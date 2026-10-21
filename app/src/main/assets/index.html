@@ -90,7 +90,7 @@ footer{padding:20px 8px;color:#7993b7}
  </div>
  </section>
  <section class="messages" id="messages" aria-live="polite"><div class="msg note" id="setupNote">برای پاسخ‌های واقعی، نشانی سرور AFG AI را در تنظیمات وارد کن. این فایل به‌تنهایی مدل هوش مصنوعی یا سرور را در خود ندارد.</div></section>
- <form class="composer" id="chatForm"><div class="compose-row"><textarea id="prompt" placeholder="پیامت را بنویس…" rows="1" required></textarea><button class="btn" type="button" id="attachBtn" aria-label="تحلیل فایل">＋</button><button class="btn primary" type="submit" id="sendBtn">ارسال ➤</button></div><div class="smallprint" id="finePrint">پاسخ‌های هوش مصنوعی ممکن است اشتباه باشند. اطلاعات مهم را بررسی کن.</div></form>
+ <form class="composer" id="chatForm"><input type="file" id="fileInput" accept=".txt,.md,.csv,.json,.log" hidden><div class="compose-row"><textarea id="prompt" placeholder="پیامت را بنویس…" rows="1" required></textarea><button class="btn" type="button" id="attachBtn" aria-label="تحلیل فایل">＋</button><button class="btn primary" type="submit" id="sendBtn">ارسال ➤</button></div><div class="smallprint" id="finePrint">پاسخ‌های هوش مصنوعی ممکن است اشتباه باشند. اطلاعات مهم را بررسی کن.</div></form>
  <section class="settings" id="settings">
   <h3 id="settingsTitle">تنظیم اتصال</h3>
   <label for="serverUrl" id="serverLabel">نشانی سرور AFG AI</label><input id="serverUrl" placeholder="https://your-afg-ai-server.example">
