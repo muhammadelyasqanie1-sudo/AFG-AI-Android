@@ -67,6 +67,28 @@ footer{padding:20px 8px;color:#7993b7}
 .creative-banner h3{margin:0 0 5px;font-size:20px}.creative-banner p{margin:0;color:#b7cbe6;font-size:12px;line-height:1.7}
 @media(max-width:680px){.app{padding:10px 9px 18px}.layout{grid-template-columns:1fr;gap:12px}.layout aside{display:none}.chat-panel{min-height:65dvh}.welcome{padding:20px 17px 12px}.welcome h2{font-size:25px}.messages{padding:13px}.msg{max-width:96%}.feature-grid{gap:8px}.feature-action{padding:12px 10px;min-height:92px;gap:8px}.feature-action .f-icon{flex-basis:38px;height:38px;font-size:20px}.feature-action strong{font-size:12px}.feature-action small{font-size:10px}.creative-banner{margin:0 12px 12px;padding:14px}.creative-banner h3{font-size:17px}.top-actions{gap:5px}.top-actions .btn{padding:8px 10px}header{padding:13px;border-radius:20px}}
 
+
+/* Account & settings PRO dashboard */
+.settings.show{display:block;animation:settingsIn .24s ease-out}
+@keyframes settingsIn{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:none}}
+.settings>h3{font-size:22px;margin:4px 0 16px;letter-spacing:-.3px}
+.settings-extra{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.settings-extra>h3{grid-column:1/-1}
+.settings-card{border:1px solid #214c76;border-radius:19px;background:linear-gradient(145deg,#0b2039,#081326);padding:16px;margin:12px 0;box-shadow:inset 0 1px #ffffff08}
+.settings-card h4{font-size:15px;margin:0 0 6px}.settings-card p{font-size:12px;line-height:1.7;color:var(--muted);margin:0 0 12px}
+.account-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.auth-btn{display:flex;align-items:center;justify-content:center;gap:9px;border:1px solid #2a5278;background:#0b1b30;color:#eef7ff;padding:12px 9px;border-radius:13px;font-weight:700;font-size:13px;min-height:46px}
+.auth-btn:active{transform:scale(.98)}.auth-btn .provider-icon{font-size:17px;width:20px;text-align:center}
+.auth-form{display:grid;gap:9px}.auth-form input{width:100%;background:#050d1a;color:var(--text);border:1px solid #244a70;border-radius:12px;padding:12px;min-width:0}
+.auth-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.auth-status{font-size:12px;line-height:1.7;color:#73e8cb;min-height:20px;margin-top:9px;overflow-wrap:anywhere}
+.settings-group{border:1px solid #1d4167;border-radius:18px;padding:14px;background:#08162a;margin:10px 0}
+.settings-group>h4{margin:0 0 10px;font-size:14px}
+.settings-group label{margin-top:8px}
+.settings .btn{max-width:100%}
+.account-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:#7af0d5;background:#0c302f;border:1px solid #1a635b;padding:6px 9px;border-radius:999px;margin-bottom:10px}
+.account-badge:before{content:"";width:6px;height:6px;border-radius:50%;background:#42f0c8}
+@media(max-width:680px){.settings{padding:14px 12px}.settings-extra{grid-template-columns:1fr}.settings-card{padding:13px}.account-grid{gap:7px}.auth-btn{font-size:12px;padding:11px 6px}.auth-row{grid-template-columns:1fr}.settings-group{padding:12px}}
+
 </style>
 </head>
 <body>
@@ -102,7 +124,24 @@ footer{padding:20px 8px;color:#7993b7}
   <label for="language" id="languageLabel">زبان پاسخ</label><select id="language"><option value="auto">خودکار / Auto</option><option value="fa">فارسی / دری</option><option value="en">English</option></select>
   <button class="btn primary" id="saveSettings" style="margin-top:12px">ذخیره تنظیمات</button>
   <div id="settingsStatus" role="status" aria-live="polite" style="font-size:12px;margin-top:10px;color:#58e7c6;line-height:1.7"></div>
-  <div class="settings-extra" style="margin-top:22px;padding-top:16px;border-top:1px solid var(--line)">
+  <section class="settings-card" id="accountCard">
+   <div class="account-badge" id="accountBadge">حساب امن · Account</div>
+   <h4 id="accountTitle">حساب AFG AI</h4>
+   <p id="accountDescription">برای آماده‌سازی همگام‌سازی گفتگوها، با ایمیل وارد شو یا یک حساب بساز. ورودهای اجتماعی به تنظیمات ارائه‌دهنده نیاز دارند.</p>
+   <div class="auth-form">
+    <input id="authEmail" type="email" autocomplete="email" placeholder="ایمیل / Email" aria-label="Email">
+    <input id="authPassword" type="password" autocomplete="current-password" placeholder="رمز عبور / Password" aria-label="Password">
+    <div class="auth-row"><button class="btn primary" type="button" id="signInBtn">ورود</button><button class="btn" type="button" id="signUpBtn">ساخت حساب</button></div>
+   </div>
+   <div class="account-grid" style="margin-top:10px">
+    <button class="auth-btn" type="button" data-provider="github"><span class="provider-icon">⌘</span> GitHub</button>
+    <button class="auth-btn" type="button" data-provider="google"><span class="provider-icon">G</span> Google</button>
+    <button class="auth-btn" type="button" data-provider="apple"><span class="provider-icon">●</span> Apple</button>
+    <button class="auth-btn" type="button" id="signOutBtn"><span class="provider-icon">↪</span><span id="signOutText">خروج از حساب</span></button>
+   </div>
+   <div class="auth-status" id="authStatus" role="status" aria-live="polite"></div>
+  </section>
+ <div class="settings-extra" style="margin-top:22px;padding-top:16px;border-top:1px solid var(--line)">
    <h3 id="personalTitle">شخصی‌سازی</h3>
    <label for="uiLanguage" id="uiLanguageLabel">زبان رابط برنامه</label>
    <select id="uiLanguage"><option value="auto">مطابق زبان گوشی / Auto</option><option value="fa">فارسی / دری</option><option value="en">English</option></select>
@@ -153,6 +192,18 @@ $('appearance').value=localStorage.getItem('afg_ai_appearance')||'dark';
 function applyAppearance(){document.body.classList.toggle('oled', $('appearance').value==='black')}
 $('appearance').onchange=()=>{localStorage.setItem('afg_ai_appearance',$('appearance').value);applyAppearance()};
 $('clearHistoryBtn').onclick=()=>{chatHistory=[];archivedChats=[];persistHistory();persistArchivedChats();$('messages').innerHTML='';$('messages').appendChild($('setupNote'));$('setupNote').textContent=tr('setup');afgAiSessionId=makeUuid();localStorage.setItem('afg_ai_session_id',afgAiSessionId);$('settingsStatus').textContent=isEnglish?'All chat history on this device was cleared.':'تمام تاریخچهٔ چت این دستگاه پاک شد.';$('settingsStatus').dataset.state='ok';renderArchivedChats()};
+
+const AUTH_URL='https://mvvvfnjwjgwxenywazqx.supabase.co';
+const AUTH_PUBLIC_KEY='sb_publishable_3No9JzPoCK8ZmCmj8i26Kg_Vr3c0jCP';
+function authStatus(message,error=false){$('authStatus').textContent=message;$('authStatus').style.color=error?'#ffb1b1':'#73e8cb'}
+function setAccountSession(session){if(session){localStorage.setItem('afg_ai_auth_session',JSON.stringify(session));$('accountBadge').textContent=(session.user&&session.user.email)||'حساب متصل';$('signInBtn').textContent=isEnglish?'Signed in':'وارد شده';authStatus(isEnglish?'Signed in successfully.':'ورود موفق بود.')}else{localStorage.removeItem('afg_ai_auth_session');$('accountBadge').textContent=isEnglish?'Secure account · Optional':'حساب امن · اختیاری';$('signInBtn').textContent=isEnglish?'Sign in':'ورود'}}
+async function authRequest(path,body){const r=await fetch(AUTH_URL+'/auth/v1/'+path,{method:'POST',headers:{'Content-Type':'application/json','apikey':AUTH_PUBLIC_KEY},body:JSON.stringify(body)});const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data.msg||data.message||data.error_description||data.error||'Authentication request failed ('+r.status+')');return data}
+$('signInBtn').onclick=async()=>{const email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||!password){authStatus(isEnglish?'Enter your email and password first.':'اول ایمیل و رمز عبور را وارد کن.',true);return}authStatus(isEnglish?'Signing in…':'در حال ورود…');try{const data=await authRequest('token?grant_type=password',{email,password});setAccountSession(data);authStatus(isEnglish?'Signed in successfully.':'ورود موفق بود.')}catch(e){authStatus(e.message,isEnglish||true)}};
+$('signUpBtn').onclick=async()=>{const email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||password.length<6){authStatus(isEnglish?'Enter a valid email and a password with at least 6 characters.':'ایمیل معتبر و رمز عبور حداقل ۶ حرفی وارد کن.',true);return}authStatus(isEnglish?'Creating account…':'در حال ساخت حساب…');try{const data=await authRequest('signup',{email,password});if(data.access_token)setAccountSession(data);authStatus(data.access_token?(isEnglish?'Account created and signed in.':'حساب ساخته شد و وارد شدی.'):(isEnglish?'Check your email to confirm your account, then sign in.':'ایمیل خود را برای تأیید حساب بررسی کن؛ سپس وارد شو.'))}catch(e){authStatus(e.message,true)}};
+document.querySelectorAll('[data-provider]').forEach(b=>b.onclick=()=>{const provider=b.dataset.provider;authStatus((isEnglish?'Social sign-in requires enabling ':'ورود اجتماعی نیاز دارد فعال شود: ')+provider+' '+(isEnglish?'in Supabase Auth and adding the redirect URL.':'در Supabase Auth و افزودن نشانی بازگشت مجاز.'),true)});
+$('signOutBtn').onclick=async()=>{try{const session=JSON.parse(localStorage.getItem('afg_ai_auth_session')||'null');if(session&&session.access_token)await fetch(AUTH_URL+'/auth/v1/logout',{method:'POST',headers:{'apikey':AUTH_PUBLIC_KEY,'Authorization':'Bearer '+session.access_token}})}catch{}setAccountSession(null);authStatus(isEnglish?'Signed out on this device.':'از این دستگاه خارج شدی.')};
+try{const currentSession=JSON.parse(localStorage.getItem('afg_ai_auth_session')||'null');if(currentSession&&currentSession.access_token&&currentSession.user)setAccountSession(currentSession)}catch{}
+
 
 $('saveSettings').onclick=()=>{const url=$('serverUrl').value.trim().replace(/\/+$/,'');if(url&&!/^https?:\/\//i.test(url)){ $('settingsStatus').textContent=isEnglish?'Enter a valid URL beginning with https://':'نشانی باید با https:// یا http:// شروع شود.';$('settingsStatus').dataset.state='error';return;}localStorage.setItem('afg_ai_server',url);localStorage.setItem('afg_ai_language',$('language').value);$('settingsStatus').textContent=isEnglish?'Settings saved on this device.':'تنظیمات با موفقیت در همین دستگاه ذخیره شد.';$('settingsStatus').dataset.state='ok';setTimeout(()=>{$('settingsStatus').textContent=''},2600)};
 const configuredServer=(localStorage.getItem('afg_ai_server')||'').trim().replace(/\/+$/,'');const defaultServer='https://afg-ai.onrender.com';$('serverUrl').value=/^https?:\/\//i.test(configuredServer)?configuredServer:defaultServer;if(!/^https?:\/\//i.test(configuredServer)){localStorage.setItem('afg_ai_server',defaultServer)}const deviceLang=(navigator.language||'fa').toLowerCase().startsWith('en')?'en':'fa';$('language').value=localStorage.getItem('afg_ai_language')||'auto';if(!localStorage.getItem('afg_ai_language'))localStorage.setItem('afg_ai_language','auto');const savedUiLanguage=localStorage.getItem('afg_ai_ui_language')||'auto';isEnglish=savedUiLanguage==='auto'?deviceLang==='en':savedUiLanguage==='en';$('uiLanguage').value=savedUiLanguage;$('appearance').value=localStorage.getItem('afg_ai_appearance')||'dark';applyAppearance();applyLang();restoreHistory();
