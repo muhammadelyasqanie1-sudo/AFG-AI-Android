@@ -270,12 +270,18 @@ http.createServer(async (req, res) => {
     return sendJson(res, 200, {
       ok: true,
       service: "AFG AI",
-      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY),\n      webSearchConfigured: Boolean(process.env.TAVILY_API_KEY),\n      imageConfigured: Boolean(process.env.IMAGE_API_KEY)
+      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY),
+      webSearchConfigured: Boolean(process.env.TAVILY_API_KEY),
+      imageConfigured: Boolean(process.env.IMAGE_API_KEY)
     });
   }
 
   if (pathname === "/api/chat") {
     return handleChat(req, res);
+  }
+
+  if (pathname === "/api/image") {
+    return handleImage(req, res);
   }
 
   if (req.method !== "GET" && req.method !== "HEAD") {
