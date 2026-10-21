@@ -2,10 +2,10 @@ package ai.afg.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.webkit.WebView;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import androidx.webkit.WebViewAssetLoader;
@@ -28,6 +28,19 @@ public class MainActivity extends Activity {
         settings.setAllowFileAccess(false);
         settings.setAllowContentAccess(false);
         webView.setWebViewClient(new WebViewClientCompat() {
+            @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                Uri uri = request.getUrl();
+                if ("mvvvfnjwjgwxenywazqx.supabase.co".equals(uri.getHost())
+                        && "/auth/v1/authorize".equals(uri.getPath())) {
+                    try {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(browserIntent);
+                    } catch (Exception ignored) { }
+                    return true;
+                }
+                return false;
+            }
+
             @Override public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 return assetLoader.shouldInterceptRequest(request.getUrl());
             }
