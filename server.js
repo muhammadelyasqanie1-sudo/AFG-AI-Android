@@ -20,7 +20,10 @@ function sendJson(res, status, data) {
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-store",
-    "X-Content-Type-Options": "nosniff"
+    "X-Content-Type-Options": "nosniff",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization"
   });
   res.end(JSON.stringify(data));
 }
@@ -196,6 +199,16 @@ http.createServer(async (req, res) => {
     pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
   } catch {
     return sendJson(res, 400, { detail: "Invalid URL." });
+  }
+
+  if (pathname.startsWith("/api/") && req.method === "OPTIONS") {
+    res.writeHead(204, {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Max-Age": "86400"
+    });
+    return res.end();
   }
 
   if (pathname === "/api/health") {
