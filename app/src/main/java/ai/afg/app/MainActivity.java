@@ -1,6 +1,8 @@
 package ai.afg.app;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -10,6 +12,7 @@ import androidx.webkit.WebViewAssetLoader;
 import androidx.webkit.WebViewClientCompat;
 
 public class MainActivity extends Activity {
+    private static final String APP_URL = "https://appassets.androidplatform.net/assets/index.html";
     private WebView webView;
     private WebViewAssetLoader assetLoader;
 
@@ -30,7 +33,30 @@ public class MainActivity extends Activity {
             }
         });
         setContentView(webView);
-        webView.loadUrl("https://appassets.androidplatform.net/assets/index.html");
+        loadAppWithAuthCallback(getIntent());
+    }
+
+    @Override protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        loadAppWithAuthCallback(intent);
+    }
+
+    private void loadAppWithAuthCallback(Intent intent) {
+        Uri data = intent == null ? null : intent.getData();
+        if (data != null && "afgai".equals(data.getScheme()) && "auth-callback".equals(data.getHost())) {
+            String fragment = data.getEncodedFragment();
+            if (fragment != null && !fragment.isEmpty()) {
+                webView.loadUrl(APP_URL + "#" + fragment);
+                return;
+            }
+            String query = data.getEncodedQuery();
+            if (query != null && !query.isEmpty()) {
+                webView.loadUrl(APP_URL + "#" + query);
+                return;
+            }
+        }
+        webView.loadUrl(APP_URL);
     }
 
     @Override public void onBackPressed() {
