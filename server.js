@@ -95,13 +95,6 @@ async function persistChatTurn(body, userText, assistantText, model) {
     });
     if (!messageResponse.ok) {
       console.warn("Supabase message insert failed:", messageResponse.status);
-    } else {
-      await fetch(supabaseUrl + "/rest/v1/chat_sessions?id=eq." + sessionId, {
-        method: "PATCH",
-        headers: { ...headers, "Prefer": "return=minimal" },
-        body: JSON.stringify({ updated_at: new Date().toISOString() }),
-        signal: AbortSignal.timeout(8000)
-      }).catch(() => {});
     }
   } catch (error) {
     console.warn("Supabase persistence unavailable:", error.name, error.message);
