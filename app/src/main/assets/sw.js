@@ -1,5 +1,5 @@
-const CACHE_NAME = "afg-ai-shell-v2";
-const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
+const CACHE_NAME = "afg-ai-shell-v3";
+const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg?v=4"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
 });
