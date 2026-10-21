@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#061329">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
 <meta name="description" content="AFG AI — همراه هوشمند افغانستان">
 <link rel="manifest" href="./manifest.webmanifest">
-<title>AFG AI — افغان AI</title>
+<title>AFG AI | هوش مصنوعی افغانستان</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1020;--panel:#121a2e;--panel2:#19233b;--text:#f3f6ff;--muted:#a8b2cc;--line:#2b3652;--accent:#7c9cff;--accent2:#4de0c1}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1c2b50 0,#0b1020 55%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100dvh}
@@ -32,7 +33,10 @@ body{background:radial-gradient(ellipse at 50% -12%,#164b80 0,transparent 42%),r
 .app{max-width:1120px;padding:18px 16px 24px}
 header{position:relative;border:1px solid #244d7b;border-radius:24px;padding:16px 18px;background:linear-gradient(110deg,#0a2343e8,#071226e8);box-shadow:0 18px 55px #0007;overflow:hidden}
 header:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 40%,#35d9ff0c 60%,transparent 80%)}
-.logo{width:62px;height:62px;border-radius:20px;background:linear-gradient(145deg,#18dcff,#4b78ff 55%,#a45dff);color:#031021;font-size:18px;line-height:1.05;box-shadow:0 0 0 1px #8deaff70,0 0 28px #08caff42}
+.logo{width:68px;height:68px;flex:0 0 68px;border-radius:21px;display:block;object-fit:cover;background:#07162c;box-shadow:0 0 0 1px #8deaff70,0 0 28px #08caff42}
+.brand{flex:1;min-width:0}.brand h1{font-size:clamp(24px,4vw,32px);font-weight:850;letter-spacing:.7px;line-height:1.15}.brand p{font-size:13px;letter-spacing:.15px}
+header{gap:16px;min-height:104px}
+@media(max-width:680px){.logo{width:62px;height:62px;flex-basis:62px;border-radius:19px}.brand h1{font-size:27px}.brand p{font-size:11px;line-height:1.7}header{gap:12px;min-height:94px;padding:12px 13px}.top-actions{flex-shrink:0}.top-actions .btn{padding:8px 9px}}
 .brand h1{font-size:clamp(21px,3vw,30px);letter-spacing:-.5px}.brand p{font-size:13px}
 .btn{transition:transform .18s,border-color .18s,box-shadow .18s;border-radius:14px}.btn:hover{transform:translateY(-1px);border-color:#43dfff;box-shadow:0 6px 22px #00cfff16}.btn.primary{background:linear-gradient(120deg,#17dff4,#4d9bff 56%,#9463ff);color:#031022;box-shadow:0 8px 24px #147cff2c}
 .layout{grid-template-columns: minmax(245px, .82fr) minmax(0,1.8fr);gap:16px;padding-top:16px}
@@ -67,8 +71,8 @@ footer{padding:20px 8px;color:#7993b7}
 <body>
 <div class="app">
 <header>
- <div class="logo">AFG<br>AI</div>
- <div class="brand"><h1>افغان AI <span style="color:var(--accent2)">· AFG AI</span></h1><p id="subtitle">همراه هوشمند افغانستان · Afghanistan AI</p></div>
+ <img class="logo" src="./icon.svg" alt="AFG AI logo" width="68" height="68">
+ <div class="brand"><h1>AFG AI</h1><p id="subtitle">هوش مصنوعی افغانستان · همراه هوشمند تو</p></div>
  <div class="top-actions"><button class="btn wide" id="langBtn">English</button><button class="btn" id="settingsBtn" aria-label="تنظیمات">⚙</button><button class="btn primary" id="installBtn" hidden>نصب</button></div>
 </header>
 <div class="layout">
@@ -113,7 +117,7 @@ let chatHistory=[];
 try{chatHistory=JSON.parse(localStorage.getItem(chatStorageKey)||'[]');if(!Array.isArray(chatHistory))chatHistory=[]}catch{chatHistory=[]}
 function persistHistory(){try{localStorage.setItem(chatStorageKey,JSON.stringify(chatHistory.slice(-80)))}catch{}}
 function restoreHistory(){if(chatHistory.length){$('messages').innerHTML='';chatHistory.slice(-80).forEach(m=>addMsg(m.text,m.kind,false))}else{$('setupNote').textContent=tr('setup')}}
-const strings={fa:{subtitle:"همراه هوشمند افغانستان · Afghanistan AI",tools:"قابلیت‌ها",welcome:"سلام! به افغان AI خوش آمدی.",welcomeText:"چه چیزی را می‌خواهی یاد بگیری، بسازی یا حل کنی؟ پرسشت را بنویس تا شروع کنیم.",placeholder:"پیامت را بنویس…",send:"ارسال ➤",fine:"پاسخ‌های هوش مصنوعی ممکن است اشتباه باشند. اطلاعات مهم را بررسی کن.",setup:"سرور AFG AI آماده است. پرسشت را بنویس تا شروع کنیم.",settings:"تنظیم اتصال",server:"نشانی سرور AFG AI",language:"زبان پاسخ",save:"ذخیره تنظیمات",warning:"کلید API را در این صفحه وارد نکن. کلید باید فقط در متغیرهای امن سرور تنظیم شود. سرور باید مسیر POST /api/chat را ارائه کند.",install:"نصب",thinking:"در حال دریافت پاسخ…",notSet:"نشانی سرور تنظیم نشده است. از ⚙ تنظیمات آن را وارد کن.",error:"ارتباط با سرور برقرار نشد. نشانی سرور و آنلاین‌بودن آن را بررسی کن.",empty:"لطفاً پیام بنویس."},en:{subtitle:"Your Afghan AI companion",tools:"Features",welcome:"Hello! Welcome to AFG AI.",welcomeText:"What would you like to learn, create, or solve? Write your question to begin.",placeholder:"Type your message…",send:"Send ➤",fine:"AI responses can be inaccurate. Verify important information.",setup:"The AFG AI server is ready. Write your question to get started.",settings:"Connection settings",server:"AFG AI server URL",language:"Response language",save:"Save settings",warning:"Do not enter API keys here. Keep keys in secure server environment variables. The server must provide POST /api/chat.",install:"Install",thinking:"Getting a response…",notSet:"Server URL is missing. Open ⚙ Settings to add it.",error:"Could not reach the server. Check the URL and server status.",empty:"Please enter a message."}};
+const strings={fa:{subtitle:"هوش مصنوعی افغانستان · همراه هوشمند تو",tools:"قابلیت‌ها",welcome:"سلام، خوش آمدی!",welcomeText:"چه چیزی را می‌خواهی یاد بگیری، بسازی یا حل کنی؟ پرسشت را بنویس تا شروع کنیم.",placeholder:"پیامت را بنویس…",send:"ارسال ➤",fine:"پاسخ‌های هوش مصنوعی ممکن است اشتباه باشند. اطلاعات مهم را بررسی کن.",setup:"سرور AFG AI آماده است. پرسشت را بنویس تا شروع کنیم.",settings:"تنظیم اتصال",server:"نشانی سرور AFG AI",language:"زبان پاسخ",save:"ذخیره تنظیمات",warning:"کلید API را در این صفحه وارد نکن. کلید باید فقط در متغیرهای امن سرور تنظیم شود. سرور باید مسیر POST /api/chat را ارائه کند.",install:"نصب",thinking:"در حال دریافت پاسخ…",notSet:"نشانی سرور تنظیم نشده است. از ⚙ تنظیمات آن را وارد کن.",error:"ارتباط با سرور برقرار نشد. نشانی سرور و آنلاین‌بودن آن را بررسی کن.",empty:"لطفاً پیام بنویس."},en:{subtitle:"Afghanistan AI · Your intelligent companion",tools:"Features",welcome:"Hello, welcome!",welcomeText:"What would you like to learn, create, or solve? Write your question to begin.",placeholder:"Type your message…",send:"Send ➤",fine:"AI responses can be inaccurate. Verify important information.",setup:"The AFG AI server is ready. Write your question to get started.",settings:"Connection settings",server:"AFG AI server URL",language:"Response language",save:"Save settings",warning:"Do not enter API keys here. Keep keys in secure server environment variables. The server must provide POST /api/chat.",install:"Install",thinking:"Getting a response…",notSet:"Server URL is missing. Open ⚙ Settings to add it.",error:"Could not reach the server. Check the URL and server status.",empty:"Please enter a message."}};
 function tr(k){return strings[isEnglish?'en':'fa'][k]||k}
 function applyLang(){document.documentElement.lang=isEnglish?'en':'fa';document.documentElement.dir=isEnglish?'ltr':'rtl';$('subtitle').textContent=tr('subtitle');$('toolsLabel').textContent=tr('tools');$('welcomeTitle').textContent=tr('welcome');$('welcomeText').textContent=tr('welcomeText');$('prompt').placeholder=tr('placeholder');$('sendBtn').textContent=tr('send');$('finePrint').textContent=tr('fine');$('setupNote').textContent=tr('setup');$('settingsTitle').textContent=tr('settings');$('serverLabel').textContent=tr('server');$('languageLabel').textContent=tr('language');$('saveSettings').textContent=tr('save');$('keyWarning').textContent=tr('warning');$('installBtn').textContent=tr('install');$('langBtn').textContent=isEnglish?'دری / فارسی':'English'}
 function addMsg(text,kind,save=true){let el=document.createElement('div');el.className='msg '+kind;el.textContent=text;$('messages').appendChild(el);el.scrollIntoView({block:'end',behavior:'smooth'});if(save&&['user','ai'].includes(kind)){chatHistory.push({text,kind});persistHistory()}return el}
