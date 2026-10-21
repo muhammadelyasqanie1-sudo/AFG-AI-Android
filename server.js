@@ -15,13 +15,159 @@ const types = {
   ".ico": "image/x-icon"
 };
 
-http.createServer((req, res) => {
-  const pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+function sendJson(res, status, data) {
+  res.writeHead(status, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff"
+  });
+  res.end(JSON.stringify(data));
+}
+
+function readJson(req, maxBytes = 1024 * 1024) {
+  return new Promise((resolve, reject) => {
+    let body = "";
+    let size = 0;
+    req.on("data", chunk => {
+      size += chunk.length;
+      if (size > maxBytes) {
+        reject(Object.assign(new Error("Request body too large"), { status: 413 }));
+        req.destroy();
+        return;
+      }
+      body += chunk;
+    });
+    req.on("end", () => {
+      try {
+        resolve(JSON.parse(body || "{}"));
+      } catch {
+        reject(Object.assign(new Error("Invalid JSON body"), { status: 400 }));
+      }
+    });
+    req.on("error", reject);
+  });
+}
+
+async function handleChat(req, res) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return sendJson(res, 405, { detail: "Use POST for this endpoint." });
+  }
+
+  const apiKey = process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    return sendJson(res, 503, {
+      detail: "AI backend is deployed, but no provider API key is configured. Add AI_API_KEY in the Render environment variables."
+    });
+  }
+
+  let body;
+  try {
+    body = await readJson(req);
+  } catch (error) {
+    return sendJson(res, error.status || 400, { detail: error.message || "Could not read request." });
+  }
+
+  const inputMessages = Array.isArray(body.messages) ? body.messages : [];
+  const messages = inputMessages
+    .filter(m => m && ["user", "assistant"].includes(m.role) && typeof m.content === "string")
+    .slice(-20)
+    .map(m => ({ role: m.role, content: m.content.slice(0, 12000) }));
+
+  if (!messages.length || !messages.some(m => m.role === "user" && m.content.trim())) {
+    return sendJson(res, 400, { detail: "Send a non-empty user message." });
+  }
+
+  const language = body.language === "fa" ? "Persian/Dari" :
+    body.language === "en" ? "English" : "the language used by the user";
+  const baseUrl = (process.env.AI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
+  const model = process.env.AI_MODEL || "gpt-4.1-mini";
+
+  try {
+    const upstream = await fetch(baseUrl + "/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + apiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          {
+            role: "system",
+            content: "You are AFG AI, a helpful, accurate, respectful assistant for users in Afghanistan. Reply in " +
+              language + ". When the user writes in Dari/Persian, use clear natural Dari/Persian. Be transparent about uncertainty."
+          },
+          ...messages
+        ],
+        temperature: 0.7
+      }),
+      signal: AbortSignal.timeout(60000)
+    });
+
+    const data = await upstream.json().catch(() => ({}));
+    if (!upstream.ok) {
+      console.error("AI provider returned HTTP", upstream.status, JSON.stringify(data).slice(0, 1200));
+      const status = upstream.status === 401 || upstream.status === 403 ? 502 :
+        upstream.status === 429 ? 429 : 502;
+      return sendJson(res, status, {
+        detail: upstream.status === 401 || upstream.status === 403
+          ? "The AI provider rejected the API key. Check AI_API_KEY and provider settings."
+          : upstream.status === 429
+            ? "The AI provider rate limit or account quota was reached. Check provider usage and billing."
+            : "The AI provider returned an error. Check Render logs and AI_BASE_URL / AI_MODEL settings."
+      });
+    }
+
+    const choice = data.choices && data.choices[0];
+    const reply = choice && choice.message && choice.message.content;
+    if (typeof reply !== "string" || !reply.trim()) {
+      console.error("Unexpected AI provider response:", JSON.stringify(data).slice(0, 1200));
+      return sendJson(res, 502, { detail: "The AI provider response did not contain text." });
+    }
+    return sendJson(res, 200, { reply, model });
+  } catch (error) {
+    console.error("AI request failed:", error.name, error.message);
+    return sendJson(res, 502, {
+      detail: error.name === "TimeoutError"
+        ? "The AI provider timed out. Try again shortly."
+        : "Could not connect to the AI provider. Check AI_BASE_URL and Render logs."
+    });
+  }
+}
+
+http.createServer(async (req, res) => {
+  let pathname;
+  try {
+    pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+  } catch {
+    return sendJson(res, 400, { detail: "Invalid URL." });
+  }
+
+  if (pathname === "/api/health") {
+    return sendJson(res, 200, {
+      ok: true,
+      service: "AFG AI",
+      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY)
+    });
+  }
+
+  if (pathname === "/api/chat") {
+    return handleChat(req, res);
+  }
+
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    res.writeHead(405, { "Allow": "GET, HEAD, POST" });
+    return res.end("Method not allowed");
+  }
+
   const requested = pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "");
   const file = path.resolve(root, requested);
   if (!file.startsWith(root + path.sep) && file !== path.join(root, "index.html")) {
-    res.writeHead(403); return res.end("Forbidden");
+    res.writeHead(403);
+    return res.end("Forbidden");
   }
+
   fs.readFile(file, (err, data) => {
     if (err) {
       res.writeHead(err.code === "ENOENT" ? 404 : 500, { "Content-Type": "text/plain; charset=utf-8" });
@@ -32,6 +178,7 @@ http.createServer((req, res) => {
       "X-Content-Type-Options": "nosniff",
       "Cache-Control": path.extname(file) === ".html" ? "no-cache" : "public, max-age=3600"
     });
+    if (req.method === "HEAD") return res.end();
     res.end(data);
   });
-}).listen(port, "0.0.0.0", () => console.log("AFG AI Mini App listening on port " + port));
+}).listen(port, "0.0.0.0", () => console.log("AFG AI listening on port " + port));
