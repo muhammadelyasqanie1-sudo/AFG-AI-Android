@@ -1,20 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
 <defs>
- <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071c39"/><stop offset=".55" stop-color="#071126"/><stop offset="1" stop-color="#190d3c"/></linearGradient>
- <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#27f1f3"/><stop offset=".52" stop-color="#248dff"/><stop offset="1" stop-color="#a45aff"/></linearGradient>
- <linearGradient id="ice" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#8defff"/></linearGradient>
- <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07101f"/><stop offset=".5" stop-color="#0b2141"/><stop offset="1" stop-color="#180d38"/></linearGradient>
+ <linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5cf4e8"/><stop offset=".48" stop-color="#2ebdff"/><stop offset="1" stop-color="#9b6bff"/></linearGradient>
+ <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d9ffff"/><stop offset="1" stop-color="#3edfff"/></linearGradient>
+ <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 </defs>
 <rect width="512" height="512" rx="118" fill="url(#bg)"/>
-<rect x="18" y="18" width="476" height="476" rx="104" fill="none" stroke="#35dfff" stroke-opacity=".35" stroke-width="3"/>
-<circle cx="256" cy="242" r="164" fill="#0a75d7" opacity=".08"/>
-<path d="M72 370 195 145 246 235 286 174 440 370Z" fill="url(#cyan)" filter="url(#glow)"/>
-<path d="m154 370 92-135 39 58 45-66 85 143Z" fill="#07162c" opacity=".88"/>
-<path d="m194 145 27 47-26-9-20 31Z" fill="url(#ice)"/>
-<path d="m286 174 27 42-27-8-19 25Z" fill="#f2ffff"/>
-<path d="M224 278h64l26 45h-116Z" fill="#08172c" opacity=".95"/>
-<path d="M251 269h14v75h-14z" fill="#20e7f4"/>
-<path d="M238 282h40" stroke="#b9ffff" stroke-width="5" stroke-linecap="round"/>
-<path d="M256 78 269 108 300 121 269 134 256 164 243 134 212 121 243 108Z" fill="#40f2e3"/>
-<text x="256" y="431" text-anchor="middle" font-family="Arial,sans-serif" font-size="50" font-weight="900" letter-spacing="2" fill="#f3fbff">AFG AI</text>
+<rect x="15" y="15" width="482" height="482" rx="105" fill="none" stroke="#66eaff" stroke-opacity=".2" stroke-width="2"/>
+<circle cx="256" cy="244" r="171" fill="#2ecbff" opacity=".04"/>
+<path d="M88 354 214 135 256 209 291 151 424 354Z" fill="url(#a)" opacity=".97"/>
+<path d="M137 354 214 218 249 278 291 213 376 354Z" fill="#07182e"/>
+<path d="m214 135 20 35-20-7-15 24Z" fill="#e7ffff"/>
+<path d="m291 151 18 31-19-6-13 19Z" fill="#e7ffff"/>
+<path d="M183 329h146" stroke="#a6f9ff" stroke-width="3" stroke-linecap="round" opacity=".65"/>
+<path d="M256 78 270 109 303 123 270 137 256 168 242 137 209 123 242 109Z" fill="#66f7e8" filter="url(#glow)"/>
+<path d="M256 98v50M231 123h50" stroke="#071b31" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+<path d="M340 191c0-22 18-40 40-40s40 18 40 40-18 40-40 40h-11l-20 16 4-25c-8-7-13-18-13-31Z" fill="#0a1a31" stroke="url(#edge)" stroke-width="5"/>
+<circle cx="364" cy="191" r="4" fill="#62f5e9"/><circle cx="380" cy="191" r="4" fill="#62f5e9"/><circle cx="396" cy="191" r="4" fill="#62f5e9"/>
+<text x="256" y="430" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="800" letter-spacing="3" fill="#f5fbff">AFG AI</text>
 </svg>
