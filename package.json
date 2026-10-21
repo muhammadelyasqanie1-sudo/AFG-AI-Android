@@ -1,0 +1,12 @@
+{
+  "name": "afg-ai-mini-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web server for the AFG AI Mini App",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
