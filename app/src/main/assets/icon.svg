@@ -1,21 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
 <defs>
- <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07101f"/><stop offset=".5" stop-color="#0b2141"/><stop offset="1" stop-color="#180d38"/></linearGradient>
- <linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5cf4e8"/><stop offset=".48" stop-color="#2ebdff"/><stop offset="1" stop-color="#9b6bff"/></linearGradient>
- <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d9ffff"/><stop offset="1" stop-color="#3edfff"/></linearGradient>
- <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#03091b"/><stop offset=".58" stop-color="#07152e"/><stop offset="1" stop-color="#100c2d"/></linearGradient>
+ <linearGradient id="metal" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="#f7fdff"/><stop offset=".24" stop-color="#a9d8ff"/><stop offset=".56" stop-color="#398bff"/><stop offset=".78" stop-color="#9a50ff"/><stop offset="1" stop-color="#39e7ff"/></linearGradient>
+ <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#36eaff"/><stop offset=".48" stop-color="#326dff"/><stop offset="1" stop-color="#9a42ff"/></linearGradient>
+ <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 </defs>
-<rect width="512" height="512" rx="118" fill="url(#bg)"/>
-<rect x="15" y="15" width="482" height="482" rx="105" fill="none" stroke="#66eaff" stroke-opacity=".2" stroke-width="2"/>
-<circle cx="256" cy="244" r="171" fill="#2ecbff" opacity=".04"/>
-<path d="M88 354 214 135 256 209 291 151 424 354Z" fill="url(#a)" opacity=".97"/>
-<path d="M137 354 214 218 249 278 291 213 376 354Z" fill="#07182e"/>
-<path d="m214 135 20 35-20-7-15 24Z" fill="#e7ffff"/>
-<path d="m291 151 18 31-19-6-13 19Z" fill="#e7ffff"/>
-<path d="M183 329h146" stroke="#a6f9ff" stroke-width="3" stroke-linecap="round" opacity=".65"/>
-<path d="M256 78 270 109 303 123 270 137 256 168 242 137 209 123 242 109Z" fill="#66f7e8" filter="url(#glow)"/>
-<path d="M256 98v50M231 123h50" stroke="#071b31" stroke-width="5" stroke-linecap="round" opacity=".75"/>
-<path d="M340 191c0-22 18-40 40-40s40 18 40 40-18 40-40 40h-11l-20 16 4-25c-8-7-13-18-13-31Z" fill="#0a1a31" stroke="url(#edge)" stroke-width="5"/>
-<circle cx="364" cy="191" r="4" fill="#62f5e9"/><circle cx="380" cy="191" r="4" fill="#62f5e9"/><circle cx="396" cy="191" r="4" fill="#62f5e9"/>
-<text x="256" y="430" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="800" letter-spacing="3" fill="#f5fbff">AFG AI</text>
+<rect width="512" height="512" rx="110" fill="url(#bg)"/>
+<circle cx="256" cy="256" r="207" fill="none" stroke="url(#ring)" stroke-width="2.5" stroke-dasharray="690 95" transform="rotate(-34 256 256)" opacity=".85"/>
+<circle cx="256" cy="256" r="190" fill="none" stroke="#428cff" stroke-opacity=".12" stroke-width="1"/>
+<g fill="url(#metal)" stroke="#8deaff" stroke-opacity=".5" stroke-width="1.2" stroke-linejoin="bevel" filter="url(#glow)">
+ <path d="M42 324 126 174 157 174 241 324 205 324 184 286 111 286 91 324Z M128 253H166L147 217Z"/>
+ <path d="M213 174H319L299 204H245L242 222H290L271 251H224L221 276H271L251 306H194L204 204Z"/>
+ <path d="M354 194H414L394 224H366L346 243 339 270 352 293H383L395 273H371L388 248H429L414 295 387 324H337L309 296 316 244 341 209Z"/>
+ <path d="M363 324 426 212 450 212 480 324H448L442 302H407L394 324Z M420 276H436L430 251Z"/>
+</g>
+<path d="M446 170 465 151 465 177 446 196Z" fill="#b45bff" filter="url(#glow)"/>
+<path d="M70 344 102 326" stroke="#28e6ff" stroke-width="3" stroke-linecap="round" filter="url(#glow)"/>
 </svg>
