@@ -9,15 +9,19 @@ workflows:
       - name: Configure Android SDK
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-      - name: Build debug APK
+          echo "Java:"
+          java -version
+          echo "Android SDK: $ANDROID_SDK_ROOT"
+      - name: Install Gradle and build APK
         script: |
-          if [ -f "./gradlew" ]; then
-            chmod +x ./gradlew
-            ./gradlew assembleDebug
-          elif [ -f "./gradlew.bat" ]; then
-            gradle assembleDebug
+          set -euo pipefail
+          if [ -x "./gradlew" ]; then
+            ./gradlew --no-daemon assembleDebug
           else
-            gradle assembleDebug
+            GRADLE_VERSION="8.9"
+            curl --fail --location --retry 3 "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" --output /tmp/gradle.zip
+            unzip -q /tmp/gradle.zip -d /tmp
+            /tmp/gradle-${GRADLE_VERSION}/bin/gradle --no-daemon assembleDebug
           fi
     artifacts:
       - app/build/outputs/**/*.apk
