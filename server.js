@@ -104,92 +104,147 @@ async function persistChatTurn(body, userText, assistantText, model) {
   }
 }
 
+function clientKey(req) {
+  return String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown").split(",")[0].trim();
+}
+const rateBuckets = new Map();
+function rateLimited(req, limit = 20, windowMs = 60_000) {
+  const now = Date.now(), key = clientKey(req);
+  let bucket = rateBuckets.get(key);
+  if (!bucket || now - bucket.start >= windowMs) bucket = { start: now, count: 0 };
+  bucket.count++;
+  rateBuckets.set(key, bucket);
+  if (rateBuckets.size > 5000) {
+    for (const [k, v] of rateBuckets) if (now - v.start > windowMs) rateBuckets.delete(k);
+  }
+  return bucket.count > limit;
+}
+
+async function searchWeb(query) {
+  const apiKey = process.env.TAVILY_API_KEY;
+  if (!apiKey) {
+    const error = new Error("Live web search is not configured yet. The administrator must add TAVILY_API_KEY on the server.");
+    error.status = 503; throw error;
+  }
+  const response = await fetch("https://api.tavily.com/search", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ api_key: apiKey, query: query.slice(0, 500), search_depth: "advanced", max_results: 5, include_answer: false }),
+    signal: AbortSignal.timeout(20000)
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    console.error("Web search provider returned HTTP", response.status);
+    const error = new Error(response.status === 429 ? "Web search is temporarily rate-limited. Try again shortly." : "The web search provider returned an error. Check its server configuration.");
+    error.status = response.status === 429 ? 429 : 502; throw error;
+  }
+  return (Array.isArray(data.results) ? data.results : []).slice(0, 5).map(item => ({
+    title: String(item.title || "Web result").slice(0, 250),
+    url: String(item.url || ""),
+    content: String(item.content || "").slice(0, 1800)
+  })).filter(item => /^https?:\/\//i.test(item.url));
+}
+
 async function handleChat(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return sendJson(res, 405, { detail: "Use POST for this endpoint." });
   }
-
+  if (rateLimited(req, 20)) return sendJson(res, 429, { detail: "Too many requests from this connection. Please wait a minute and try again." });
   const apiKey = process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    return sendJson(res, 503, {
-      detail: "AI backend is deployed, but no provider API key is configured. Add AI_API_KEY in the Render environment variables."
-    });
-  }
+  if (!apiKey) return sendJson(res, 503, { detail: "The AI provider key is not configured. The administrator must add AI_API_KEY in Render." });
 
   let body;
-  try {
-    body = await readJson(req);
-  } catch (error) {
-    return sendJson(res, error.status || 400, { detail: error.message || "Could not read request." });
-  }
+  try { body = await readJson(req); }
+  catch (error) { return sendJson(res, error.status || 400, { detail: error.message || "Could not read request." }); }
 
   const inputMessages = Array.isArray(body.messages) ? body.messages : [];
   const messages = inputMessages
     .filter(m => m && ["user", "assistant"].includes(m.role) && typeof m.content === "string")
-    .slice(-20)
-    .map(m => ({ role: m.role, content: m.content.slice(0, 12000) }));
+    .slice(-20).map(m => ({ role: m.role, content: m.content.slice(0, 12000) }));
+  const lastUser = messages.filter(m => m.role === "user").slice(-1)[0];
+  if (!lastUser || !lastUser.content.trim()) return sendJson(res, 400, { detail: "Send a non-empty user message." });
 
-  if (!messages.length || !messages.some(m => m.role === "user" && m.content.trim())) {
-    return sendJson(res, 400, { detail: "Send a non-empty user message." });
+  const language = body.language === "fa" ? "Persian/Dari" : body.language === "en" ? "English" : "the same language as the user's latest message (detect it automatically)";
+  const mode = ["chat", "research", "coding", "creative", "study"].includes(body.mode) ? body.mode : "chat";
+  const modeInstructions = {
+    chat: "Answer naturally and helpfully. Ask a clarifying question only when it is genuinely needed.",
+    research: "Act as a careful research assistant. Separate verified facts from uncertainty, compare sources, and cite source titles and URLs when sources are provided.",
+    coding: "Act as an expert software engineer. Give runnable code when appropriate, explain assumptions, consider edge cases, and include security and testing notes.",
+    creative: "Act as a creative partner. Offer original, concrete, polished ideas and respect the requested style and constraints.",
+    study: "Act as a patient tutor. Teach step by step, use examples, check understanding, and adapt the explanation to the learner."
+  };
+  let sources = [];
+  if (body.web_search === true || mode === "research") {
+    try { sources = await searchWeb(lastUser.content); }
+    catch (error) { return sendJson(res, error.status || 502, { detail: error.message || "Live web search failed." }); }
+    if (!sources.length) return sendJson(res, 502, { detail: "The search provider returned no usable results. Try a more specific query." });
   }
-
-  const language = body.language === "fa" ? "Persian/Dari" :
-    body.language === "en" ? "English" : "the same language as the user's latest message (detect it automatically)";
   const baseUrl = (process.env.AI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
   const model = process.env.AI_MODEL || "gpt-4.1-mini";
-
+  const systemText = "You are AFG AI, a helpful, accurate, respectful assistant for users in Afghanistan. Reply in " + language +
+    ". When the user writes in Dari/Persian, use clear natural Dari/Persian. Be transparent about uncertainty. Never claim you performed an action you did not perform. " +
+    modeInstructions[mode] +
+    (sources.length ? "\n\nUse these live web search results as evidence. Do not invent details beyond them. Mention relevant source titles in the answer and clearly distinguish source claims from your own explanation:\n" +
+      sources.map((x, i) => "[" + (i + 1) + "] " + x.title + "\nURL: " + x.url + "\nSnippet: " + x.content).join("\n\n") : "");
   try {
     const upstream = await fetch(baseUrl + "/chat/completions", {
       method: "POST",
-      headers: {
-        "Authorization": "Bearer " + apiKey,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          {
-            role: "system",
-            content: "You are AFG AI, a helpful, accurate, respectful assistant for users in Afghanistan. Reply in " +
-              language + ". When the user writes in Dari/Persian, use clear natural Dari/Persian. Be transparent about uncertainty."
-          },
-          ...messages
-        ],
-        temperature: 0.7
-      }),
+      headers: { "Authorization": "Bearer " + apiKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ model, messages: [{ role: "system", content: systemText }, ...messages], temperature: mode === "coding" || mode === "research" ? 0.3 : 0.7 }),
       signal: AbortSignal.timeout(60000)
     });
-
     const data = await upstream.json().catch(() => ({}));
     if (!upstream.ok) {
       console.error("AI provider returned HTTP", upstream.status, JSON.stringify(data).slice(0, 1200));
-      const status = upstream.status === 401 || upstream.status === 403 ? 502 :
-        upstream.status === 429 ? 429 : 502;
-      return sendJson(res, status, {
-        detail: upstream.status === 401 || upstream.status === 403
-          ? "The AI provider rejected the API key. Check AI_API_KEY and provider settings."
-          : upstream.status === 429
-            ? "The AI provider rate limit or account quota was reached. Check provider usage and billing."
-            : "The AI provider returned an error. Check Render logs and AI_BASE_URL / AI_MODEL settings."
-      });
+      const status = upstream.status === 429 ? 429 : 502;
+      return sendJson(res, status, { detail: upstream.status === 401 || upstream.status === 403
+        ? "The AI provider rejected the API key. Check AI_API_KEY and provider settings."
+        : upstream.status === 429 ? "The AI provider rate limit or account quota was reached. Check provider usage."
+        : "The AI provider returned an error. Check Render logs and AI_BASE_URL / AI_MODEL settings." });
     }
-
     const choice = data.choices && data.choices[0];
     const reply = choice && choice.message && choice.message.content;
-    if (typeof reply !== "string" || !reply.trim()) {
-      console.error("Unexpected AI provider response:", JSON.stringify(data).slice(0, 1200));
-      return sendJson(res, 502, { detail: "The AI provider response did not contain text." });
-    }
-    await persistChatTurn(body, messages.filter(m => m.role === "user").slice(-1)[0].content, reply, model);
-    return sendJson(res, 200, { reply, model });
+    if (typeof reply !== "string" || !reply.trim()) return sendJson(res, 502, { detail: "The AI provider response did not contain text." });
+    await persistChatTurn(body, lastUser.content, reply, model);
+    return sendJson(res, 200, { reply, model, mode, sources: sources.map(({ title, url }) => ({ title, url })) });
   } catch (error) {
     console.error("AI request failed:", error.name, error.message);
-    return sendJson(res, 502, {
-      detail: error.name === "TimeoutError"
-        ? "The AI provider timed out. Try again shortly."
-        : "Could not connect to the AI provider. Check AI_BASE_URL and Render logs."
+    return sendJson(res, 502, { detail: error.name === "TimeoutError" ? "The AI provider timed out. Try again shortly." : "Could not connect to the AI provider. Check AI_BASE_URL and Render logs." });
+  }
+}
+
+async function handleImage(req, res) {
+  if (req.method !== "POST") { res.setHeader("Allow", "POST"); return sendJson(res, 405, { detail: "Use POST for this endpoint." }); }
+  if (rateLimited(req, 5)) return sendJson(res, 429, { detail: "Too many image requests. Please wait a minute and try again." });
+  let body;
+  try { body = await readJson(req, 100 * 1024); }
+  catch (error) { return sendJson(res, error.status || 400, { detail: error.message || "Could not read request." }); }
+  const prompt = typeof body.prompt === "string" ? body.prompt.trim().slice(0, 4000) : "";
+  if (!prompt) return sendJson(res, 400, { detail: "Write a description of the image you want." });
+  const apiKey = process.env.IMAGE_API_KEY;
+  if (!apiKey) return sendJson(res, 503, { detail: "Image generation is not configured yet. The administrator must add IMAGE_API_KEY and configure an image provider on the server." });
+  const baseUrl = (process.env.IMAGE_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
+  const model = process.env.IMAGE_MODEL || "gpt-image-1";
+  try {
+    const upstream = await fetch(baseUrl + "/images/generations", {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + apiKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ model, prompt, n: 1, size: "1024x1024" }),
+      signal: AbortSignal.timeout(120000)
     });
+    const data = await upstream.json().catch(() => ({}));
+    if (!upstream.ok) {
+      console.error("Image provider returned HTTP", upstream.status, JSON.stringify(data).slice(0, 800));
+      return sendJson(res, upstream.status === 429 ? 429 : 502, { detail: upstream.status === 401 || upstream.status === 403 ? "The image provider rejected IMAGE_API_KEY." : upstream.status === 429 ? "Image generation is rate-limited. Try again later." : "The image provider returned an error. Check IMAGE_BASE_URL and IMAGE_MODEL." });
+    }
+    const item = data.data && data.data[0];
+    const imageUrl = item && (item.url || (item.b64_json ? "data:image/png;base64," + item.b64_json : ""));
+    if (typeof imageUrl !== "string" || !imageUrl) return sendJson(res, 502, { detail: "The image provider returned no image." });
+    return sendJson(res, 200, { imageUrl, model });
+  } catch (error) {
+    console.error("Image request failed:", error.name, error.message);
+    return sendJson(res, 502, { detail: error.name === "TimeoutError" ? "Image generation timed out." : "Could not connect to the image provider." });
   }
 }
 
@@ -215,7 +270,7 @@ http.createServer(async (req, res) => {
     return sendJson(res, 200, {
       ok: true,
       service: "AFG AI",
-      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY)
+      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY),\n      webSearchConfigured: Boolean(process.env.TAVILY_API_KEY),\n      imageConfigured: Boolean(process.env.IMAGE_API_KEY)
     });
   }
 
