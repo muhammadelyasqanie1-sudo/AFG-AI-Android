@@ -132,7 +132,7 @@ async function handleChat(req, res) {
   }
 
   const language = body.language === "fa" ? "Persian/Dari" :
-    body.language === "en" ? "English" : "the language used by the user";
+    body.language === "en" ? "English" : "the same language as the user's latest message (detect it automatically)";
   const baseUrl = (process.env.AI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
   const model = process.env.AI_MODEL || "gpt-4.1-mini";
 
