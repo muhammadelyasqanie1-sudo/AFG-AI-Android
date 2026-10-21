@@ -122,7 +122,8 @@ function makeUuid(){return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/
 function savedUuid(key){let value=localStorage.getItem(key);if(!value){value=makeUuid();localStorage.setItem(key,value)}return value}
 const afgAiUserId=savedUuid('afg_ai_user_id');
 let afgAiSessionId=savedUuid('afg_ai_session_id');
-const chatStorageKey='afg_ai_chat_history_v1';
+const chatStorageKey='afg_ai_chat_history_v2';
+try{localStorage.removeItem('afg_ai_chat_history_v1')}catch{}
 let chatHistory=[];
 const obsoleteNotices=[/نشانی سرور تنظیم نشده/i,/نشانی سرور تنظیم نشده است/i,/تنظیم نشده است\. از ⚙ تنظیمات/i,/Could not reach the server/i,/Server URL is missing/i,/Make sure the backend accepts/i,/بررسی کن که سرور درخواست را بپذیرد/i,/Settings saved on this device/i,/تنظیمات در همین دستگاه ذخیره شد/i,/در حال دریافت پاسخ/i,/Getting a response/i];
 try{
