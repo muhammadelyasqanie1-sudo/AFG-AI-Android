@@ -25,6 +25,43 @@ aside{padding:14px}.section-label{color:var(--muted);font-size:12px;margin:4px 0
 .settings{display:none;padding:16px;border-top:1px solid var(--line);background:#0b1224}.settings.show{display:block}.settings label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}.settings input,.settings select{width:100%;background:#080e1c;color:var(--text);border:1px solid var(--line);padding:10px;border-radius:10px}.settings .warning{color:#ffd48b;font-size:12px;line-height:1.7;margin-top:8px}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:13px}
 @media(max-width:680px){.app{padding:9px}.layout{grid-template-columns:1fr}.layout aside{min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:9px}.section-label{grid-column:1/-1;margin:0}.feature{margin:0;padding:9px}.feature span{display:none}.chat-panel{min-height:55dvh}.welcome{padding:18px 16px 6px}.welcome h2{font-size:21px}.messages{padding:12px}.msg{max-width:96%}.top-actions .wide{display:none}}
+
+/* PRO++ visual system */
+:root{--bg:#030a19;--panel:#07152a;--panel2:#0c2140;--text:#f4f8ff;--muted:#a9bddc;--line:#1c3a61;--accent:#25d9ff;--accent2:#42f0c8;--violet:#8a5cff}
+body{background:radial-gradient(ellipse at 50% -12%,#164b80 0,transparent 42%),radial-gradient(ellipse at 100% 30%,#25145455,transparent 35%),linear-gradient(180deg,#061329,#020714 72%);background-attachment:fixed}
+.app{max-width:1120px;padding:18px 16px 24px}
+header{position:relative;border:1px solid #244d7b;border-radius:24px;padding:16px 18px;background:linear-gradient(110deg,#0a2343e8,#071226e8);box-shadow:0 18px 55px #0007;overflow:hidden}
+header:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 40%,#35d9ff0c 60%,transparent 80%)}
+.logo{width:62px;height:62px;border-radius:20px;background:linear-gradient(145deg,#18dcff,#4b78ff 55%,#a45dff);color:#031021;font-size:18px;line-height:1.05;box-shadow:0 0 0 1px #8deaff70,0 0 28px #08caff42}
+.brand h1{font-size:clamp(21px,3vw,30px);letter-spacing:-.5px}.brand p{font-size:13px}
+.btn{transition:transform .18s,border-color .18s,box-shadow .18s;border-radius:14px}.btn:hover{transform:translateY(-1px);border-color:#43dfff;box-shadow:0 6px 22px #00cfff16}.btn.primary{background:linear-gradient(120deg,#17dff4,#4d9bff 56%,#9463ff);color:#031022;box-shadow:0 8px 24px #147cff2c}
+.layout{grid-template-columns: minmax(245px, .82fr) minmax(0,1.8fr);gap:16px;padding-top:16px}
+aside,.chat-panel{border:1px solid #1c3b61;border-radius:24px;background:linear-gradient(160deg,#0b1930f5,#071020f5);box-shadow:0 16px 45px #0004}
+aside{padding:16px;align-self:start;position:relative;overflow:hidden}
+.section-label{font-size:13px;font-weight:800;color:#9bdcff;margin:2px 0 14px}
+.feature{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:100px;padding:14px;margin:9px 0;border-radius:18px;border-color:#24517b;background:linear-gradient(125deg,#0c2948,#0a142a);font-size:14px;box-shadow:inset 0 1px #ffffff08;overflow:hidden}
+.feature:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(#20dfff,#8b63ff)}
+.feature strong{font-size:15px;line-height:1.5}.feature span{display:block;font-size:12px;margin-top:4px;line-height:1.6}
+.chat-panel{min-height:680px}
+.welcome{position:relative;isolation:isolate;padding:28px 25px 18px;overflow:hidden}
+.welcome:before{content:"";position:absolute;z-index:-1;inset:0 0 auto;height:245px;background:radial-gradient(ellipse at 75% 5%,#1b73b755,transparent 55%),linear-gradient(180deg,#0a2343aa,transparent);clip-path:polygon(0 0,100% 0,100% 70%,82% 54%,72% 68%,60% 38%,48% 74%,35% 48%,22% 78%,0 56%)}
+.welcome h2{font-size:clamp(24px,4vw,34px);line-height:1.5;margin-bottom:8px}.welcome p{font-size:15px}
+.quick{gap:9px}.quick button{border-radius:14px;padding:10px 13px;background:#0b2340;border-color:#214a75;font-size:13px}
+.messages{padding:16px 22px;gap:14px}.msg{border-radius:18px;padding:14px 16px;font-size:15px;box-shadow:0 8px 24px #0002}.msg.user{background:linear-gradient(125deg,#173f70,#1c3260);border-color:#2b67a0}.msg.ai{background:linear-gradient(125deg,#0c2c3a,#12263a);border-color:#245465}
+.composer{background:#071020;padding:16px 18px}.compose-row{align-items:center;gap:10px}.compose-row textarea{min-height:54px;border-radius:18px;border-color:#234a75;background:#050c19;padding:14px;box-shadow:inset 0 1px 8px #0005}.compose-row textarea:focus{border-color:#24dfff;box-shadow:0 0 0 3px #18dfff18}.smallprint{font-size:12px}
+.settings{border-top-color:#21466c;background:#071225;padding:18px}.settings input,.settings select{border-radius:13px;border-color:#21466c}
+footer{padding:20px 8px;color:#7993b7}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.feature-action{min-width:0;text-align:right;border:1px solid #214e78;border-radius:18px;padding:15px 13px;background:linear-gradient(140deg,#0d2c4d,#0a142a);color:var(--text);display:flex;align-items:center;gap:11px;cursor:pointer;min-height:100px}
+.feature-action .f-icon{flex:0 0 44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:23px;background:#12c7ff17;border:1px solid #22cfff66;color:#37e1ff}
+.feature-action:nth-child(2) .f-icon{color:#c58aff;background:#9d55ff18;border-color:#9d55ff66}
+.feature-action:nth-child(3) .f-icon{color:#39e9c7;background:#39e9c718;border-color:#39e9c766}
+.feature-action:nth-child(4) .f-icon{color:#ffb8e7;background:#f66bd518;border-color:#f66bd566}
+.feature-action strong{display:block;font-size:13px}.feature-action small{display:block;color:var(--muted);font-size:11px;line-height:1.5;margin-top:4px}
+.creative-banner{margin:4px 18px 18px;border:1px solid #2678a3;border-radius:20px;padding:18px;background:radial-gradient(ellipse at 95% 20%,#7d55ff45,transparent 36%),linear-gradient(110deg,#08364c,#0b1830 65%,#241748);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.creative-banner h3{margin:0 0 5px;font-size:20px}.creative-banner p{margin:0;color:#b7cbe6;font-size:12px;line-height:1.7}
+@media(max-width:680px){.app{padding:10px 9px 18px}.layout{grid-template-columns:1fr;gap:12px}.layout aside{display:none}.chat-panel{min-height:65dvh}.welcome{padding:20px 17px 12px}.welcome h2{font-size:25px}.messages{padding:13px}.msg{max-width:96%}.feature-grid{gap:8px}.feature-action{padding:12px 10px;min-height:92px;gap:8px}.feature-action .f-icon{flex-basis:38px;height:38px;font-size:20px}.feature-action strong{font-size:12px}.feature-action small{font-size:10px}.creative-banner{margin:0 12px 12px;padding:14px}.creative-banner h3{font-size:17px}.top-actions{gap:5px}.top-actions .btn{padding:8px 10px}header{padding:13px;border-radius:20px}}
+
 </style>
 </head>
 <body>
@@ -36,16 +73,24 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:13px}
 </header>
 <div class="layout">
 <aside>
- <div class="section-label" id="toolsLabel">قابلیت‌ها</div>
- <div class="feature"><strong>✦ گفت‌وگوی هوشمند</strong><span>دری، فارسی و انگلیسی</span></div>
- <div class="feature"><strong>▤ تحلیل فایل</strong><span>برای اتصال به سرور</span></div>
- <div class="feature"><strong>◈ عکس و ویدیو</strong><span>نیازمند سرویس تصویری</span></div>
+ <div class="section-label" id="toolsLabel">قابلیت‌های AFG AI</div>
+ <div class="feature"><strong>✦ گفت‌وگوی هوشمند</strong><span>پرسش، نوشتن، یادگیری و برنامه‌نویسی</span></div>
+ <div class="feature"><strong>▤ تحلیل فایل</strong><span>خواندن متن و بررسی محتوای فایل‌های پشتیبانی‌شده</span></div>
+ <div class="feature"><strong>◈ ابزارهای خلاقانه</strong><span>فضای آماده برای اتصال سرویس‌های تصویری</span></div>
+ <div class="feature"><strong>⌁ زبان خودکار</strong><span>پاسخ به زبان پیام در حالت خودکار</span></div>
 </aside>
 <main class="chat-panel">
  <section class="welcome"><h2 id="welcomeTitle">سلام! به افغان AI خوش آمدی.</h2><p id="welcomeText">چه چیزی را می‌خواهی یاد بگیری، بسازی یا حل کنی؟ پرسشت را بنویس تا شروع کنیم.</p>
- <div class="quick"><button data-prompt="یک برنامهٔ یادگیری زبان انگلیسی برایم بساز.">📚 یادگیری</button><button data-prompt="این ایده را به یک پروژهٔ عملی تبدیل کن.">💡 ایده‌پردازی</button><button data-prompt="یک قطعه کد را توضیح بده و بهترش کن.">⌘ برنامه‌نویسی</button></div></section>
+ <div class="quick"><button data-prompt="یک برنامهٔ یادگیری زبان انگلیسی برایم بساز.">📚 یادگیری</button><button data-prompt="این ایده را به یک پروژهٔ عملی تبدیل کن.">💡 ایده‌پردازی</button><button data-prompt="یک قطعه کد را توضیح بده و بهترش کن.">⌘ برنامه‌نویسی</button></div>
+ <div class="feature-grid">
+  <button class="feature-action" id="chatFeature"><span class="f-icon">✦</span><span><strong>گفت‌وگوی هوشمند</strong><small>پرسش، مشاوره و پاسخ‌گویی</small></span></button>
+  <button class="feature-action" id="imageFeature"><span class="f-icon">✧</span><span><strong>ساخت تصویر</strong><small>آماده‌سازی اتصال به سرویس تصویر</small></span></button>
+  <button class="feature-action" id="fileFeature"><span class="f-icon">▤</span><span><strong>تحلیل فایل</strong><small>متن، CSV، JSON و فایل‌های متنی</small></span></button>
+  <button class="feature-action" id="webFeature"><span class="f-icon">⌕</span><span><strong>جست‌وجوی وب</strong><small>وقتی سرویس جست‌وجو پیکربندی شود</small></span></button>
+ </div>
+ </section>
  <section class="messages" id="messages" aria-live="polite"><div class="msg note" id="setupNote">برای پاسخ‌های واقعی، نشانی سرور AFG AI را در تنظیمات وارد کن. این فایل به‌تنهایی مدل هوش مصنوعی یا سرور را در خود ندارد.</div></section>
- <form class="composer" id="chatForm"><div class="compose-row"><textarea id="prompt" placeholder="پیامت را بنویس…" rows="1" required></textarea><button class="btn primary" type="submit" id="sendBtn">ارسال ➤</button></div><div class="smallprint" id="finePrint">پاسخ‌های هوش مصنوعی ممکن است اشتباه باشند. اطلاعات مهم را بررسی کن.</div></form>
+ <form class="composer" id="chatForm"><div class="compose-row"><textarea id="prompt" placeholder="پیامت را بنویس…" rows="1" required></textarea><button class="btn" type="button" id="attachBtn" aria-label="تحلیل فایل">＋</button><button class="btn primary" type="submit" id="sendBtn">ارسال ➤</button></div><div class="smallprint" id="finePrint">پاسخ‌های هوش مصنوعی ممکن است اشتباه باشند. اطلاعات مهم را بررسی کن.</div></form>
  <section class="settings" id="settings">
   <h3 id="settingsTitle">تنظیم اتصال</h3>
   <label for="serverUrl" id="serverLabel">نشانی سرور AFG AI</label><input id="serverUrl" placeholder="https://your-afg-ai-server.example">
@@ -77,6 +122,14 @@ $('saveSettings').onclick=()=>{localStorage.setItem('afg_ai_server',$('serverUrl
 $('serverUrl').value=localStorage.getItem('afg_ai_server')||(location.protocol.startsWith('http')?location.origin:'https://afg-ai.onrender.com');const deviceLang=(navigator.language||'fa').toLowerCase().startsWith('en')?'en':'fa';$('language').value=localStorage.getItem('afg_ai_language')||'auto';isEnglish=localStorage.getItem('afg_ai_ui_language')?(localStorage.getItem('afg_ai_ui_language')==='en'):deviceLang==='en';applyLang();restoreHistory();
 document.querySelectorAll('[data-prompt]').forEach(b=>b.onclick=()=>{$('prompt').value=b.dataset.prompt;$('prompt').focus()});
 $('chatForm').onsubmit=async e=>{e.preventDefault();const text=$('prompt').value.trim();if(!text){addMsg(tr('empty'),'note');return}const base=(localStorage.getItem('afg_ai_server')||'').replace(/\/+$/,'');if(!base){$('settings').classList.add('show');addMsg(tr('notSet'),'note');return}addMsg(text,'user');$('prompt').value='';const wait=addMsg(tr('thinking'),'ai');$('sendBtn').disabled=true;try{const res=await fetch(base+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:chatHistory.filter(m=>['user','ai'].includes(m.kind)).slice(-20).map(m=>({role:m.kind==='ai'?'assistant':'user',content:m.text})),language:$('language').value||'auto',web_search:false,user_id:afgAiUserId,session_id:afgAiSessionId})});const data=await res.json();if(!res.ok)throw new Error(data.detail||tr('error'));wait.textContent=data.reply||data.response||JSON.stringify(data);chatHistory.push({text:wait.textContent,kind:'ai'});persistHistory()}catch(err){wait.textContent=(err.message||tr('error'))+'\\n\\n'+(isEnglish?'Make sure the backend accepts this request and has an AI provider configured.':'بررسی کن که سرور درخواست را بپذیرد و سرویس هوش مصنوعی در آن تنظیم شده باشد.')}finally{$('sendBtn').disabled=false}};
+
+$('chatFeature').onclick=()=>{$('prompt').focus();$('prompt').scrollIntoView({behavior:'smooth',block:'center'})};
+$('fileFeature').onclick=()=>$('fileInput').click();
+$('attachBtn').onclick=()=>$('fileInput').click();
+$('imageFeature').onclick=()=>addMsg(isEnglish?'Image generation is not connected yet. A compatible image-generation provider must be configured on the server before this tool can create images.':'ساخت تصویر هنوز به سرویس تصویری وصل نشده است. برای تولید واقعی تصویر باید سرویس سازگار در سرور تنظیم شود؛ این دکمه فعلاً ادعای ساخت تصویر نمی‌کند.','note');
+$('webFeature').onclick=()=>addMsg(isEnglish?'Web search needs a configured search provider.':'جست‌وجوی وب به کلید سرویس جست‌وجو در سرور نیاز دارد.','note');
+$('fileInput').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;const allowed=['txt','md','csv','json','log'];const ext=file.name.split('.').pop().toLowerCase();if(!allowed.includes(ext)){addMsg(isEnglish?'For now, choose TXT, MD, CSV, JSON or LOG.':'فعلاً فایل TXT، MD، CSV، JSON یا LOG انتخاب کن.','note');e.target.value='';return}if(file.size>1024*1024){addMsg(isEnglish?'File limit is 1 MB for this basic analyzer.':'حداکثر اندازهٔ فایل در این تحلیل‌گر اولیه ۱ مگابایت است.','note');e.target.value='';return}try{const content=await file.text();$('prompt').value=(isEnglish?'Analyze this file named ':'این فایل را تحلیل کن: ')+file.name+'\n\n'+content.slice(0,18000);addMsg(isEnglish?'File loaded into the prompt. Press Send to analyze it with AFG AI.':'فایل خوانده شد. برای تحلیل محتوای آن با AFG AI دکمهٔ ارسال را بزن.','note');$('prompt').focus()}catch{addMsg(isEnglish?'Could not read this file.':'خواندن این فایل ممکن نشد.','note')}finally{e.target.value=''}});
+
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').hidden=false});$('installBtn').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installBtn').hidden=true}else{addMsg(isEnglish?'Use your browser menu and choose “Install app” or “Add to Home screen”.':'از منوی مرورگر گزینهٔ «نصب برنامه» یا «افزودن به صفحهٔ اصلی» را انتخاب کن.','note')}};
 if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
