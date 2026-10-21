@@ -2,12 +2,13 @@ workflows:
   android-apk:
     name: AFG AI Android APK
     max_build_duration: 60
-    instance_type: linux_x2
+    instance_type: linux
     environment:
       java: 17
     scripts:
       - name: Configure Android SDK
         script: |
+          set -euo pipefail
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
           echo "Java:"
           java -version
