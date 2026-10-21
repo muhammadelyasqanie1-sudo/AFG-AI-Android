@@ -120,6 +120,25 @@ footer{padding:20px 8px;color:#7993b7}
 #messages .source-link{display:block;border:1px solid #24486d;border-radius:11px;padding:9px 11px;color:#82e7f5;text-decoration:none;font-size:12px;background:#071426}
 @media(max-width:680px){.mode-bar{gap:5px;padding:6px}.mode-btn{padding:9px 10px;flex:1}.mode-caption{font-size:10px}}
 
+
+/* Conversation-first navigation inspired by modern AI workspaces */
+.sidebar-brand{display:flex;align-items:center;gap:10px;margin:2px 0 16px;padding:4px 2px}
+.sidebar-mini-logo{display:grid;place-items:center;width:37px;height:37px;border-radius:12px;background:linear-gradient(135deg,#28dfff,#a18aff);color:#041326;font-weight:950}
+.sidebar-brand strong,.sidebar-brand small{display:block}.sidebar-brand strong{font-size:14px}.sidebar-brand small{font-size:10px;color:var(--muted);margin-top:3px}
+.sidebar-new{width:100%;text-align:start;border:1px solid #27618a;border-radius:13px;padding:12px;background:linear-gradient(120deg,#103b59,#15254b);color:#f4fbff;font-weight:750;margin-bottom:10px}
+.sidebar-search-wrap{display:flex;align-items:center;gap:7px;border:1px solid #1c3d5e;background:#061124;border-radius:12px;padding:0 10px;margin-bottom:18px;color:#72cfe4}
+.sidebar-search-wrap input{min-width:0;width:100%;border:0!important;outline:0;background:transparent;color:var(--text);padding:10px 0;font-size:12px}
+.sidebar-section-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#7898bc;margin:14px 5px 7px}
+.sidebar-nav{display:flex;align-items:center;gap:10px;width:100%;text-align:start;border:1px solid transparent;border-radius:11px;background:transparent;color:#c1d3ec;padding:10px 11px;margin:2px 0;font-size:12px}
+.sidebar-nav.active,.sidebar-nav:hover{background:#102b46;border-color:#214c70;color:#f2fcff}
+.recent-chats{display:grid;gap:4px;max-height:34vh;overflow:auto}
+.recent-chat{width:100%;text-align:start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:transparent;border:1px solid transparent;border-radius:10px;padding:9px 10px;color:#a9bddc;font-size:11px}
+.recent-chat:hover{background:#0c2138;border-color:#1d4167;color:#f4f8ff}
+.sidebar-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid #1b3653;padding-top:13px;margin-top:14px;color:#6f8fb5;font-size:9px}
+.sidebar-bottom button{border:1px solid #1e4266;background:#0a1a30;color:#d9edff;border-radius:10px;padding:9px 11px;font-size:11px}
+.sidebar-toggle{display:none}
+@media(max-width:680px){.sidebar-toggle{display:inline-flex!important}.layout aside#conversationSidebar{display:none}.layout aside#conversationSidebar.mobile-open{display:block;position:fixed;z-index:1100;top:9px;bottom:9px;right:9px;width:min(310px,86vw);min-height:0;overflow:auto;box-shadow:0 20px 80px #000b}.sidebar-bottom{position:sticky;bottom:0;background:#071225;padding-bottom:8px}.recent-chats{max-height:26vh}body.sidebar-open:after{content:"";position:fixed;inset:0;background:#0009;z-index:1090}}
+
 </style>
 </head>
 <body>
@@ -127,15 +146,21 @@ footer{padding:20px 8px;color:#7993b7}
 <header>
  <img class="logo" src="./icon.svg?v=3" alt="AFG AI logo" width="68" height="68">
  <div class="brand"><h1>AFG AI</h1><p id="subtitle">هوش مصنوعی افغانستان · همراه هوشمند تو</p></div>
- <div class="top-actions"><button class="btn wide" id="newChatBtn" type="button">گفت‌وگوی جدید</button><button class="btn wide" id="langBtn">English</button><button class="btn" id="settingsBtn" aria-label="تنظیمات">⚙</button><button class="btn primary" id="installBtn" hidden>نصب</button></div>
+ <div class="top-actions"><button class="btn sidebar-toggle" id="sidebarToggle" type="button" aria-label="گفت‌وگوهای اخیر">☰</button><button class="btn wide" id="newChatBtn" type="button">گفت‌وگوی جدید</button><button class="btn wide" id="langBtn">English</button><button class="btn" id="settingsBtn" aria-label="تنظیمات">⚙</button><button class="btn primary" id="installBtn" hidden>نصب</button></div>
 </header>
 <div class="layout">
-<aside>
- <div class="section-label" id="toolsLabel">قابلیت‌های AFG AI</div>
- <div class="feature"><strong>✦ گفت‌وگوی هوشمند</strong><span>پرسش، نوشتن، یادگیری و برنامه‌نویسی</span></div>
- <div class="feature"><strong>▤ تحلیل فایل</strong><span>خواندن متن و بررسی محتوای فایل‌های پشتیبانی‌شده</span></div>
- <div class="feature"><strong>◈ ابزارهای خلاقانه</strong><span>فضای آماده برای اتصال سرویس‌های تصویری</span></div>
- <div class="feature"><strong>⌁ زبان خودکار</strong><span>پاسخ به زبان پیام در حالت خودکار</span></div>
+<aside id="conversationSidebar" aria-label="گفت‌وگوها">
+ <div class="sidebar-brand"><span class="sidebar-mini-logo">AF</span><span><strong>AFG AI</strong><small id="sidebarTagline">فضای هوشمند تو</small></span></div>
+ <button class="sidebar-new" id="sidebarNewChat" type="button">＋ <span id="sidebarNewText">گفت‌وگوی جدید</span></button>
+ <label class="sidebar-search-wrap"><span>⌕</span><input id="chatSearch" type="search" placeholder="جست‌وجو در گفتگوها…" aria-label="جست‌وجوی گفت‌وگوها"></label>
+ <div class="sidebar-section-title" id="sidebarToolsTitle">فضاها</div>
+ <button class="sidebar-nav active" type="button" data-mode="chat">✦ <span id="sideChatText">گفت‌وگو</span></button>
+ <button class="sidebar-nav" type="button" data-mode="research">⌕ <span id="sideResearchText">پژوهش زنده</span></button>
+ <button class="sidebar-nav" type="button" data-mode="coding">⌘ <span id="sideCodingText">برنامه‌نویسی</span></button>
+ <button class="sidebar-nav" type="button" data-mode="study">▤ <span id="sideStudyText">آموزش</span></button>
+ <button class="sidebar-nav" type="button" data-mode="creative">✧ <span id="sideCreativeText">خلاقیت</span></button>
+ <div class="sidebar-section-title" id="sidebarRecentTitle">گفت‌وگوهای اخیر</div><div id="recentChats" class="recent-chats"></div>
+ <div class="sidebar-bottom"><button type="button" id="sidebarSettings">⚙ <span id="sidebarSettingsText">تنظیمات</span></button><span>AFG AI · PRO++</span></div>
 </aside>
 <main class="chat-panel">
  <section class="welcome"><h2 id="welcomeTitle">سلام! به افغان AI خوش آمدی.</h2><p id="welcomeText">چه چیزی را می‌خواهی یاد بگیری، بسازی یا حل کنی؟ پرسشت را بنویس تا شروع کنیم.</p>
@@ -200,7 +225,9 @@ try{
 }catch{chatHistory=[]}
 function persistHistory(){try{localStorage.setItem(chatStorageKey,JSON.stringify(chatHistory.slice(-80)))}catch{}}
 function persistArchivedChats(){try{localStorage.setItem(archivedChatsKey,JSON.stringify(archivedChats.slice(-50)))}catch{}}
-function renderArchivedChats(){const root=$('savedChats');if(!root)return;root.innerHTML='';if(!archivedChats.length){const empty=document.createElement('div');empty.className='smallprint';empty.textContent=isEnglish?'Your saved conversations will appear here.':'گفت‌وگوهای قبلی‌ات پس از شروع گفت‌وگوی جدید اینجا ذخیره می‌شوند.';root.appendChild(empty);return}archivedChats.slice().reverse().forEach((chat,index)=>{const b=document.createElement('button');b.type='button';b.className='btn';b.style.textAlign='start';b.style.width='100%';const title=chat.title||((isEnglish?'Conversation ':'گفت‌وگو ')+(archivedChats.length-index));b.textContent=title;b.onclick=()=>{if(chatHistory.length){archivedChats.push({id:makeUuid(),title:makeChatTitle(chatHistory),messages:chatHistory.slice(),savedAt:Date.now()});persistArchivedChats()}chatHistory=Array.isArray(chat.messages)?chat.messages.slice(-80):[];persistHistory();afgAiSessionId=chat.id||makeUuid();localStorage.setItem('afg_ai_session_id',afgAiSessionId);$('messages').innerHTML='';if(chatHistory.length)chatHistory.forEach(m=>addMsg(m.text,m.kind,false));else $('messages').appendChild($('setupNote'));$('settingsStatus').textContent=isEnglish?'Conversation opened.':'گفت‌وگوی ذخیره‌شده باز شد.';renderArchivedChats();window.scrollTo({top:0,behavior:'smooth'})};root.appendChild(b)})}
+function openSavedConversation(chat){if(chatHistory.length){archivedChats.push({id:makeUuid(),title:makeChatTitle(chatHistory),messages:chatHistory.slice(),savedAt:Date.now()});archivedChats=archivedChats.slice(-50);persistArchivedChats()}chatHistory=Array.isArray(chat.messages)?chat.messages.slice(-80):[];persistHistory();afgAiSessionId=chat.id||makeUuid();localStorage.setItem('afg_ai_session_id',afgAiSessionId);$('messages').innerHTML='';if(chatHistory.length)chatHistory.forEach(m=>addMsg(m.text,m.kind,false));else $('messages').appendChild($('setupNote'));$('settingsStatus').textContent=isEnglish?'Conversation opened.':'گفت‌وگوی ذخیره‌شده باز شد.';renderArchivedChats();$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open');window.scrollTo({top:0,behavior:'smooth'})}
+function renderChatList(root,items,emptyText){if(!root)return;root.innerHTML='';if(!items.length){const empty=document.createElement('div');empty.className='smallprint';empty.textContent=emptyText;root.appendChild(empty);return}items.slice().reverse().forEach((chat,index)=>{const b=document.createElement('button');b.type='button';b.className=root.id==='recentChats'?'recent-chat':'btn';b.style.textAlign='start';b.style.width='100%';b.textContent=chat.title||((isEnglish?'Conversation ':'گفت‌وگو ')+(items.length-index));b.onclick=()=>openSavedConversation(chat);root.appendChild(b)})}
+function renderArchivedChats(){renderChatList($('savedChats'),archivedChats,isEnglish?'Your saved conversations will appear here.':'گفت‌وگوهای قبلی‌ات پس از شروع گفت‌وگوی جدید اینجا ذخیره می‌شوند.');const q=($('chatSearch')&&$('chatSearch').value||'').trim().toLowerCase();renderChatList($('recentChats'),archivedChats.filter(c=>!q||(c.title||'').toLowerCase().includes(q)),isEnglish?'No recent conversations yet.':'گفت‌وگوی ذخیره‌شده‌ای نیست.')}
 function makeChatTitle(messages){const first=(messages||[]).find(m=>m.kind==='user'&&m.text);if(!first)return isEnglish?'Saved conversation':'گفت‌وگوی ذخیره‌شده';return first.text.replace(/\s+/g,' ').slice(0,44)+(first.text.length>44?'…':'')}
 function archiveCurrentChat(){if(!chatHistory.length)return;archivedChats.push({id:afgAiSessionId,title:makeChatTitle(chatHistory),messages:chatHistory.slice(-80),savedAt:Date.now()});archivedChats=archivedChats.slice(-50);persistArchivedChats();renderArchivedChats()}
 function restoreHistory(){if(chatHistory.length){$('messages').innerHTML='';chatHistory.slice(-80).forEach(m=>addMsg(m.text,m.kind,false))}else{$('setupNote').textContent=tr('setup')}renderArchivedChats()}
@@ -211,7 +238,7 @@ function addMsg(text,kind,save=true){let el=document.createElement('div');el.cla
 $('newChatBtn').onclick=()=>{archiveCurrentChat();chatHistory=[];persistHistory();$('messages').innerHTML='';$('messages').appendChild($('setupNote'));$('setupNote').textContent=tr('setup');afgAiSessionId=makeUuid();localStorage.setItem('afg_ai_session_id',afgAiSessionId);$('prompt').value='';renderArchivedChats();$('prompt').focus()};
 $('langBtn').onclick=()=>{isEnglish=!isEnglish;localStorage.setItem('afg_ai_ui_language',isEnglish?'en':'fa');$('uiLanguage').value=isEnglish?'en':'fa';applyLang()};
 function closeSettings(){$('settings').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'})}
-$('settingsBackBtn').onclick=closeSettings;
+$('settingsBackBtn').onclick=closeSettings;$('sidebarToggle').onclick=()=>{const side=$('conversationSidebar');side.classList.toggle('mobile-open');document.body.classList.toggle('sidebar-open',side.classList.contains('mobile-open'))};$('sidebarNewChat').onclick=()=>{$('newChatBtn').click();$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open')};$('sidebarSettings').onclick=()=>{$('settingsBtn').click();$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open')};$('chatSearch').addEventListener('input',renderArchivedChats);
 $('settingsBtn').onclick=()=>{const panel=$('settings');const opening=!panel.classList.contains('show');panel.classList.toggle('show',opening);if(opening)panel.scrollTop=0};
 $('uiLanguage').value=localStorage.getItem('afg_ai_ui_language')||'auto';
 $('uiLanguage').onchange=()=>{const value=$('uiLanguage').value;localStorage.setItem('afg_ai_ui_language',value);isEnglish=value==='auto'?deviceLang==='en':value==='en';applyLang()};
@@ -234,7 +261,7 @@ document.querySelectorAll('[data-prompt]').forEach(b=>b.onclick=()=>{$('prompt')
 $('chatForm').onsubmit=async e=>{e.preventDefault();const text=$('prompt').value.trim();if(!text){addMsg(tr('empty'),'note');return}addMsg(text,'user');$('prompt').value='';const wait=addMsg(isEnglish?'Working on your request…':'در حال آماده‌سازی پاسخ…','ai',false);$('sendBtn').disabled=true;try{const res=await fetch(defaultServer+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:chatHistory.filter(m=>['user','ai'].includes(m.kind)).slice(-20).map(m=>({role:m.kind==='ai'?'assistant':'user',content:m.text})),language:$('language').value||'auto',mode:activeMode,web_search:activeMode==='research',user_id:afgAiUserId,session_id:afgAiSessionId})});const data=await res.json();if(!res.ok)throw new Error(data.detail||tr('error'));wait.textContent=data.reply||data.response||JSON.stringify(data);chatHistory.push({text:wait.textContent,kind:'ai'});persistHistory();if(Array.isArray(data.sources)&&data.sources.length){const list=document.createElement('div');list.className='source-list';data.sources.forEach(src=>{const a=document.createElement('a');a.className='source-link';a.href=src.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='↗ '+src.title;list.appendChild(a)});wait.appendChild(list)}}catch(err){wait.className='msg note';wait.textContent=err.message||tr('error')}finally{$('sendBtn').disabled=false}};
 
 function setMode(mode){activeMode=mode;document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));const captions={fa:{chat:'حالت گفتگو برای پرسش‌های عمومی، نوشتن و مشاوره.',research:'پژوهش زنده به سرویس جست‌وجو نیاز دارد؛ پاسخ همراه با پیوند منابع نمایش داده می‌شود.',coding:'برای کدنویسی، اشکال‌زدایی، توضیح و بازبینی امنیتی.',study:'آموزش گام‌به‌گام، مثال و توضیح متناسب با سطح تو.',creative:'ایده‌پردازی، داستان، متن تبلیغاتی و راه‌حل‌های خلاقانه.'},en:{chat:'General questions, writing and advice.',research:'Live research requires a configured search provider and returns source links.',coding:'Coding, debugging, explanations and security-minded reviews.',study:'Step-by-step teaching, examples and explanations.',creative:'Brainstorming, stories, copywriting and original ideas.'}};$('modeCaption').textContent=captions[isEnglish?'en':'fa'][mode];$('prompt').placeholder=mode==='coding'?(isEnglish?'Describe the code or bug…':'کد یا مشکل برنامه‌نویسی را بنویس…'):mode==='research'?(isEnglish?'What should I research on the web?':'چه موضوعی را در وب بررسی کنم؟'):mode==='creative'?(isEnglish?'What would you like to create?':'چه چیزی می‌خواهی خلق کنی؟'):tr('placeholder')}
-document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{setMode(b.dataset.mode);document.querySelectorAll('.sidebar-nav').forEach(x=>x.classList.toggle('active',x.dataset.mode===b.dataset.mode));$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open')}));
 $('chatFeature').onclick=()=>{setMode('chat');$('prompt').focus();$('prompt').scrollIntoView({behavior:'smooth',block:'center'})};
 $('fileFeature').onclick=()=>$('fileInput').click();$('attachBtn').onclick=()=>$('fileInput').click();
 function showToolNotice(message){let notice=$('toolNotice');if(!notice){notice=document.createElement('div');notice.id='toolNotice';notice.className='msg note';notice.setAttribute('role','status');$('messages').appendChild(notice)}notice.textContent=message;notice.scrollIntoView({behavior:'smooth',block:'nearest'})}
