@@ -123,7 +123,7 @@ footer{padding:20px 8px;color:#7993b7}
 
 /* Conversation-first navigation inspired by modern AI workspaces */
 .sidebar-brand{display:flex;align-items:center;gap:10px;margin:2px 0 16px;padding:4px 2px}
-.sidebar-mini-logo{display:grid;place-items:center;width:37px;height:37px;border-radius:12px;background:linear-gradient(135deg,#28dfff,#a18aff);color:#041326;font-weight:950}
+.sidebar-mini-logo{display:block;object-fit:cover;width:37px;height:37px;border-radius:12px;border:1px solid #2b5b8a;box-shadow:0 0 18px #245cff24}
 .sidebar-brand strong,.sidebar-brand small{display:block}.sidebar-brand strong{font-size:14px}.sidebar-brand small{font-size:10px;color:var(--muted);margin-top:3px}
 .sidebar-new{width:100%;text-align:start;border:1px solid #27618a;border-radius:13px;padding:12px;background:linear-gradient(120deg,#103b59,#15254b);color:#f4fbff;font-weight:750;margin-bottom:10px}
 .sidebar-search-wrap{display:flex;align-items:center;gap:7px;border:1px solid #1c3d5e;background:#061124;border-radius:12px;padding:0 10px;margin-bottom:18px;color:#72cfe4}
@@ -146,18 +146,26 @@ footer{padding:20px 8px;color:#7993b7}
 .image-dialog-card textarea{width:100%;resize:vertical;min-height:110px;border:1px solid #254d71;border-radius:14px;background:#040b17;color:var(--text);padding:12px;line-height:1.7}
 .image-dialog-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:12px}.image-dialog-actions button{min-width:105px}
 
+
+.welcome-brand-mark{display:flex;align-items:center;gap:13px;margin:0 0 18px;padding:12px 14px;border:1px solid #203f67;border-radius:18px;background:linear-gradient(115deg,#061326,#0b1530 72%,#100c2b);max-width:390px}
+.welcome-brand-mark img{display:block;width:88px;height:88px;object-fit:cover;border-radius:15px;flex:0 0 auto;box-shadow:0 0 25px #236bff25}
+.welcome-brand-mark strong{display:block;font-size:20px;letter-spacing:2px;background:linear-gradient(100deg,#f5fcff,#67bfff 52%,#b78aff);color:transparent;background-clip:text}
+.welcome-brand-mark span{display:block;margin-top:5px;color:#8ba7d2;font-size:9px;letter-spacing:1.2px}
+.logo{object-fit:cover;border:1px solid #2b5b8a;box-shadow:0 0 22px #2676ff30}
+@media(max-width:520px){.welcome-brand-mark{gap:10px;padding:9px 11px}.welcome-brand-mark img{width:68px;height:68px}.welcome-brand-mark strong{font-size:17px}.welcome-brand-mark span{font-size:8px;letter-spacing:.6px}}
+
 </style>
 </head>
 <body>
 <div class="app">
 <header>
- <img class="logo" src="./icon.svg?v=3" alt="AFG AI logo" width="68" height="68">
+ <img class="logo" src="./afg-ai-logo.jpg?v=1" alt="AFG AI Neon Chrome logo" width="68" height="68">
  <div class="brand"><h1>AFG AI</h1><p id="subtitle">هوش مصنوعی افغانستان · همراه هوشمند تو</p></div>
  <div class="top-actions"><button class="btn sidebar-toggle" id="sidebarToggle" type="button" aria-label="گفت‌وگوهای اخیر">☰</button><button class="btn wide" id="newChatBtn" type="button">گفت‌وگوی جدید</button><button class="btn wide" id="langBtn">English</button><button class="btn" id="settingsBtn" aria-label="تنظیمات">⚙</button><button class="btn primary" id="installBtn" hidden>نصب</button></div>
 </header>
 <div class="layout">
 <aside id="conversationSidebar" aria-label="گفت‌وگوها">
- <div class="sidebar-brand"><span class="sidebar-mini-logo">AF</span><span><strong>AFG AI</strong><small id="sidebarTagline">فضای هوشمند تو</small></span></div>
+ <div class="sidebar-brand"><img class="sidebar-mini-logo" src="./afg-ai-logo.jpg?v=1" alt="AFG AI logo"><span><strong>AFG AI</strong><small id="sidebarTagline">فضای هوشمند تو</small></span></div>
  <button class="sidebar-new" id="sidebarNewChat" type="button">＋ <span id="sidebarNewText">گفت‌وگوی جدید</span></button>
  <label class="sidebar-search-wrap"><span>⌕</span><input id="chatSearch" type="search" placeholder="جست‌وجو در گفتگوها…" aria-label="جست‌وجوی گفت‌وگوها"></label>
  <div class="sidebar-section-title" id="sidebarToolsTitle">فضاها</div>
@@ -170,7 +178,7 @@ footer{padding:20px 8px;color:#7993b7}
  <div class="sidebar-bottom"><button type="button" id="sidebarSettings">⚙ <span id="sidebarSettingsText">تنظیمات</span></button><span>AFG AI · PRO++</span></div>
 </aside>
 <main class="chat-panel">
- <section class="welcome"><h2 id="welcomeTitle">سلام! به افغان AI خوش آمدی.</h2><p id="welcomeText">چه چیزی را می‌خواهی یاد بگیری، بسازی یا حل کنی؟ پرسشت را بنویس تا شروع کنیم.</p>
+ <section class="welcome"><div class="welcome-brand-mark"><img src="./afg-ai-logo.jpg?v=1" alt="AFG AI Neon Chrome emblem"><div><strong>AFG AI</strong><span>PRO++ · INTELLIGENCE, REIMAGINED</span></div></div><h2 id="welcomeTitle">سلام! به افغان AI خوش آمدی.</h2><p id="welcomeText">چه چیزی را می‌خواهی یاد بگیری، بسازی یا حل کنی؟ پرسشت را بنویس تا شروع کنیم.</p>
  <div class="quick"><button data-prompt="یک برنامهٔ یادگیری زبان انگلیسی برایم بساز.">📚 یادگیری</button><button data-prompt="این ایده را به یک پروژهٔ عملی تبدیل کن.">💡 ایده‌پردازی</button><button data-prompt="یک قطعه کد را توضیح بده و بهترش کن.">⌘ برنامه‌نویسی</button></div>
  <div class="feature-grid">
   <button class="feature-action" id="chatFeature"><span class="f-icon">✦</span><span><strong>گفت‌وگوی هوشمند</strong><small>پرسش، مشاوره و پاسخ‌گویی</small></span></button>
