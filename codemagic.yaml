@@ -1,0 +1,24 @@
+workflows:
+  android-apk:
+    name: AFG AI Android APK
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      java: 17
+    scripts:
+      - name: Configure Android SDK
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+      - name: Build debug APK
+        script: |
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew assembleDebug
+          elif [ -f "./gradlew.bat" ]; then
+            gradle assembleDebug
+          else
+            gradle assembleDebug
+          fi
+    artifacts:
+      - app/build/outputs/**/*.apk
+      - build/outputs/**/*.apk
