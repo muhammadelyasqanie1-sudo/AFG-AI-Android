@@ -1,6 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
 const root = path.join(__dirname, "app", "src", "main", "assets");
 const port = Number(process.env.PORT || 3000);
@@ -46,6 +47,65 @@ function readJson(req, maxBytes = 1024 * 1024) {
     });
     req.on("error", reject);
   });
+}
+
+async function persistChatTurn(body, userText, assistantText, model) {
+  const supabaseUrl = (process.env.SUPABASE_URL || "").replace(/\\/+$/, "");
+  const supabaseKey = process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return;
+
+  const isUuid = value => typeof value === "string" &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+  const userId = isUuid(body.user_id) ? body.user_id : crypto.randomUUID();
+  const sessionId = isUuid(body.session_id) ? body.session_id : crypto.randomUUID();
+  const language = body.language === "en" ? "en" : "fa";
+  const headers = {
+    "apikey": supabaseKey,
+    "Authorization": "Bearer " + supabaseKey,
+    "Content-Type": "application/json",
+    "Prefer": "return=minimal"
+  };
+
+  try {
+    const sessionResponse = await fetch(supabaseUrl + "/rest/v1/chat_sessions", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        id: sessionId,
+        user_id: userId,
+        title: userText.slice(0, 120),
+        language
+      }),
+      signal: AbortSignal.timeout(8000)
+    });
+    // A 409 means this browser session was already created; continue appending messages.
+    if (!sessionResponse.ok && sessionResponse.status !== 409) {
+      console.warn("Supabase session insert failed:", sessionResponse.status);
+      return;
+    }
+
+    const messageResponse = await fetch(supabaseUrl + "/rest/v1/chat_messages", {
+      method: "POST",
+      headers,
+      body: JSON.stringify([
+        { session_id: sessionId, role: "user", content: userText.slice(0, 12000), model },
+        { session_id: sessionId, role: "assistant", content: assistantText.slice(0, 24000), model }
+      ]),
+      signal: AbortSignal.timeout(8000)
+    });
+    if (!messageResponse.ok) {
+      console.warn("Supabase message insert failed:", messageResponse.status);
+    } else {
+      await fetch(supabaseUrl + "/rest/v1/chat_sessions?id=eq." + sessionId, {
+        method: "PATCH",
+        headers: { ...headers, "Prefer": "return=minimal" },
+        body: JSON.stringify({ updated_at: new Date().toISOString() }),
+        signal: AbortSignal.timeout(8000)
+      }).catch(() => {});
+    }
+  } catch (error) {
+    console.warn("Supabase persistence unavailable:", error.name, error.message);
+  }
 }
 
 async function handleChat(req, res) {
@@ -125,6 +185,7 @@ async function handleChat(req, res) {
       console.error("Unexpected AI provider response:", JSON.stringify(data).slice(0, 1200));
       return sendJson(res, 502, { detail: "The AI provider response did not contain text." });
     }
+    await persistChatTurn(body, messages.filter(m => m.role === "user").slice(-1)[0].content, reply, model);
     return sendJson(res, 200, { reply, model });
   } catch (error) {
     console.error("AI request failed:", error.name, error.message);
