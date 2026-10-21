@@ -50,7 +50,7 @@ function readJson(req, maxBytes = 1024 * 1024) {
 }
 
 async function persistChatTurn(body, userText, assistantText, model) {
-  const supabaseUrl = (process.env.SUPABASE_URL || "").replace(/\\/+$/, "");
+  const supabaseUrl = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
   const supabaseKey = process.env.SUPABASE_ANON_KEY;
   if (!supabaseUrl || !supabaseKey) return;
 
