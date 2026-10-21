@@ -89,6 +89,20 @@ footer{padding:20px 8px;color:#7993b7}
 .account-badge:before{content:"";width:6px;height:6px;border-radius:50%;background:#42f0c8}
 @media(max-width:680px){.settings{padding:14px 12px}.settings-extra{grid-template-columns:1fr}.settings-card{padding:13px}.account-grid{gap:7px}.auth-btn{font-size:12px;padding:11px 6px}.auth-row{grid-template-columns:1fr}.settings-group{padding:12px}}
 
+
+/* First-launch authentication gate and navigation */
+.auth-gate{position:fixed;z-index:9999;inset:0;display:none;overflow:auto;background:radial-gradient(ellipse at 50% 0,#155087 0,transparent 48%),linear-gradient(180deg,#061329,#020714);padding:22px 16px;align-items:center;justify-content:center}
+.auth-gate.visible{display:flex}
+.auth-gate-card{width:min(100%,440px);border:1px solid #24517b;border-radius:26px;padding:24px;background:linear-gradient(155deg,#0c203b,#071020);box-shadow:0 28px 90px #0009}
+.auth-gate-logo{width:76px;height:76px;object-fit:cover;border-radius:23px;display:block;margin:0 auto 14px;box-shadow:0 0 28px #20cfff33}
+.auth-gate h2{text-align:center;font-size:25px;margin:6px 0}.auth-gate .lead{text-align:center;color:var(--muted);font-size:13px;line-height:1.8;margin:8px 0 20px}
+.auth-gate .gate-main-btn{width:100%;min-height:48px;margin:6px 0;border-radius:14px}
+.auth-gate .gate-provider{width:100%;margin:5px 0}
+.gate-back{display:flex;align-items:center;gap:8px;margin-bottom:16px;background:transparent;border:1px solid #24466b;color:var(--text);padding:9px 12px;border-radius:12px}
+.gate-panel[hidden]{display:none!important}.gate-status{min-height:22px;font-size:12px;line-height:1.7;color:#73e8cb;margin-top:10px;overflow-wrap:anywhere}
+.settings-heading-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.settings-back{border:1px solid #28547a;background:#0b2038;color:#eaf6ff;border-radius:12px;padding:8px 12px}
+@media(max-width:480px){.auth-gate{padding:12px}.auth-gate-card{padding:19px;border-radius:22px}.auth-gate h2{font-size:23px}}
+
 </style>
 </head>
 <body>
@@ -119,7 +133,7 @@ footer{padding:20px 8px;color:#7993b7}
  <section class="messages" id="messages" aria-live="polite"><div class="msg note" id="setupNote">برای پاسخ‌های واقعی، نشانی سرور AFG AI را در تنظیمات وارد کن. این فایل به‌تنهایی مدل هوش مصنوعی یا سرور را در خود ندارد.</div></section>
  <form class="composer" id="chatForm"><input type="file" id="fileInput" accept=".txt,.md,.csv,.json,.log" hidden><div class="compose-row"><textarea id="prompt" placeholder="پیامت را بنویس…" rows="1" required></textarea><button class="btn" type="button" id="attachBtn" aria-label="تحلیل فایل">＋</button><button class="btn primary" type="submit" id="sendBtn">ارسال ➤</button></div><div class="smallprint" id="finePrint">پاسخ‌های هوش مصنوعی ممکن است اشتباه باشند. اطلاعات مهم را بررسی کن.</div></form>
  <section class="settings" id="settings">
-  <h3 id="settingsTitle">تنظیم اتصال</h3>
+  <div class="settings-heading-row"><h3 id="settingsTitle">تنظیم اتصال</h3><button class="settings-back" id="settingsBackBtn" type="button">← برگشت</button></div>
   <label for="serverUrl" id="serverLabel">نشانی سرور AFG AI</label><input id="serverUrl" placeholder="https://your-afg-ai-server.example">
   <label for="language" id="languageLabel">زبان پاسخ</label><select id="language"><option value="auto">خودکار / Auto</option><option value="fa">فارسی / دری</option><option value="en">English</option></select>
   <button class="btn primary" id="saveSettings" style="margin-top:12px">ذخیره تنظیمات</button>
@@ -134,7 +148,7 @@ footer{padding:20px 8px;color:#7993b7}
     <div class="auth-row"><button class="btn primary" type="button" id="signInBtn">ورود</button><button class="btn" type="button" id="signUpBtn">ساخت حساب</button></div>
    </div>
    <div class="account-grid" style="margin-top:10px">
-    <button class="auth-btn" type="button" data-provider="github"><span class="provider-icon">⌘</span> GitHub</button>
+    
     <button class="auth-btn" type="button" data-provider="google"><span class="provider-icon">G</span> Google</button>
     <button class="auth-btn" type="button" data-provider="apple"><span class="provider-icon">●</span> Apple</button>
     <button class="auth-btn" type="button" id="signOutBtn"><span class="provider-icon">↪</span><span id="signOutText">خروج از حساب</span></button>
@@ -157,6 +171,33 @@ footer{padding:20px 8px;color:#7993b7}
 </div>
 <footer>AFG AI · همراه هوشمند افغانستان · Afghanistan AI</footer>
 </div>
+
+<div class="auth-gate" id="authGate" aria-modal="true" role="dialog" aria-label="ورود به AFG AI">
+ <div class="auth-gate-card">
+  <img class="auth-gate-logo" src="./icon.svg?v=3" alt="AFG AI">
+  <h2 id="gateTitle">به AFG AI خوش آمدی</h2>
+  <p class="lead" id="gateLead">برای شروع، حساب بساز یا وارد حساب خود شو.</p>
+  <div class="gate-panel" id="gateChoices">
+   <button class="btn primary gate-main-btn" id="gateCreate" type="button">ایجاد حساب کاربری</button>
+   <button class="btn gate-main-btn" id="gateLogin" type="button">ورود به حساب کاربری</button>
+   <div style="text-align:center;color:var(--muted);font-size:12px;margin:14px 0 8px">یا ادامه با</div>
+   <button class="auth-btn gate-provider" data-gate-provider="google" type="button"><span class="provider-icon">G</span> Google</button>
+   <button class="auth-btn gate-provider" data-gate-provider="apple" type="button"><span class="provider-icon">●</span> Apple</button>
+   <div class="gate-status" id="gateChoiceStatus" role="status"></div>
+  </div>
+  <div class="gate-panel" id="gateEmailPanel" hidden>
+   <button class="gate-back" id="gateBack" type="button">← <span id="gateBackText">برگشت</span></button>
+   <h3 id="gateFormTitle" style="margin:0 0 12px">ایجاد حساب کاربری</h3>
+   <form class="auth-form" id="gateAuthForm">
+    <input id="gateEmail" type="email" autocomplete="email" placeholder="ایمیل" required>
+    <input id="gatePassword" type="password" autocomplete="current-password" placeholder="رمز عبور (حداقل ۶ حرف)" minlength="6" required>
+    <button class="btn primary gate-main-btn" id="gateSubmit" type="submit">ایجاد حساب</button>
+   </form>
+   <div class="gate-status" id="gateStatus" role="status"></div>
+  </div>
+ </div>
+</div>
+
 <script>
 const $=id=>document.getElementById(id);let isEnglish=false,installPrompt=null;
 function makeUuid(){return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==='x'?r:(r&3|8)).toString(16)})}
@@ -185,7 +226,8 @@ function tr(k){return strings[isEnglish?'en':'fa'][k]||k}
 function applyLang(){document.documentElement.lang=isEnglish?'en':'fa';document.documentElement.dir=isEnglish?'ltr':'rtl';$('subtitle').textContent=tr('subtitle');$('newChatBtn').textContent=tr('newChat');$('toolsLabel').textContent=tr('tools');$('welcomeTitle').textContent=tr('welcome');$('welcomeText').textContent=tr('welcomeText');$('prompt').placeholder=tr('placeholder');$('sendBtn').textContent=tr('send');$('finePrint').textContent=tr('fine');$('setupNote').textContent=tr('setup');$('settingsTitle').textContent=tr('settings');$('serverLabel').textContent=tr('server');$('languageLabel').textContent=tr('language');$('saveSettings').textContent=tr('save');$('keyWarning').textContent=tr('warning');$('installBtn').textContent=tr('install');$('langBtn').textContent=isEnglish?'دری / فارسی':'English';$('personalTitle').textContent=isEnglish?'Personalization':'شخصی‌سازی';$('uiLanguageLabel').textContent=isEnglish?'App language':'زبان رابط برنامه';$('appearanceLabel').textContent=isEnglish?'Appearance':'ظاهر برنامه';$('clearHistoryBtn').textContent=isEnglish?'Clear all chat history on this device':'پاک‌کردن تمام تاریخچهٔ این دستگاه';$('historyTitle').textContent=isEnglish?'Saved conversations':'گفت‌وگوهای ذخیره‌شده';renderArchivedChats()}
 function addMsg(text,kind,save=true){let el=document.createElement('div');el.className='msg '+kind;el.textContent=text;$('messages').appendChild(el);el.scrollIntoView({block:'end',behavior:'smooth'});if(save&&['user','ai'].includes(kind)){chatHistory.push({text,kind});persistHistory()}return el}
 $('newChatBtn').onclick=()=>{archiveCurrentChat();chatHistory=[];persistHistory();$('messages').innerHTML='';$('messages').appendChild($('setupNote'));$('setupNote').textContent=tr('setup');afgAiSessionId=makeUuid();localStorage.setItem('afg_ai_session_id',afgAiSessionId);$('prompt').value='';renderArchivedChats();$('prompt').focus()};
-$('langBtn').onclick=()=>{isEnglish=!isEnglish;localStorage.setItem('afg_ai_ui_language',isEnglish?'en':'fa');$('uiLanguage').value=isEnglish?'en':'fa';applyLang()};$('settingsBtn').onclick=()=>{const panel=$('settings');const opening=!panel.classList.contains('show');panel.classList.toggle('show',opening);if(opening){panel.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>$('serverUrl').focus({preventScroll:true}),250)}};
+$('langBtn').onclick=()=>{isEnglish=!isEnglish;localStorage.setItem('afg_ai_ui_language',isEnglish?'en':'fa');$('uiLanguage').value=isEnglish?'en':'fa';applyLang()};$('settingsBackBtn').onclick=()=>{$('settings').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'})};
+$('settingsBtn').onclick=()=>{const panel=$('settings');const opening=!panel.classList.contains('show');panel.classList.toggle('show',opening);if(opening){panel.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>$('serverUrl').focus({preventScroll:true}),250)}};
 $('uiLanguage').value=localStorage.getItem('afg_ai_ui_language')||'auto';
 $('uiLanguage').onchange=()=>{const value=$('uiLanguage').value;localStorage.setItem('afg_ai_ui_language',value);isEnglish=value==='auto'?deviceLang==='en':value==='en';applyLang()};
 $('appearance').value=localStorage.getItem('afg_ai_appearance')||'dark';
@@ -220,5 +262,22 @@ $('fileInput').addEventListener('change',async e=>{const file=e.target.files&&e.
 
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').hidden=false});$('installBtn').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installBtn').hidden=true}else{addMsg(isEnglish?'Use your browser menu and choose “Install app” or “Add to Home screen”.':'از منوی مرورگر گزینهٔ «نصب برنامه» یا «افزودن به صفحهٔ اصلی» را انتخاب کن.','note')}};
 if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+/* First-run account flow: email/password, Google and Apple; no GitHub option */
+let gateMode='signup';
+function gateText(id,fa,en){const el=$(id);if(el)el.textContent=isEnglish?en:fa}
+function showGatePanel(panel){$('gateChoices').hidden=panel!=='choices';$('gateEmailPanel').hidden=panel!=='email';$('gateChoiceStatus').textContent='';$('gateStatus').textContent='';}
+function showAuthGate(){const saved=JSON.parse(localStorage.getItem('afg_ai_auth_session')||'null');if(saved&&saved.access_token&&saved.user){$('authGate').classList.remove('visible');return} $('authGate').classList.add('visible');showGatePanel('choices');}
+function setGateMode(mode){gateMode=mode;showGatePanel('email');gateText('gateTitle',mode==='signup'?'ایجاد حساب کاربری':'ورود به حساب کاربری',mode==='signup'?'Create account':'Sign in');gateText('gateLead',mode==='signup'?'مشخصات خود را وارد کن تا حساب بسازی.':'با ایمیل و رمز عبور وارد حساب خود شو.',mode==='signup'?'Enter your details to create your account.':'Sign in with your email and password.');gateText('gateFormTitle',mode==='signup'?'ایجاد حساب کاربری':'ورود به حساب کاربری',mode==='signup'?'Create account':'Sign in');gateText('gateSubmit',mode==='signup'?'ایجاد حساب':'ورود',mode==='signup'?'Create account':'Sign in');$('gatePassword').autocomplete=mode==='signup'?'new-password':'current-password';}
+$('gateCreate').onclick=()=>setGateMode('signup');
+$('gateLogin').onclick=()=>setGateMode('login');
+$('gateBack').onclick=()=>showGatePanel('choices');
+async function gateSocial(provider){$('gateChoiceStatus').textContent=isEnglish?'Opening '+provider+' sign-in…':'در حال بازکردن ورود با '+provider+'…';try{const redirect=encodeURIComponent(location.href.split('#')[0]);location.href=AUTH_URL+'/auth/v1/authorize?provider='+encodeURIComponent(provider)+'&redirect_to='+redirect}catch(e){$('gateChoiceStatus').textContent=isEnglish?'Could not start social sign-in. Enable this provider in Supabase Auth first.':'ورود اجتماعی شروع نشد؛ ابتدا این ارائه‌دهنده را در Supabase Auth فعال کن.'}}
+document.querySelectorAll('[data-gate-provider]').forEach(b=>b.onclick=()=>gateSocial(b.dataset.gateProvider));
+$('gateAuthForm').onsubmit=async e=>{e.preventDefault();const email=$('gateEmail').value.trim(),password=$('gatePassword').value;const submit=$('gateSubmit');submit.disabled=true;$('gateStatus').textContent=isEnglish?'Please wait…':'لطفاً صبر کن…';try{let data;if(gateMode==='signup'){data=await authRequest('signup',{email,password});if(!data.access_token){$('gateStatus').textContent=isEnglish?'Account request created. Check your email to confirm it, then return and sign in.':'درخواست حساب ثبت شد. ایمیل را برای تأیید بررسی کن، سپس به صفحه ورود برگرد.';return}}else{data=await authRequest('token?grant_type=password',{email,password})}if(!data.access_token||!data.user)throw new Error(isEnglish?'No active session was returned. Check email confirmation settings.':'نشست فعال دریافت نشد؛ تأیید ایمیل را بررسی کن.');setAccountSession(data);$('authGate').classList.remove('visible');authStatus(isEnglish?'Account connected.':'حساب وصل شد.');}catch(err){$('gateStatus').textContent=err.message|| (isEnglish?'Authentication failed.':'ورود ناموفق بود.');}finally{submit.disabled=false}};
+/* Handle OAuth implicit callback if Supabase returns tokens in the URL hash. */
+(async()=>{try{const hash=new URLSearchParams(location.hash.replace(/^#/,' '));const access=hash.get('access_token');if(access){const response=await fetch(AUTH_URL+'/auth/v1/user',{headers:{apikey:AUTH_PUBLIC_KEY,Authorization:'Bearer '+access}});if(response.ok){const user=await response.json();setAccountSession({access_token:access,refresh_token:hash.get('refresh_token')||'',token_type:hash.get('token_type')||'bearer',expires_in:Number(hash.get('expires_in')||3600),user});history.replaceState(null,'',location.pathname+location.search)}}}catch{}showGateIfNeeded()})();
+function showGateIfNeeded(){showAuthGate()}
+
 </script>
 </body></html>
