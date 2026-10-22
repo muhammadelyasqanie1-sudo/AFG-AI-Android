@@ -246,6 +246,63 @@ footer{background:#212121;color:#888;padding:8px;border:0}
 #attachBtn:active{transform:scale(.94);background:#1b3b60}#sendBtn{min-width:54px;height:52px;border-radius:50%;font-size:0;padding:0;display:grid;place-items:center;box-shadow:0 6px 20px #24d9ff22}#sendBtn:before{content:'➤';font-size:23px}html[dir=rtl] #sendBtn:before{transform:rotate(180deg)}#sendBtn:disabled{opacity:.55}
 .attach-menu{position:absolute;bottom:calc(100% + 10px);inset-inline-start:0;display:grid;grid-template-columns:1fr;gap:5px;min-width:205px;padding:8px;border:1px solid #2a5277;border-radius:17px;background:#0a1930;box-shadow:0 16px 44px #0008;z-index:30}.attach-menu[hidden]{display:none}.attach-option{display:flex;align-items:center;gap:12px;text-align:start;width:100%;border:0;border-radius:11px;background:transparent;color:var(--text);padding:11px 12px}.attach-option:active,.attach-option:hover{background:#17365a}.attach-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:#173454;font-size:18px}.composer{position:relative}.attachment-preview{display:flex;align-items:center;gap:10px;padding:8px 12px;margin-bottom:9px;border:1px solid var(--line);border-radius:14px;background:#0b1a30}.attachment-preview img{width:54px;height:54px;object-fit:cover;border-radius:10px}.attachment-preview .attachment-name{flex:1;overflow-wrap:anywhere;font-size:12px;color:var(--muted)}.attachment-preview button{border:0;background:#263e5c;color:white;border-radius:50%;width:30px;height:30px}
 @media(max-width:420px){.compose-row{gap:6px}#attachBtn{width:48px;height:48px;flex-basis:48px}#sendBtn{height:48px;min-width:48px}.compose-row textarea{min-height:48px;padding:12px}}
+
+/* AFG AI Neo redesign: unified modern dark glass interface */
+:root{color-scheme:dark;--bg:#080d1b;--panel:#101a2e;--panel2:#172642;--text:#f4f7ff;--muted:#a5b3ce;--line:#263858;--accent:#72a7ff;--accent2:#5eead4}
+body{background:radial-gradient(ellipse at 15% -10%,#244c83 0,transparent 38%),radial-gradient(ellipse at 95% 20%,#482c78 0,transparent 30%),linear-gradient(180deg,#0b1324,#070b15 80%);color:var(--text)}
+.app{max-width:1240px;padding:16px;gap:12px}
+header{background:linear-gradient(135deg,#111f36ee,#0c1426ee);border:1px solid #344967;border-radius:24px;backdrop-filter:blur(18px);box-shadow:0 18px 50px #0005}
+.brand h1{font-weight:850;letter-spacing:-.7px;background:linear-gradient(100deg,#f5fbff,#8bdcff 65%,#a5a0ff);color:transparent;background-clip:text}
+.logo{border-radius:20px}
+.layout{gap:14px}
+aside,.chat-panel{background:linear-gradient(155deg,#111d32f2,#0b1324f7);border:1px solid #293e5d;border-radius:24px;box-shadow:0 18px 50px #0003}
+aside{padding:14px}
+.sidebar-nav,.sidebar-new,.settings-action{border-radius:14px;transition:background .18s,border-color .18s,transform .18s}
+.sidebar-nav.active,.sidebar-nav:hover,.sidebar-new:hover{background:#1b3150;border-color:#41658f}
+.chat-panel{min-height:calc(100dvh - 120px);overflow:hidden}
+.welcome{padding:34px 26px 18px}
+.welcome h2{font-weight:800;letter-spacing:-.6px;background:linear-gradient(90deg,#f8fbff,#a5d9ff 70%,#c4b5fd);color:transparent;background-clip:text}
+.welcome>p{color:#b3c1d8;line-height:1.9}
+.quick button{background:#111f34;border-color:#2c4262;color:#dce9ff;border-radius:14px}
+.quick button:hover{background:#1b3150;border-color:#5a8dc2}
+.feature-action{background:linear-gradient(145deg,#14243d,#101a2d);border-color:#2a4264;border-radius:18px;min-height:90px;transition:transform .18s,border-color .18s,background .18s}
+.feature-action:hover{transform:translateY(-2px);background:#172943;border-color:#4e80b8}
+.feature-action .f-icon{border:1px solid #31577d;background:#17314e;color:#8be6ff;border-radius:13px}
+.mode-btn{border-radius:12px;border-color:#2c4262;color:#b7c5dd}
+.mode-btn.active{background:linear-gradient(110deg,#1e4e72,#383365);border-color:#6387bd;color:white}
+.mode-caption{color:#93a8c8}
+.messages{gap:18px}
+.msg.user{background:linear-gradient(135deg,#1b3c64,#28345f);border:1px solid #365b88;border-radius:20px 20px 5px 20px}
+.msg.ai{background:linear-gradient(145deg,#101f31,#101a2b);border:1px solid #243d54;border-radius:20px;padding:15px 17px}
+.msg.note{background:#17243a;border-color:#344762;color:#bac9df;border-radius:16px}
+.composer{background:linear-gradient(180deg,transparent,#0a1222 22%);padding:12px 18px calc(14px + env(safe-area-inset-bottom))}
+.compose-row{background:#111d30;border:1px solid #334966;border-radius:25px;box-shadow:0 12px 35px #0004}
+.compose-row:focus-within{border-color:#6b9ff2;box-shadow:0 0 0 3px #659bff18}
+.compose-row textarea{color:#f5f8ff}
+#attachBtn{background:#1a2c46;border-color:#385579;color:#e4efff}
+#sendBtn{background:linear-gradient(130deg,#8be7ff,#8ba8ff 65%,#b4a1ff);color:#07111f}
+.attach-menu{background:#101c30;border-color:#354e70;border-radius:18px;box-shadow:0 20px 55px #0008}
+.attach-option:hover{background:#1b3150}
+.attachment-preview{background:#111f33;border-color:#344a69}
+.settings{background:#0b1425;border-color:#293e5d}
+.settings-shell{color:var(--text)}
+.settings-topbar,.settings-hero,.settings-card{background:linear-gradient(145deg,#13233b,#0e192c);border-color:#2b4364;border-radius:20px}
+.settings-card{box-shadow:0 10px 30px #0002}
+.settings-card h3,.settings-card h4{color:#f2f6ff}
+.settings-card p,.settings label{color:#aabbd4}
+.settings input,.settings select,.auth-form input{background:#091222;border-color:#304967;color:#f4f7ff;border-radius:13px}
+.settings-action{background:#101f34;border:1px solid #2b4262;color:#edf5ff}
+.settings-action:hover{background:#1a3150}
+.settings-back{background:#142640;border-color:#2d486b;border-radius:12px}
+.settings-mark,.settings-hero-icon{background:linear-gradient(135deg,#2a7b9f,#6553a5);border-radius:16px}
+.settings-bottom{background:#0c1628;border-color:#2b4262}
+.btn{border-color:#334a6b;background:#172641}
+.btn.primary{background:linear-gradient(120deg,#77e2f6,#8ca7ff 65%,#b8a1ff);color:#07111f}
+footer{background:transparent;color:#8195b5}
+body.oled{background:#000!important}
+body.oled .chat-panel,body.oled aside,body.oled header,body.oled .settings{background:#050505!important;border-color:#252525!important}
+@media(max-width:760px){.app{padding:9px}.chat-panel{border-radius:20px}.welcome{padding:23px 15px 12px}.messages{padding:12px}.msg.ai{padding:13px}.composer{background:linear-gradient(180deg,transparent,#0a1222 12%)}header{border-radius:20px}}
+
 </style>
 </head>
 <body>
