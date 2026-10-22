@@ -166,7 +166,7 @@ async function handleChat(req, res) {
   if (!lastUser || !lastUser.content.trim()) return sendJson(res, 400, { detail: "Send a non-empty user message." });
   let imageData = "";
   if (typeof body.image === "string" && body.image) {
-    if (body.image.length > 6 * 1024 * 1024 || !/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(body.image)) {
+    if (body.image.length > 7 * 1024 * 1024 || !/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(body.image)) {
       return sendJson(res, 400, { detail: "Unsupported image. Choose a PNG, JPEG, or WebP image under 5 MB." });
     }
     imageData = body.image;
@@ -198,8 +198,8 @@ async function handleChat(req, res) {
   }
   const baseUrl = (process.env.AI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
   const model = process.env.AI_MODEL || "gpt-4.1-mini";
-  const systemText = "You are AFG AI, a helpful, accurate, respectful assistant for users in Afghanistan. Reply in " + language +
-    ". When the user writes in Dari/Persian, use clear natural Dari/Persian. Be transparent about uncertainty. Never claim you performed an action you did not perform. " +
+  const systemText = "You are AFG AI, a genuinely useful, accurate, respectful assistant designed for people in Afghanistan. Reply in " + language +
+    ". When the user writes in Dari/Persian, use natural Afghan Dari vocabulary and clear readable phrasing; do not force Iranian-specific expressions when an Afghan expression fits better. Give practical steps that work on Android and with limited bandwidth when relevant. Consider Afghanistan-specific context only when useful; do not assume the user's province, beliefs, budget, or circumstances. Explain unfamiliar technical terms simply. For education, teach step by step; for coding, provide complete safe code and explain exactly where it belongs; for documents, help draft and translate useful real-world text. If asked about prices, laws, news, or other changing facts, distinguish current verified information from general knowledge and do not invent live facts. Protect privacy: never ask for passwords or API keys, and advise keeping secrets on the server. If an image is attached, inspect it carefully and describe uncertainty rather than guessing. Be transparent about uncertainty and never claim you performed an action you did not perform. " +
     modeInstructions[mode] +
     (sources.length ? "\n\nUse these live web search results as evidence. Do not invent details beyond them. Mention relevant source titles in the answer and clearly distinguish source claims from your own explanation:\n" +
       sources.map((x, i) => "[" + (i + 1) + "] " + x.title + "\nURL: " + x.url + "\nSnippet: " + x.content).join("\n\n") : "");
