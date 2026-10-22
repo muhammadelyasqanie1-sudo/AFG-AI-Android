@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebSettings;
 import android.webkit.WebResourceRequest;
@@ -28,6 +29,7 @@ public class MainActivity extends Activity {
     private WebViewAssetLoader assetLoader;
     private ValueCallback<Uri[]> filePathCallback;
     private Uri cameraOutputUri;
+    private volatile boolean cameraModeRequested = false;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,11 @@ public class MainActivity extends Activity {
         webView = new WebView(this);
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new Object() {
+            @JavascriptInterface public void setCameraMode(boolean enabled) {
+                cameraModeRequested = enabled;
+            }
+        }, "AFGCamera");
         settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(false);
         // Content URIs are used only by Android's system file picker.
@@ -62,7 +69,9 @@ public class MainActivity extends Activity {
                             }
                         }
                     }
-                    if (params.isCaptureEnabled() && wantsImage) {
+                    boolean forceCamera = cameraModeRequested;
+                    cameraModeRequested = false;
+                    if ((forceCamera || params.isCaptureEnabled()) && wantsImage) {
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
                             File output = File.createTempFile("afg-ai-camera-", ".jpg", getCacheDir());
@@ -79,6 +88,7 @@ public class MainActivity extends Activity {
                     startActivityForResult(Intent.createChooser(chooserIntent, "Choose photo or file"), FILE_CHOOSER_REQUEST_CODE);
                     return true;
                 } catch (Exception error) {
+                    cameraModeRequested = false;
                     cameraOutputUri = null;
                     filePathCallback = null;
                     callback.onReceiveValue(null);
