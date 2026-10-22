@@ -304,6 +304,31 @@ body.oled{background:#000!important}
 body.oled .chat-panel,body.oled aside,body.oled header,body.oled .settings{background:#050505!important;border-color:#252525!important}
 @media(max-width:760px){.app{padding:9px}.chat-panel{border-radius:20px}.welcome{padding:23px 15px 12px}.messages{padding:12px}.msg.ai{padding:13px}.composer{background:linear-gradient(180deg,transparent,#0a1222 12%)}header{border-radius:20px}}
 
+
+/* AFGAI usability polish: cleaner conversation area and a clear, touch-friendly send action */
+.welcome{padding-bottom:8px}
+.quick{margin-top:12px}
+.mode-bar{display:flex;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;max-width:100%}
+.mode-bar::-webkit-scrollbar{display:none}
+.mode-btn{flex:0 0 auto;white-space:nowrap}
+.compose-row{gap:10px;align-items:stretch}
+.compose-row textarea{min-height:56px;padding:15px 16px;font-size:16px;line-height:1.5}
+#sendBtn{min-width:112px;width:auto;height:56px;flex:0 0 auto;border-radius:17px;padding:0 19px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:15px;font-weight:800;white-space:nowrap;box-shadow:0 7px 24px #24d9ff35;border:1px solid #75f2ff55;background:linear-gradient(135deg,#25d9ff,#42f0c8);color:#031425}
+#sendBtn:before{content:'➤';font-size:20px;transform:none!important}
+#sendBtn:disabled{opacity:.55;filter:saturate(.7)}
+#attachBtn{min-width:54px;width:54px;height:56px;flex:0 0 54px;border-radius:16px;font-size:25px;display:grid;place-items:center}
+@media(max-width:680px){
+ .welcome{padding:17px 14px 7px}
+ .quick{gap:6px;margin-top:10px}
+ .quick button{padding:8px 10px;font-size:11px}
+ .mode-bar{margin-top:9px}
+ .mode-btn{padding:9px 11px;font-size:12px}
+ .compose-row{gap:7px}
+ .compose-row textarea{min-width:0;min-height:54px;padding:13px 11px;font-size:16px}
+ #sendBtn{min-width:88px;width:auto;height:54px;padding:0 13px;border-radius:15px;font-size:14px}
+ #sendBtn:before{font-size:18px}
+ #attachBtn{min-width:46px;width:46px;height:54px;flex-basis:46px;border-radius:14px}
+}
 </style>
 </head>
 <body>
@@ -330,12 +355,7 @@ body.oled .chat-panel,body.oled aside,body.oled header,body.oled .settings{backg
 <main class="chat-panel">
  <section class="welcome"><div class="welcome-brand-mark"><img src="./afg-ai-logo.jpg?v=1" alt="AFGAI Neon Chrome emblem"><div><strong>AFGAI</strong><span>PRO++ · INTELLIGENCE, REIMAGINED</span></div></div><h2 id="welcomeTitle">سلام! به افغان AI خوش آمدی.</h2><p id="welcomeText">چه چیزی را می‌خواهی یاد بگیری، بسازی یا حل کنی؟ پرسشت را بنویس تا شروع کنیم.</p>
  <div class="quick"><button data-prompt="یک برنامهٔ یادگیری زبان انگلیسی برایم بساز.">📚 یادگیری</button><button data-prompt="این ایده را به یک پروژهٔ عملی تبدیل کن.">💡 ایده‌پردازی</button><button data-prompt="یک قطعه کد را توضیح بده و بهترش کن.">⌘ برنامه‌نویسی</button></div>
- <div class="feature-grid">
-  <button class="feature-action" id="chatFeature"><span class="f-icon">✦</span><span><strong>گفت‌وگوی هوشمند</strong><small>پرسش، مشاوره و پاسخ‌گویی</small></span></button>
-  <button class="feature-action" id="imageFeature"><span class="f-icon">✧</span><span><strong>ساخت تصویر</strong><small>تولید تصویر با سرویس تصویری پیکربندی‌شده</small></span></button>
-  <button class="feature-action" id="fileFeature"><span class="f-icon">▤</span><span><strong>تحلیل فایل</strong><small>متن، CSV، JSON و فایل‌های متنی</small></span></button>
-  <button class="feature-action" id="webFeature"><span class="f-icon">⌕</span><span><strong>جست‌وجوی وب</strong><small>جست‌وجوی زنده و منابع قابل بازکردن</small></span></button>
- </div>
+ <!-- Removed redundant large feature panel; tools remain available in the main navigation and attachment menu. -->
  <div class="mode-bar" role="group" aria-label="AI mode">
   <button type="button" class="mode-btn active" data-mode="chat" id="modeChat">✦ گفتگو</button>
   <button type="button" class="mode-btn" data-mode="research" id="modeResearch">⌕ پژوهش زنده</button>
