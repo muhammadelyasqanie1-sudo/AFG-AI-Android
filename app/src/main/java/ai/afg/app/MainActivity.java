@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.JavascriptInterface;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebSettings;
 import android.webkit.WebResourceRequest;
@@ -30,7 +29,6 @@ public class MainActivity extends Activity {
     private WebViewAssetLoader assetLoader;
     private ValueCallback<Uri[]> filePathCallback;
     private Uri cameraOutputUri;
-    private volatile boolean cameraModeRequested = false;
     private volatile boolean cameraModeRequested = false;
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,6 @@ public class MainActivity extends Activity {
             @JavascriptInterface public void setCameraMode(boolean enabled) {
                 cameraModeRequested = enabled;
             }
-        }, "AFGCamera");
         settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(false);
         // Content URIs are used only by Android's system file picker.
