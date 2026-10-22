@@ -316,7 +316,9 @@ body.oled .chat-panel,body.oled aside,body.oled header,body.oled .settings{backg
 #sendBtn{min-width:112px;width:auto;height:56px;flex:0 0 auto;border-radius:17px;padding:0 19px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:15px;font-weight:800;white-space:nowrap;box-shadow:0 7px 24px #24d9ff35;border:1px solid #75f2ff55;background:linear-gradient(135deg,#25d9ff,#42f0c8);color:#031425}
 #sendBtn:before{content:'➤';font-size:20px;transform:none!important}
 #sendBtn:disabled{opacity:.55;filter:saturate(.7)}
-#attachBtn{min-width:54px;width:54px;height:56px;flex:0 0 54px;border-radius:16px;font-size:25px;display:grid;place-items:center}
+#attachBtn{min-width:54px;width:54px;height:56px;flex:0 0 54px;border-radius:16px;font-size:34px;line-height:1;display:grid;place-items:center;padding:0;color:#f4f8ff;background:#203b5d;border:1px solid #496b91;box-shadow:0 4px 14px #0003}
+#attachBtn::before{content:none!important}
+#attachBtn:focus-visible{outline:3px solid #7bdfff;outline-offset:2px}
 @media(max-width:680px){
  .welcome{padding:17px 14px 7px}
  .quick{gap:6px;margin-top:10px}
@@ -327,7 +329,7 @@ body.oled .chat-panel,body.oled aside,body.oled header,body.oled .settings{backg
  .compose-row textarea{min-width:0;min-height:54px;padding:13px 11px;font-size:16px}
  #sendBtn{min-width:88px;width:auto;height:54px;padding:0 13px;border-radius:15px;font-size:14px}
  #sendBtn:before{font-size:18px}
- #attachBtn{min-width:46px;width:46px;height:54px;flex-basis:46px;border-radius:14px}
+ #attachBtn{min-width:46px;width:46px;height:54px;flex-basis:46px;border-radius:14px;font-size:32px}
 }
 </style>
 </head>
