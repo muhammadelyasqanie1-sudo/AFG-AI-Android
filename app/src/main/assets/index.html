@@ -112,14 +112,14 @@ footer{padding:20px 8px;color:#7993b7}
 .mode-bar{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px;padding:8px;border:1px solid #1b4166;border-radius:16px;background:#061225}
 .mode-btn{border:1px solid transparent;border-radius:11px;background:transparent;color:#a9bddc;padding:9px 12px;font-size:12px}
 .mode-btn.active{color:#eefdff;background:linear-gradient(135deg,#123d60,#20214c);border-color:#2c7598;box-shadow:inset 0 1px #ffffff12}
-.mode-caption{font-size:11px;color:#83a5c8;margin:7px 3px 0;line-height:1.6}
+.mode-caption{display:none!important} .mode-bar{margin-top:9px;padding:5px;gap:5px;background:linear-gradient(120deg,#061225,#0b1930);border-color:#173b60}.mode-btn{padding:8px 10px;min-height:36px} .mode-btn.active{box-shadow:0 0 0 1px #2c7598,inset 0 1px #ffffff12}
 .result-card{border:1px solid #275178;background:#08172a;border-radius:17px;padding:12px;margin:8px 0;max-width:100%;overflow-wrap:anywhere}
 .result-card img{display:block;width:100%;height:auto;border-radius:12px;margin-top:8px}
 .result-card a{color:#69dff1;text-decoration:underline}
 .msg.ai{white-space:pre-wrap}
 #messages .source-list{display:grid;gap:7px;margin-top:10px}
 #messages .source-link{display:block;border:1px solid #24486d;border-radius:11px;padding:9px 11px;color:#82e7f5;text-decoration:none;font-size:12px;background:#071426}
-@media(max-width:680px){.mode-bar{gap:5px;padding:6px}.mode-btn{padding:9px 10px;flex:1}.mode-caption{font-size:10px}}
+@media(max-width:680px){.mode-bar{gap:4px;padding:4px;margin-top:8px}.mode-btn{padding:8px 4px;flex:1;font-size:11px;white-space:nowrap}.mode-caption{display:none!important}}
 
 
 /* Conversation-first navigation inspired by modern AI workspaces */
