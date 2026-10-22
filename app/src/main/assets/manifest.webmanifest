@@ -1,7 +1,7 @@
 {
-  "name": "AFG AI — Afghanistan Intelligence",
-  "short_name": "AFG AI",
-  "description": "هوش مصنوعی افغانستان؛ همراه هوشمند برای یادگیری، نوشتن و حل مسئله",
+  "name": "AFGAI — Afghanistan Intelligence",
+  "short_name": "AFGAI",
+  "description": "AFGAI؛ هوش مصنوعی افغانستان برای یادگیری، نوشتن و حل مسئله",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#030a19",
