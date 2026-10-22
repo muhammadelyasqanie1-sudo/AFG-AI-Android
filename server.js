@@ -155,7 +155,7 @@ async function handleChat(req, res) {
   if (!apiKey) return sendJson(res, 503, { detail: "The AI provider key is not configured. The administrator must add AI_API_KEY in Render." });
 
   let body;
-  try { body = await readJson(req); }
+  try { body = await readJson(req, 7 * 1024 * 1024); }
   catch (error) { return sendJson(res, error.status || 400, { detail: error.message || "Could not read request." }); }
 
   const inputMessages = Array.isArray(body.messages) ? body.messages : [];
@@ -164,6 +164,22 @@ async function handleChat(req, res) {
     .slice(-20).map(m => ({ role: m.role, content: m.content.slice(0, 12000) }));
   const lastUser = messages.filter(m => m.role === "user").slice(-1)[0];
   if (!lastUser || !lastUser.content.trim()) return sendJson(res, 400, { detail: "Send a non-empty user message." });
+  let imageData = "";
+  if (typeof body.image === "string" && body.image) {
+    if (body.image.length > 6 * 1024 * 1024 || !/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(body.image)) {
+      return sendJson(res, 400, { detail: "Unsupported image. Choose a PNG, JPEG, or WebP image under 5 MB." });
+    }
+    imageData = body.image;
+  }
+  const aiMessages = messages.map((m, index) => {
+    if (imageData && m === lastUser) {
+      return { role: m.role, content: [
+        { type: "text", text: m.content },
+        { type: "image_url", image_url: { url: imageData, detail: "auto" } }
+      ] };
+    }
+    return m;
+  });
 
   const language = body.language === "fa" ? "Persian/Dari" : body.language === "en" ? "English" : "the same language as the user's latest message (detect it automatically)";
   const mode = ["chat", "research", "coding", "creative", "study"].includes(body.mode) ? body.mode : "chat";
@@ -191,7 +207,7 @@ async function handleChat(req, res) {
     const upstream = await fetch(baseUrl + "/chat/completions", {
       method: "POST",
       headers: { "Authorization": "Bearer " + apiKey, "Content-Type": "application/json" },
-      body: JSON.stringify({ model, messages: [{ role: "system", content: systemText }, ...messages], temperature: mode === "coding" || mode === "research" ? 0.3 : 0.7 }),
+      body: JSON.stringify({ model, messages: [{ role: "system", content: systemText }, ...aiMessages], temperature: mode === "coding" || mode === "research" ? 0.3 : 0.7 }),
       signal: AbortSignal.timeout(60000)
     });
     const data = await upstream.json().catch(() => ({}));
