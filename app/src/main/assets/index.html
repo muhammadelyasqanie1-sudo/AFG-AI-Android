@@ -364,7 +364,35 @@ $('exportDataBtn').onclick=()=>{const payload={exported_at:new Date().toISOStrin
 
 /* Account sign-in is intentionally not part of the current public experience. */
 
-const defaultServer='https://afg-ai.onrender.com';const deviceLang=(navigator.language||'fa').toLowerCase().startsWith('en')?'en':'fa';$('language').value=localStorage.getItem('afg_ai_language')||'auto';if(!localStorage.getItem('afg_ai_language'))localStorage.setItem('afg_ai_language','auto');const savedUiLanguage=localStorage.getItem('afg_ai_ui_language')||'auto';isEnglish=savedUiLanguage==='auto'?deviceLang==='en':savedUiLanguage==='en';$('uiLanguage').value=savedUiLanguage;$('appearance').value=localStorage.getItem('afg_ai_appearance')||'dark';applyAppearance();applyLang();restoreHistory();
+const defaultServer='https://afg-ai.onrender.com';
+// Automatically wake/check the backend when the app opens or returns to the foreground.
+// Render's Free service may sleep while idle; short retries help the first request recover.
+let lastBackendWakeAt=0,backendWakePromise=null;
+async function wakeBackendOnOpen(force=false){
+  const now=Date.now();
+  if(backendWakePromise)return backendWakePromise;
+  if(!force&&now-lastBackendWakeAt<60000)return;
+  lastBackendWakeAt=now;
+  backendWakePromise=(async()=>{
+    const delays=[0,1800,3500,6500];
+    for(const delay of delays){
+      if(delay)await new Promise(resolve=>setTimeout(resolve,delay));
+      try{
+        const controller=new AbortController();
+        const timeout=setTimeout(()=>controller.abort(),12000);
+        try{
+          const response=await fetch(defaultServer+'/api/health',{cache:'no-store',signal:controller.signal});
+          if(response.ok){const data=await response.json();if(data&&data.ok)return true;}
+        }finally{clearTimeout(timeout);}
+      }catch(_){}
+    }
+    return false;
+  })();
+  try{return await backendWakePromise;}finally{backendWakePromise=null;}
+}
+window.addEventListener('DOMContentLoaded',()=>{wakeBackendOnOpen(true)});
+window.addEventListener('pageshow',()=>{wakeBackendOnOpen()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wakeBackendOnOpen()});const deviceLang=(navigator.language||'fa').toLowerCase().startsWith('en')?'en':'fa';$('language').value=localStorage.getItem('afg_ai_language')||'auto';if(!localStorage.getItem('afg_ai_language'))localStorage.setItem('afg_ai_language','auto');const savedUiLanguage=localStorage.getItem('afg_ai_ui_language')||'auto';isEnglish=savedUiLanguage==='auto'?deviceLang==='en':savedUiLanguage==='en';$('uiLanguage').value=savedUiLanguage;$('appearance').value=localStorage.getItem('afg_ai_appearance')||'dark';applyAppearance();applyLang();restoreHistory();
 document.querySelectorAll('[data-prompt]').forEach(b=>b.onclick=()=>{$('prompt').value=b.dataset.prompt;$('prompt').focus()});
 $('chatForm').onsubmit=async e=>{e.preventDefault();const text=$('prompt').value.trim();if(!text){addMsg(tr('empty'),'note');return}addMsg(text,'user');$('prompt').value='';const wait=addMsg(isEnglish?'Working on your request…':'در حال آماده‌سازی پاسخ…','ai',false);$('sendBtn').disabled=true;try{const res=await fetch(defaultServer+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:chatHistory.filter(m=>['user','ai'].includes(m.kind)).slice(-20).map(m=>({role:m.kind==='ai'?'assistant':'user',content:m.text})),language:$('language').value||'auto',mode:activeMode,web_search:activeMode==='research',user_id:afgAiUserId,session_id:afgAiSessionId})});const data=await res.json();if(!res.ok)throw new Error(data.detail||tr('error'));wait.textContent=data.reply||data.response||JSON.stringify(data);chatHistory.push({text:wait.textContent,kind:'ai'});persistHistory();if(Array.isArray(data.sources)&&data.sources.length){const list=document.createElement('div');list.className='source-list';data.sources.forEach(src=>{const a=document.createElement('a');a.className='source-link';a.href=src.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='↗ '+src.title;list.appendChild(a)});wait.appendChild(list)}}catch(err){wait.className='msg note';wait.textContent=err.message||tr('error')}finally{$('sendBtn').disabled=false}};
 
