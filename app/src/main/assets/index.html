@@ -346,7 +346,17 @@ function addMsg(text,kind,save=true){let el=document.createElement('div');el.cla
 $('newChatBtn').onclick=()=>{archiveCurrentChat();chatHistory=[];persistHistory();$('messages').innerHTML='';$('messages').appendChild($('setupNote'));$('setupNote').textContent=tr('setup');afgAiSessionId=makeUuid();localStorage.setItem('afg_ai_session_id',afgAiSessionId);$('prompt').value='';renderArchivedChats();$('prompt').focus()};
 $('langBtn').onclick=()=>{isEnglish=!isEnglish;localStorage.setItem('afg_ai_ui_language',isEnglish?'en':'fa');$('uiLanguage').value=isEnglish?'en':'fa';applyLang()};
 function closeSettings(){$('settings').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'})}
-$('settingsBackBtn').onclick=closeSettings;$('sidebarToggle').onclick=()=>{const side=$('conversationSidebar');side.classList.toggle('mobile-open');document.body.classList.toggle('sidebar-open',side.classList.contains('mobile-open'))};$('sidebarNewChat').onclick=()=>{$('newChatBtn').click();$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open')};$('sidebarSettings').onclick=()=>{$('settingsBtn').click();$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open')};$('chatSearch').addEventListener('input',renderArchivedChats);
+$('settingsBackBtn').onclick=closeSettings;$('sidebarToggle').onclick=()=>{const side=$('conversationSidebar');side.classList.toggle('mobile-open');document.body.classList.toggle('sidebar-open',side.classList.contains('mobile-open'))};
+// Close the conversation/history drawer when the user taps outside it.
+function closeConversationSidebar(){const side=$('conversationSidebar');side.classList.remove('mobile-open');document.body.classList.remove('sidebar-open')}
+document.addEventListener('click',event=>{
+  const side=$('conversationSidebar');
+  if(!side.classList.contains('mobile-open'))return;
+  if(side.contains(event.target)||$('sidebarToggle').contains(event.target))return;
+  closeConversationSidebar();
+});
+document.addEventListener('keydown',event=>{if(event.key==='Escape')closeConversationSidebar()});
+$('sidebarNewChat').onclick=()=>{$('newChatBtn').click();$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open')};$('sidebarSettings').onclick=()=>{$('settingsBtn').click();$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open')};$('chatSearch').addEventListener('input',renderArchivedChats);
 $('settingsBtn').onclick=()=>{const panel=$('settings');const opening=!panel.classList.contains('show');panel.classList.toggle('show',opening);if(opening)panel.scrollTop=0};
 $('uiLanguage').value=localStorage.getItem('afg_ai_ui_language')||'auto';
 $('uiLanguage').onchange=()=>{const value=$('uiLanguage').value;localStorage.setItem('afg_ai_ui_language',value);isEnglish=value==='auto'?deviceLang==='en':value==='en';applyLang()};
