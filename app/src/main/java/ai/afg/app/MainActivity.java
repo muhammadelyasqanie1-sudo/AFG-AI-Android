@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.JavascriptInterface;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebSettings;
 import android.webkit.WebResourceRequest;
@@ -30,6 +31,7 @@ public class MainActivity extends Activity {
     private ValueCallback<Uri[]> filePathCallback;
     private Uri cameraOutputUri;
     private volatile boolean cameraModeRequested = false;
+    private volatile boolean cameraModeRequested = false;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +42,11 @@ public class MainActivity extends Activity {
         webView = new WebView(this);
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new Object() {
+            @JavascriptInterface public void setCameraMode(boolean enabled) {
+                cameraModeRequested = enabled;
+            }
+        }, "AFGCamera");
         webView.addJavascriptInterface(new Object() {
             @JavascriptInterface public void setCameraMode(boolean enabled) {
                 cameraModeRequested = enabled;
