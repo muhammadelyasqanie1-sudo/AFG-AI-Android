@@ -472,7 +472,7 @@ let pendingImageData='',pendingImageFile=null;
 function closeAttachMenu(){$('attachMenu').hidden=true;$('attachBtn').setAttribute('aria-expanded','false')}
 $('attachBtn').onclick=()=>{const open=$('attachMenu').hidden;$('attachMenu').hidden=!open;$('attachBtn').setAttribute('aria-expanded',String(open))};
 $('choosePhoto').onclick=()=>{closeAttachMenu();$('photoInput').click()};
-$('takePhoto').onclick=()=>{closeAttachMenu();$('cameraInput').click()};
+$('takePhoto').onclick=()=>{closeAttachMenu();try{if(window.AFGCamera)window.AFGCamera.setCameraMode(true)}catch(_){}$('cameraInput').click()};
 $('chooseFile').onclick=()=>{closeAttachMenu();$('fileInput').click()};
 document.addEventListener('click',e=>{if(!$('attachMenu').contains(e.target)&&!$('attachBtn').contains(e.target))closeAttachMenu()});
 $('removeAttachment').onclick=()=>{pendingImageData='';pendingImageFile=null;$('attachmentPreview').hidden=true;$('attachmentThumb').removeAttribute('src');$('photoInput').value='';$('cameraInput').value=''};
