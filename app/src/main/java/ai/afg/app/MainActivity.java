@@ -45,10 +45,6 @@ public class MainActivity extends Activity {
                 cameraModeRequested = enabled;
             }
         }, "AFGCamera");
-        webView.addJavascriptInterface(new Object() {
-            @JavascriptInterface public void setCameraMode(boolean enabled) {
-                cameraModeRequested = enabled;
-            }
         settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(false);
         // Content URIs are used only by Android's system file picker.
