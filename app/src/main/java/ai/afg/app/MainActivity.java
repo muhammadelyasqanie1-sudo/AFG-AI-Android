@@ -2,6 +2,13 @@ package ai.afg.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.ActivityNotFoundException;
+import android.provider.MediaStore;
+import android.os.Environment;
+import android.content.pm.PackageManager;
+import androidx.core.content.FileProvider;
+import java.io.File;
+import java.io.IOException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.ValueCallback;
@@ -20,6 +27,7 @@ public class MainActivity extends Activity {
     private WebView webView;
     private WebViewAssetLoader assetLoader;
     private ValueCallback<Uri[]> filePathCallback;
+    private Uri cameraOutputUri;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,19 +51,35 @@ public class MainActivity extends Activity {
                 }
                 filePathCallback = callback;
 
-                Intent chooserIntent;
                 try {
-                    chooserIntent = params.createIntent();
-                } catch (Exception ignored) {
-                    chooserIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    chooserIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    chooserIntent.setType("*/*");
-                }
+                    boolean wantsImage = false;
+                    String[] acceptTypes = params.getAcceptTypes();
+                    if (acceptTypes != null) {
+                        for (String type : acceptTypes) {
+                            if (type != null && (type.startsWith("image/") || type.equals("*/*"))) {
+                                wantsImage = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (params.isCaptureEnabled() && wantsImage) {
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                            File output = File.createTempFile("afg-ai-camera-", ".jpg", getCacheDir());
+                            cameraOutputUri = FileProvider.getUriForFile(
+                                MainActivity.this, getPackageName() + ".fileprovider", output);
+                            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraOutputUri);
+                            cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            startActivityForResult(cameraIntent, FILE_CHOOSER_REQUEST_CODE);
+                            return true;
+                        }
+                    }
 
-                try {
-                    startActivityForResult(Intent.createChooser(chooserIntent, "Choose a file"), FILE_CHOOSER_REQUEST_CODE);
+                    Intent chooserIntent = params.createIntent();
+                    startActivityForResult(Intent.createChooser(chooserIntent, "Choose photo or file"), FILE_CHOOSER_REQUEST_CODE);
                     return true;
                 } catch (Exception error) {
+                    cameraOutputUri = null;
                     filePathCallback = null;
                     callback.onReceiveValue(null);
                     return false;
@@ -92,17 +116,20 @@ public class MainActivity extends Activity {
 
         if (filePathCallback == null) return;
         Uri[] results = null;
-        if (resultCode == RESULT_OK && data != null) {
-            if (data.getClipData() != null) {
+        if (resultCode == RESULT_OK) {
+            if (cameraOutputUri != null) {
+                results = new Uri[] { cameraOutputUri };
+            } else if (data != null && data.getClipData() != null) {
                 int count = data.getClipData().getItemCount();
                 results = new Uri[count];
                 for (int i = 0; i < count; i++) {
                     results[i] = data.getClipData().getItemAt(i).getUri();
                 }
-            } else if (data.getData() != null) {
+            } else if (data != null && data.getData() != null) {
                 results = new Uri[] { data.getData() };
             }
         }
+        cameraOutputUri = null;
         filePathCallback.onReceiveValue(results);
         filePathCallback = null;
     }
