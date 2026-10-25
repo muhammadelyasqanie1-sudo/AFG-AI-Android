@@ -153,8 +153,16 @@ async function handleChat(req, res) {
     return sendJson(res, 405, { detail: "Use POST for this endpoint." });
   }
   if (rateLimited(req, 20)) return sendJson(res, 429, { detail: "Too many requests from this connection. Please wait a minute and try again." });
-  const apiKey = process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
-  if (!apiKey) return sendJson(res, 503, { detail: "The AI provider key is not configured. The administrator must add AI_API_KEY in Render." });
+  const provider = String(process.env.AI_PROVIDER || (process.env.ANTHROPIC_API_KEY ? "anthropic" : "openai")).toLowerCase();
+  const apiKey = provider === "anthropic"
+    ? process.env.ANTHROPIC_API_KEY
+    : (process.env.AI_API_KEY || process.env.OPENAI_API_KEY);
+  if (!["anthropic", "openai"].includes(provider)) {
+    return sendJson(res, 500, { detail: "Unsupported AI_PROVIDER. Use anthropic or openai." });
+  }
+  if (!apiKey) return sendJson(res, 503, { detail: provider === "anthropic"
+    ? "Claude is not configured. The administrator must add ANTHROPIC_API_KEY and set AI_PROVIDER=anthropic in the hosting environment."
+    : "The AI provider key is not configured. The administrator must add AI_API_KEY in the hosting environment." });
 
   let body;
   try { body = await readJson(req, 7 * 1024 * 1024); }
@@ -199,30 +207,61 @@ async function handleChat(req, res) {
     if (!sources.length) return sendJson(res, 502, { detail: "The search provider returned no usable results. Try a more specific query." });
   }
   const baseUrl = (process.env.AI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
-  const model = process.env.AI_MODEL || "gpt-4.1-mini";
+  const model = process.env.AI_MODEL || (provider === "anthropic" ? "claude-sonnet-5-5" : "gpt-4.1-mini");
   const systemText = "You are AFG AI, a genuinely useful, accurate, respectful assistant designed for people in Afghanistan. Reply in " + language +
     ". When the user writes in Dari/Persian, use natural Afghan Dari vocabulary and clear readable phrasing; do not force Iranian-specific expressions when an Afghan expression fits better. Give practical steps that work on Android and with limited bandwidth when relevant. Consider Afghanistan-specific context only when useful; do not assume the user's province, beliefs, budget, or circumstances. Explain unfamiliar technical terms simply. For education, teach step by step; for coding, provide complete safe code and explain exactly where it belongs; for documents, help draft and translate useful real-world text. If asked about prices, laws, news, or other changing facts, distinguish current verified information from general knowledge and do not invent live facts. Protect privacy: never ask for passwords or API keys, and advise keeping secrets on the server. If an image is attached, inspect it carefully and describe uncertainty rather than guessing. Be transparent about uncertainty and never claim you performed an action you did not perform. For every answer, identify the user’s actual goal first; prioritize the direct answer, then give clear actionable steps. Use headings or lists only when they improve readability. Avoid generic filler, repeating the question, and unnecessary disclaimers. If a request is ambiguous, ask one focused question; otherwise make a reasonable assumption and state it briefly when needed. For technical tasks, inspect the provided context, preserve existing working behavior, give complete compatible solutions, and explain likely failure points. For factual or research tasks, distinguish evidence from inference, cite available source URLs, and explicitly say when evidence is insufficient. For calculations, check the arithmetic. For Dari/Persian, use natural Afghan Dari, right-to-left-friendly formatting, and practical wording. " +
     modeInstructions[mode] +
     (sources.length ? "\n\nUse these live web search results as evidence. Do not invent details beyond them. Mention relevant source titles in the answer and clearly distinguish source claims from your own explanation:\n" +
       sources.map((x, i) => "[" + (i + 1) + "] " + x.title + "\nURL: " + x.url + "\nSnippet: " + x.content).join("\n\n") : "");
   try {
-    const upstream = await fetch(baseUrl + "/chat/completions", {
-      method: "POST",
-      headers: { "Authorization": "Bearer " + apiKey, "Content-Type": "application/json" },
-      body: JSON.stringify({ model, messages: [{ role: "system", content: systemText }, ...aiMessages], temperature: mode === "coding" || mode === "research" ? 0.3 : 0.7 }),
-      signal: AbortSignal.timeout(60000)
-    });
+    let upstream;
+    if (provider === "anthropic") {
+      const anthropicMessages = aiMessages.map(message => ({
+        role: message.role,
+        content: typeof message.content === "string" ? message.content : message.content.map(part => {
+          if (part.type === "text") return { type: "text", text: part.text };
+          const imageUrl = part.image_url && part.image_url.url;
+          const match = typeof imageUrl === "string" && imageUrl.match(/^data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/=]+)$/);
+          return match ? { type: "image", source: { type: "base64", media_type: "image/" + match[1], data: match[2] } } : null;
+        }).filter(Boolean)
+      }));
+      upstream = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 4096,
+          system: systemText,
+          messages: anthropicMessages,
+          temperature: mode === "coding" || mode === "research" ? 0.3 : 0.7
+        }),
+        signal: AbortSignal.timeout(60000)
+      });
+    } else {
+      upstream = await fetch(baseUrl + "/chat/completions", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + apiKey, "Content-Type": "application/json" },
+        body: JSON.stringify({ model, messages: [{ role: "system", content: systemText }, ...aiMessages], temperature: mode === "coding" || mode === "research" ? 0.3 : 0.7 }),
+        signal: AbortSignal.timeout(60000)
+      });
+    }
     const data = await upstream.json().catch(() => ({}));
     if (!upstream.ok) {
       console.error("AI provider returned HTTP", upstream.status, JSON.stringify(data).slice(0, 1200));
       const status = upstream.status === 429 ? 429 : 502;
       return sendJson(res, status, { detail: upstream.status === 401 || upstream.status === 403
-        ? "The AI provider rejected the API key. Check AI_API_KEY and provider settings."
+        ? "The AI provider rejected the API key. Check the provider key and account settings."
         : upstream.status === 429 ? "The AI provider rate limit or account quota was reached. Check provider usage."
-        : "The AI provider returned an error. Check Render logs and AI_BASE_URL / AI_MODEL settings." });
+        : "The AI provider returned an error. Check server logs and AI_PROVIDER / AI_MODEL settings." });
     }
     const choice = data.choices && data.choices[0];
-    const reply = choice && choice.message && choice.message.content;
+    const reply = provider === "anthropic"
+      ? (Array.isArray(data.content) ? data.content.filter(block => block.type === "text").map(block => block.text || "").join("\n") : "")
+      : (choice && choice.message && choice.message.content);
     if (typeof reply !== "string" || !reply.trim()) return sendJson(res, 502, { detail: "The AI provider response did not contain text." });
     await persistChatTurn(body, lastUser.content, reply, model);
     return sendJson(res, 200, { reply, model, mode, sources: sources.map(({ title, url }) => ({ title, url })) });
@@ -288,7 +327,7 @@ http.createServer(async (req, res) => {
     return sendJson(res, 200, {
       ok: true,
       service: "AFG AI",
-      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY),
+      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY),
       webSearchConfigured: Boolean(process.env.TAVILY_API_KEY),
       imageConfigured: Boolean(process.env.IMAGE_API_KEY)
     });
