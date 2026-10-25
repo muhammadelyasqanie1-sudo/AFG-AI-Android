@@ -147,26 +147,141 @@ async function searchWeb(query) {
   })).filter(item => /^https?:\/\//i.test(item.url));
 }
 
+
+const RELAY_BASE = "https://api.llmsrelay.com";
+const RELAY_GROUPS = [
+  { key: "LLMSRELAY_CLAUDE_API_KEY", group: "claude", label: "Claude · Basic / Pro", api: "messages" },
+  { key: "LLMSRELAY_CODEX_API_KEY", group: "codex", label: "GPT / Codex · Codex / Codex Pro", api: "chat" },
+  { key: "LLMSRELAY_UNCENSORED_API_KEY", group: "uncensored", label: "GLM / DeepSeek · Uncensored", api: "chat" }
+];
+async function relayModelsForGroup(config) {
+  const apiKey = process.env[config.key];
+  if (!apiKey) return [];
+  const response = await fetch(RELAY_BASE + "/v1/models", {
+    headers: { "x-api-key": apiKey, "Authorization": "Bearer " + apiKey },
+    signal: AbortSignal.timeout(15000)
+  });
+  if (!response.ok) {
+    console.warn("LLMsRelay model listing failed for", config.group, "HTTP", response.status);
+    return [];
+  }
+  const data = await response.json().catch(() => ({}));
+  const items = Array.isArray(data.data) ? data.data : Array.isArray(data.models) ? data.models : [];
+  return items.filter(item => item && typeof item.id === "string" && item.id.trim()).map(item => ({
+    id: item.id,
+    group: config.group,
+    provider: config.label,
+    displayName: item.name || item.id
+  }));
+}
+async function getRelayCatalog() {
+  const groups = await Promise.all(RELAY_GROUPS.map(async config => ({ config, models: await relayModelsForGroup(config) })));
+  return groups.flatMap(x => x.models);
+}
+async function handleRelayModels(req, res) {
+  if (req.method !== "GET") { res.setHeader("Allow", "GET"); return sendJson(res, 405, { detail: "Use GET for this endpoint." }); }
+  const hasAnyKey = RELAY_GROUPS.some(group => Boolean(process.env[group.key]));
+  if (!hasAnyKey) return sendJson(res, 200, { configured: false, models: [], groups: [], detail: "LLMsRelay API keys have not been configured on the server." });
+  try {
+    const models = await getRelayCatalog();
+    const groups = [...new Set(models.map(model => model.group))];
+    return sendJson(res, 200, { configured: true, models, groups });
+  } catch (error) {
+    console.error("LLMsRelay catalog request failed:", error.name, error.message);
+    return sendJson(res, 502, { configured: true, models: [], groups: [], detail: "Could not retrieve the model list from LLMsRelay. Check the configured API keys." });
+  }
+}
+async function handleRelayChat(req, res, body) {
+  const catalog = await getRelayCatalog().catch(() => []);
+  if (!catalog.length) return sendJson(res, 503, { detail: "No LLMsRelay models are available. Add a valid group API key in Render Environment and check its access." });
+  const requestedModel = typeof body.model === "string" ? body.model : "";
+  const selected = catalog.find(model => model.id === requestedModel);
+  if (!selected) return sendJson(res, 400, { detail: "Choose a model from the current model list, then try again." });
+  const groupConfig = RELAY_GROUPS.find(group => group.group === selected.group);
+  const apiKey = groupConfig && process.env[groupConfig.key];
+  if (!apiKey) return sendJson(res, 503, { detail: "The API key for this model group is not configured on the server." });
+  const inputMessages = Array.isArray(body.messages) ? body.messages : [];
+  const messages = inputMessages.filter(m => m && ["user", "assistant"].includes(m.role) && typeof m.content === "string")
+    .slice(-20).map(m => ({ role: m.role, content: m.content.slice(0, 12000) }));
+  const lastUser = messages.filter(m => m.role === "user").slice(-1)[0];
+  if (!lastUser || !lastUser.content.trim()) return sendJson(res, 400, { detail: "Send a non-empty user message." });
+  let imageData = "";
+  if (typeof body.image === "string" && body.image) {
+    if (body.image.length > 7 * 1024 * 1024 || !/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(body.image))
+      return sendJson(res, 400, { detail: "Unsupported image. Choose a PNG, JPEG, or WebP image under 5 MB." });
+    imageData = body.image;
+  }
+  const language = body.language === "fa" ? "Persian/Dari" : body.language === "en" ? "English" : "the same language as the user's latest message (detect automatically)";
+  const mode = ["chat", "research", "coding", "creative", "study"].includes(body.mode) ? body.mode : "chat";
+  const systemText = "You are AFG AI, a helpful assistant. Reply in " + language +
+    ". Use natural Afghan Dari when the user writes in Dari/Persian. Be accurate, practical, and transparent about uncertainty. Never claim actions you did not perform. Keep API keys and secrets private. Mode: " + mode + ".";
+  const aiMessages = messages.map(m => m === lastUser && imageData ? { role: m.role, content: [
+    { type: "text", text: m.content },
+    { type: "image_url", image_url: { url: imageData, detail: "auto" } }
+  ] } : m);
+  try {
+    let upstream, data, reply;
+    if (selected.group === "claude") {
+      const anthropicMessages = aiMessages.map(message => ({
+        role: message.role,
+        content: typeof message.content === "string" ? message.content : message.content.map(part => {
+          if (part.type === "text") return { type: "text", text: part.text };
+          const url = part.image_url && part.image_url.url;
+          const match = typeof url === "string" && url.match(/^data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/=]+)$/);
+          return match ? { type: "image", source: { type: "base64", media_type: "image/" + match[1], data: match[2] } } : null;
+        }).filter(Boolean)
+      }));
+      upstream = await fetch(RELAY_BASE + "/v1/messages", {
+        method: "POST",
+        headers: { "x-api-key": apiKey, "anthropic-version": "2023-06-01", "Content-Type": "application/json" },
+        body: JSON.stringify({ model: selected.id, max_tokens: 4096, system: systemText, messages: anthropicMessages, temperature: mode === "coding" ? 0.3 : 0.7 }),
+        signal: AbortSignal.timeout(60000)
+      });
+      data = await upstream.json().catch(() => ({}));
+      reply = Array.isArray(data.content) ? data.content.filter(block => block.type === "text").map(block => block.text || "").join("\n") : "";
+    } else {
+      upstream = await fetch(RELAY_BASE + "/v1/chat/completions", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + apiKey, "Content-Type": "application/json" },
+        body: JSON.stringify({ model: selected.id, messages: [{ role: "system", content: systemText }, ...aiMessages], temperature: mode === "coding" ? 0.3 : 0.7 }),
+        signal: AbortSignal.timeout(60000)
+      });
+      data = await upstream.json().catch(() => ({}));
+      reply = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+    }
+    if (!upstream.ok) {
+      console.error("LLMsRelay returned HTTP", upstream.status, JSON.stringify(data).slice(0, 1000));
+      return sendJson(res, upstream.status === 429 ? 429 : 502, { detail: upstream.status === 401 || upstream.status === 403
+        ? "LLMsRelay rejected the API key or this model group does not have access."
+        : upstream.status === 429 ? "LLMsRelay rate limit or account quota reached. Check the account balance and usage."
+        : "LLMsRelay could not complete this request. Check model access, account balance, and Render logs." });
+    }
+    if (typeof reply !== "string" || !reply.trim()) return sendJson(res, 502, { detail: "The selected model returned no text. Try another model." });
+    await persistChatTurn(body, lastUser.content, reply, selected.id);
+    return sendJson(res, 200, { reply, model: selected.id, provider: selected.provider, mode, sources: [] });
+  } catch (error) {
+    console.error("LLMsRelay request failed:", error.name, error.message);
+    return sendJson(res, 502, { detail: error.name === "TimeoutError" ? "The selected model timed out. Try again shortly." : "Could not connect to LLMsRelay. Check Render logs and the provider status." });
+  }
+}
+
 async function handleChat(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return sendJson(res, 405, { detail: "Use POST for this endpoint." });
   }
   if (rateLimited(req, 20)) return sendJson(res, 429, { detail: "Too many requests from this connection. Please wait a minute and try again." });
+  const relayConfigured = RELAY_GROUPS.some(group => Boolean(process.env[group.key]));
   const provider = String(process.env.AI_PROVIDER || (process.env.ANTHROPIC_API_KEY ? "anthropic" : "openai")).toLowerCase();
-  const apiKey = provider === "anthropic"
-    ? process.env.ANTHROPIC_API_KEY
-    : (process.env.AI_API_KEY || process.env.OPENAI_API_KEY);
-  if (!["anthropic", "openai"].includes(provider)) {
-    return sendJson(res, 500, { detail: "Unsupported AI_PROVIDER. Use anthropic or openai." });
+  const apiKey = provider === "anthropic" ? process.env.ANTHROPIC_API_KEY : (process.env.AI_API_KEY || process.env.OPENAI_API_KEY);
+  if (!relayConfigured) {
+    if (!["anthropic", "openai"].includes(provider)) return sendJson(res, 500, { detail: "Unsupported AI_PROVIDER. Use anthropic or openai." });
+    if (!apiKey) return sendJson(res, 503, { detail: "No AI provider key is configured. Add an LLMsRelay group key or configure the existing AI provider on Render." });
   }
-  if (!apiKey) return sendJson(res, 503, { detail: provider === "anthropic"
-    ? "Claude is not configured. The administrator must add ANTHROPIC_API_KEY and set AI_PROVIDER=anthropic in the hosting environment."
-    : "The AI provider key is not configured. The administrator must add AI_API_KEY in the hosting environment." });
-
   let body;
   try { body = await readJson(req, 7 * 1024 * 1024); }
   catch (error) { return sendJson(res, error.status || 400, { detail: error.message || "Could not read request." }); }
+  if (relayConfigured) return handleRelayChat(req, res, body);
 
   const inputMessages = Array.isArray(body.messages) ? body.messages : [];
   const messages = inputMessages
@@ -327,13 +442,13 @@ http.createServer(async (req, res) => {
     return sendJson(res, 200, {
       ok: true,
       service: "AFG AI",
-      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY),
+      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY || RELAY_GROUPS.some(group => process.env[group.key])),\n      llmsRelayConfigured: RELAY_GROUPS.some(group => Boolean(process.env[group.key])),
       webSearchConfigured: Boolean(process.env.TAVILY_API_KEY),
       imageConfigured: Boolean(process.env.IMAGE_API_KEY)
     });
   }
 
-  if (pathname === "/api/chat") {
+  if (pathname === "/api/models") {\n    return handleRelayModels(req, res);\n  }\n\n  if (pathname === "/api/chat") {
     return handleChat(req, res);
   }
 
