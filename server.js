@@ -442,7 +442,8 @@ http.createServer(async (req, res) => {
     return sendJson(res, 200, {
       ok: true,
       service: "AFG AI",
-      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY || RELAY_GROUPS.some(group => process.env[group.key])),\n      llmsRelayConfigured: RELAY_GROUPS.some(group => Boolean(process.env[group.key])),
+      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY || RELAY_GROUPS.some(group => process.env[group.key])),
+      llmsRelayConfigured: RELAY_GROUPS.some(group => Boolean(process.env[group.key])),
       webSearchConfigured: Boolean(process.env.TAVILY_API_KEY),
       imageConfigured: Boolean(process.env.IMAGE_API_KEY)
     });
