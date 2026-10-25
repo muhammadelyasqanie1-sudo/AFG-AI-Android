@@ -469,56 +469,53 @@ let availableModels=[], selectedModelId=localStorage.getItem('afg_ai_selected_mo
 function modelGroupLabel(group){return ({claude:'Claude · Basic / Pro',codex:'GPT / Codex · Codex Pro',uncensored:'GLM / DeepSeek · Uncensored'})[group]||group}
 async function loadAvailableModels(){
  const select=$('modelSelect'),status=$('modelStatus');if(!select||!status)return;
- status.classList.remove('error');status.textContent=isEnglish?'Loading models available to the configured API keys…':'در حال دریافت مدل‌های قابل‌دسترسی از کلیدهای API…';
+ select.disabled=true;status.classList.remove('error');
+ status.textContent=isEnglish?'Checking configured AI model providers…':'در حال بررسی گروه‌های مدل تنظیم‌شده…';
  try{
   const response=await fetch(defaultServer+'/api/models',{cache:'no-store'});const data=await response.json();
   if(!response.ok)throw new Error(data.detail||'Could not load models');
   availableModels=Array.isArray(data.models)?data.models:[];
   select.replaceChildren();
   if(!availableModels.length){
-   const option=document.createElement('option');option.value='';option.textContent=isEnglish?'No LLMsRelay models configured':'هنوز مدلی از LLMsRelay تنظیم نشده';select.appendChild(option);select.disabled=true;
-   status.textContent=data.detail||(isEnglish?'Add an API key for a model group in Render Environment.':'کلید گروه مدل را در Environment سرویس Render اضافه کن.');return;
+   const option=document.createElement('option');option.value='';
+   option.textContent=isEnglish?'No models available yet — configure an API key':'هنوز مدلی در دسترس نیست — کلید API را تنظیم کنید';
+   select.appendChild(option);
+   const groups=[
+    {id:'claude',label:'Claude · Basic / Pro'},
+    {id:'codex',label:'ChatGPT / GPT · Codex / Codex Pro'},
+    {id:'uncensored',label:'GLM / DeepSeek · Uncensored'}
+   ];
+   groups.forEach(group=>{const item=document.createElement('option');item.value='';item.disabled=true;item.textContent='🔒 '+group.label+(isEnglish?' — API key needed':' — نیاز به کلید API');select.appendChild(item)});
+   select.disabled=true;
+   status.textContent=data.detail||(isEnglish?'Add LLMSRELAY_CLAUDE_API_KEY in Render → Environment. Then refresh this chat.':'کلید LLMSRELAY_CLAUDE_API_KEY را در Render ← Environment اضافه کن؛ سپس چت را تازه‌سازی کن.');
+   status.classList.add('error');return;
   }
   const groups=[...new Set(availableModels.map(model=>model.group))];
   groups.forEach(group=>{
    const optgroup=document.createElement('optgroup');optgroup.label=modelGroupLabel(group);
-   availableModels.filter(model=>model.group===group).forEach(model=>{const option=document.createElement('option');option.value=model.id;option.textContent=model.displayName&&model.displayName!==model.id?model.displayName+' · '+model.id:model.id;optgroup.appendChild(option)});
+   availableModels.filter(model=>model.group===group).forEach(model=>{
+    const option=document.createElement('option');option.value=model.id;
+    option.textContent=model.displayName&&model.displayName!==model.id?model.displayName+' · '+model.id:model.id;
+    optgroup.appendChild(option);
+   });
    select.appendChild(optgroup);
   });
   const savedExists=availableModels.some(model=>model.id===selectedModelId);
   if(!savedExists)selectedModelId=availableModels[0].id;
   select.value=selectedModelId;select.disabled=false;localStorage.setItem('afg_ai_selected_model',selectedModelId);
-  status.textContent=isEnglish?availableModels.length+' models available. The selected model will answer your next message.':availableModels.length+' مدل قابل‌دسترسی است؛ مدل انتخاب‌شده به پیام بعدی پاسخ می‌دهد.';
- }catch(error){select.disabled=true;select.replaceChildren();const option=document.createElement('option');option.value='';option.textContent=isEnglish?'Could not load model list':'فهرست مدل‌ها بار نشد';select.appendChild(option);status.classList.add('error');status.textContent=error.message||(isEnglish?'Check the server connection.':'اتصال سرور را بررسی کن.')}
+  status.textContent=isEnglish?availableModels.length+' models available. Choose one for your next message.':availableModels.length+' مدل موجود است؛ مدل دلخواهت را برای پیام بعدی انتخاب کن.';
+ }catch(error){
+  select.disabled=true;select.replaceChildren();
+  const option=document.createElement('option');option.value='';option.textContent=isEnglish?'Model list unavailable':'فهرست مدل‌ها در دسترس نیست';select.appendChild(option);
+  status.classList.add('error');status.textContent=(error.message||'')+' — '+(isEnglish?'Check Render deployment and API keys.':'استقرار Render و کلیدهای API را بررسی کن.');
+ }
 }
-$('modelSelect').addEventListener('change',()=>{selectedModelId=$('modelSelect').value;if(selectedModelId)localStorage.setItem('afg_ai_selected_model',selectedModelId);const chosen=availableModels.find(model=>model.id===selectedModelId);$('modelStatus').textContent=chosen?(isEnglish?'Selected: ':'انتخاب‌شده: ')+chosen.displayName:'';
+$('modelSelect').addEventListener('change',()=>{
+ selectedModelId=$('modelSelect').value;
+ if(selectedModelId)localStorage.setItem('afg_ai_selected_model',selectedModelId);
+ const chosen=availableModels.find(model=>model.id===selectedModelId);
+ $('modelStatus').textContent=chosen?(isEnglish?'Selected: ':'انتخاب‌شده: ')+chosen.displayName:'';
 });
-
-// Automatically wake/check the backend when the app opens or returns to the foreground.
-// Render's Free service may sleep while idle; short retries help the first request recover.
-let lastBackendWakeAt=0,backendWakePromise=null;
-async function wakeBackendOnOpen(force=false){
-  const now=Date.now();
-  if(backendWakePromise)return backendWakePromise;
-  if(!force&&now-lastBackendWakeAt<60000)return;
-  lastBackendWakeAt=now;
-  backendWakePromise=(async()=>{
-    const delays=[0,1800,3500,6500];
-    for(const delay of delays){
-      if(delay)await new Promise(resolve=>setTimeout(resolve,delay));
-      try{
-        const controller=new AbortController();
-        const timeout=setTimeout(()=>controller.abort(),12000);
-        try{
-          const response=await fetch(defaultServer+'/api/health',{cache:'no-store',signal:controller.signal});
-          if(response.ok){const data=await response.json();if(data&&data.ok)return true;}
-        }finally{clearTimeout(timeout);}
-      }catch(_){}
-    }
-    return false;
-  })();
-  try{return await backendWakePromise;}finally{backendWakePromise=null;}
-}
 window.addEventListener('DOMContentLoaded',()=>{wakeBackendOnOpen(true).then(()=>loadAvailableModels())});
 window.addEventListener('pageshow',()=>{wakeBackendOnOpen().then(()=>loadAvailableModels())});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wakeBackendOnOpen()});const deviceLang=(navigator.language||'fa').toLowerCase().startsWith('en')?'en':'fa';$('language').value=localStorage.getItem('afg_ai_language')||'auto';if(!localStorage.getItem('afg_ai_language'))localStorage.setItem('afg_ai_language','auto');const savedUiLanguage=localStorage.getItem('afg_ai_ui_language')||'auto';isEnglish=savedUiLanguage==='auto'?deviceLang==='en':savedUiLanguage==='en';$('uiLanguage').value=savedUiLanguage;$('appearance').value=localStorage.getItem('afg_ai_appearance')||'dark';applyAppearance();applyLang();restoreHistory();
