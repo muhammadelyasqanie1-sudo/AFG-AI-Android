@@ -519,8 +519,8 @@ async function wakeBackendOnOpen(force=false){
   })();
   try{return await backendWakePromise;}finally{backendWakePromise=null;}
 }
-window.addEventListener('DOMContentLoaded',()=>{wakeBackendOnOpen(true);loadAvailableModels()});
-window.addEventListener('pageshow',()=>{wakeBackendOnOpen();loadAvailableModels()});
+window.addEventListener('DOMContentLoaded',()=>{wakeBackendOnOpen(true).then(()=>loadAvailableModels())});
+window.addEventListener('pageshow',()=>{wakeBackendOnOpen().then(()=>loadAvailableModels())});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wakeBackendOnOpen()});const deviceLang=(navigator.language||'fa').toLowerCase().startsWith('en')?'en':'fa';$('language').value=localStorage.getItem('afg_ai_language')||'auto';if(!localStorage.getItem('afg_ai_language'))localStorage.setItem('afg_ai_language','auto');const savedUiLanguage=localStorage.getItem('afg_ai_ui_language')||'auto';isEnglish=savedUiLanguage==='auto'?deviceLang==='en':savedUiLanguage==='en';$('uiLanguage').value=savedUiLanguage;$('appearance').value=localStorage.getItem('afg_ai_appearance')||'dark';applyAppearance();applyLang();restoreHistory();
 document.querySelectorAll('[data-prompt]').forEach(b=>b.onclick=()=>{$('prompt').value=b.dataset.prompt;$('prompt').focus()});
 let pendingImageData='',pendingImageFile=null;
