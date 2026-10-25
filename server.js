@@ -448,7 +448,11 @@ http.createServer(async (req, res) => {
     });
   }
 
-  if (pathname === "/api/models") {\n    return handleRelayModels(req, res);\n  }\n\n  if (pathname === "/api/chat") {
+  if (pathname === "/api/models") {
+    return handleRelayModels(req, res);
+  }
+
+  if (pathname === "/api/chat") {
     return handleChat(req, res);
   }
 
