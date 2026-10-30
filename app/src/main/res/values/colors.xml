@@ -1,4 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="afg_icon_background">#061329</color>
+
+    <color name="widget_text_primary">#E0E6ED</color>
+    <color name="widget_text_secondary">#8892A0</color>
+    <color name="widget_text_muted">#5A6A7F</color>
+    <color name="widget_divider">#1A283A</color>
+    <color name="widget_button_text">#0A0F1A</color>
+
+    <color name="primary">#00D4AA</color>
+    <color name="primary_dark">#00B894</color>
+    <color name="primary_light">#34E8C0</color>
+    <color name="secondary">#1A283A</color>
+    <color name="background">#0A0F1A</color>
+    <color name="surface">#0E1625</color>
+    <color name="surface_variant">#141E33</color>
+    <color name="text_primary">#E0E6ED</color>
+    <color name="text_secondary">#8892A0</color>
+    <color name="text_muted">#5A6A7F</color>
+    <color name="border">#1A283A</color>
+    <color name="error">#FF6B6B</color>
+    <color name="warning">#FFD93D</color>
+    <color name="success">#00D4AA</color>
+
+    <color name="cyberpunk_primary">#00FFFF</color>
+    <color name="cyberpunk_secondary">#FF00FF</color>
+    <color name="cyberpunk_accent">#FFFF00</color>
+    <color name="cyberpunk_bg">#0A001A</color>
+
+    <color name="minimal_primary">#00D4AA</color>
+    <color name="minimal_bg">#FFFFFF</color>
+    <color name="minimal_surface">#F5F5F5</color>
+    <color name="minimal_text">#1A1A1A</color>
+
+    <color name="premium_primary">#D4A017</color>
+    <color name="premium_secondary">#B8860B</color>
+    <color name="premium_bg">#0D0D0D</color>
+    <color name="premium_surface">#1A1A1A</color>
+    <color name="premium_text">#F0E6D2</color>
 </resources>

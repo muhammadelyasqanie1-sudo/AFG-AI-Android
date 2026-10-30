@@ -1,0 +1,199 @@
+/* ==========================================================================
+   AFG AI · Design tokens
+   Futuristic, premium, minimal. Themes and accents are switched with
+   data attributes on <html>, so no rebuild or JS style injection is needed.
+   ========================================================================== */
+
+:root {
+  --font-sans: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Vazirmatn", "Noto Sans Arabic", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code",
+    Menlo, Consolas, monospace;
+
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-2xl: 36px;
+  --radius-pill: 999px;
+
+  --sidebar-w: 286px;
+  --content-w: 940px;
+  --header-h: 70px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --speed: 220ms;
+
+  --fs-xs: 0.72rem;
+  --fs-sm: 0.8rem;
+  --fs-md: 0.9rem;
+  --fs-base: 0.96rem;
+  --fs-lg: 1.08rem;
+  --fs-xl: 1.35rem;
+  --fs-2xl: clamp(1.65rem, 3.3vw, 2.5rem);
+  --fs-3xl: clamp(2rem, 5vw, 3.4rem);
+
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #fb7185;
+  --info: #60a5fa;
+
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 14px 40px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 30px 90px rgba(0, 0, 0, 0.5);
+}
+
+/* ------------------------------- Midnight -------------------------------- */
+:root,
+:root[data-theme="midnight"] {
+  color-scheme: dark;
+  --bg-0: #020711;
+  --bg-1: #061326;
+  --bg-2: #0a1c36;
+  --surface: rgba(9, 24, 45, 0.72);
+  --surface-solid: #081729;
+  --surface-2: rgba(13, 35, 62, 0.72);
+  --surface-3: rgba(20, 48, 82, 0.55);
+  --surface-hover: rgba(30, 66, 108, 0.42);
+  --line: rgba(94, 155, 214, 0.16);
+  --line-strong: rgba(104, 190, 240, 0.3);
+  --text: #f2f7ff;
+  --text-muted: #9db3d0;
+  --text-dim: #6883a5;
+  --glass-blur: 22px;
+  --grid-line: rgba(88, 156, 220, 0.045);
+  --glow-a: rgba(34, 211, 238, 0.2);
+  --glow-b: rgba(124, 108, 255, 0.18);
+  --user-bubble-1: #16436b;
+  --user-bubble-2: #1b2f68;
+  --user-border: rgba(104, 196, 255, 0.34);
+  --code-bg: #030b16;
+  --scrim: rgba(1, 6, 14, 0.7);
+}
+
+/* --------------------------------- OLED ---------------------------------- */
+:root[data-theme="oled"] {
+  color-scheme: dark;
+  --bg-0: #000000;
+  --bg-1: #040506;
+  --bg-2: #080a0d;
+  --surface: rgba(10, 12, 15, 0.78);
+  --surface-solid: #07080a;
+  --surface-2: rgba(17, 20, 25, 0.8);
+  --surface-3: rgba(28, 32, 39, 0.6);
+  --surface-hover: rgba(40, 45, 54, 0.55);
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.2);
+  --text: #f7f8fa;
+  --text-muted: #a2a9b4;
+  --text-dim: #6c7481;
+  --glass-blur: 18px;
+  --grid-line: rgba(255, 255, 255, 0.025);
+  --glow-a: rgba(34, 211, 238, 0.12);
+  --glow-b: rgba(124, 108, 255, 0.1);
+  --user-bubble-1: #1b1f26;
+  --user-bubble-2: #242932;
+  --user-border: rgba(255, 255, 255, 0.16);
+  --code-bg: #000000;
+  --scrim: rgba(0, 0, 0, 0.78);
+}
+
+/* -------------------------------- Aurora --------------------------------- */
+:root[data-theme="aurora"] {
+  color-scheme: dark;
+  --bg-0: #05030f;
+  --bg-1: #0c0822;
+  --bg-2: #101a33;
+  --surface: rgba(20, 17, 48, 0.72);
+  --surface-solid: #120f2a;
+  --surface-2: rgba(29, 27, 64, 0.7);
+  --surface-3: rgba(44, 42, 90, 0.55);
+  --surface-hover: rgba(52, 48, 104, 0.45);
+  --line: rgba(148, 142, 255, 0.16);
+  --line-strong: rgba(167, 190, 255, 0.32);
+  --text: #f6f3ff;
+  --text-muted: #b3acd6;
+  --text-dim: #7f78a6;
+  --glass-blur: 24px;
+  --grid-line: rgba(140, 130, 255, 0.05);
+  --glow-a: rgba(88, 226, 214, 0.18);
+  --glow-b: rgba(167, 139, 250, 0.22);
+  --user-bubble-1: #253166;
+  --user-bubble-2: #3a235f;
+  --user-border: rgba(170, 150, 255, 0.34);
+  --code-bg: #070516;
+  --scrim: rgba(3, 2, 12, 0.72);
+}
+
+/* -------------------------------- Accents -------------------------------- */
+:root,
+:root[data-accent="cyan"] {
+  --accent: #22d3ee;
+  --accent-2: #3b82f6;
+  --accent-3: #a78bfa;
+  --accent-soft: rgba(34, 211, 238, 0.12);
+  --accent-line: rgba(34, 211, 238, 0.36);
+  --accent-text: #06121f;
+  --accent-gradient: linear-gradient(120deg, #22d3ee 0%, #3b82f6 54%, #8b5cf6 100%);
+}
+
+:root[data-accent="violet"] {
+  --accent: #a78bfa;
+  --accent-2: #7c6cff;
+  --accent-3: #f472b6;
+  --accent-soft: rgba(167, 139, 250, 0.14);
+  --accent-line: rgba(167, 139, 250, 0.4);
+  --accent-text: #100a20;
+  --accent-gradient: linear-gradient(120deg, #a78bfa 0%, #7c6cff 48%, #f472b6 100%);
+}
+
+:root[data-accent="emerald"] {
+  --accent: #34d399;
+  --accent-2: #22d3ee;
+  --accent-3: #a3e635;
+  --accent-soft: rgba(52, 211, 153, 0.13);
+  --accent-line: rgba(52, 211, 153, 0.38);
+  --accent-text: #04140f;
+  --accent-gradient: linear-gradient(120deg, #34d399 0%, #22d3ee 55%, #a3e635 100%);
+}
+
+:root[data-accent="amber"] {
+  --accent: #fbbf24;
+  --accent-2: #fb923c;
+  --accent-3: #f472b6;
+  --accent-soft: rgba(251, 191, 36, 0.13);
+  --accent-line: rgba(251, 191, 36, 0.38);
+  --accent-text: #1a1003;
+  --accent-gradient: linear-gradient(120deg, #fbbf24 0%, #fb923c 52%, #f472b6 100%);
+}
+
+/* ------------------------------- Text size ------------------------------- */
+:root[data-size="sm"] {
+  --fs-base: 0.88rem;
+  --fs-md: 0.84rem;
+  --fs-lg: 1rem;
+  --fs-2xl: clamp(1.45rem, 3vw, 2.15rem);
+}
+:root[data-size="lg"] {
+  --fs-base: 1.04rem;
+  --fs-md: 0.98rem;
+  --fs-lg: 1.18rem;
+  --fs-2xl: clamp(1.85rem, 3.6vw, 2.8rem);
+}
+
+/* Reduced motion is honoured globally. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --speed: 1ms;
+  }
+}
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+  scroll-behavior: auto !important;
+}

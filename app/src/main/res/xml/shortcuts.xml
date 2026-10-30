@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="new_chat"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_new_chat"
+        android:shortcutShortLabel="@string/shortcut_new_chat_short"
+        android:shortcutLongLabel="@string/shortcut_new_chat_long"
+        android:rank="0">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="afgai://new_chat" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="voice_chat"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_voice_chat"
+        android:shortcutShortLabel="@string/shortcut_voice_chat_short"
+        android:shortcutLongLabel="@string/shortcut_voice_chat_long"
+        android:rank="1">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="afgai://voice_chat" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="recent_chats"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_recent"
+        android:shortcutShortLabel="@string/shortcut_recent_short"
+        android:shortcutLongLabel="@string/shortcut_recent_long"
+        android:rank="2">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="afgai://recent" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_settings"
+        android:shortcutShortLabel="@string/shortcut_settings_short"
+        android:shortcutLongLabel="@string/shortcut_settings_long"
+        android:rank="3">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="afgai://settings" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+</shortcuts>

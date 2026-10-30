@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules xmlns:android="http://schemas.android.com/apk/res/android">
+    <cloud-backup>
+        <include domain="sharedpref" path="afg_ai_prefs.xml" />
+        <include domain="file" path="web_storage" />
+        <exclude domain="sharedpref" path="afg_ai_prefs.xml" key="auth_token" />
+        <exclude domain="sharedpref" path="afg_ai_prefs.xml" key="refresh_token" />
+        <exclude domain="sharedpref" path="afg_ai_prefs.xml" key="biometric_secret" />
+        <exclude domain="file" path="web_storage/cache" />
+        <exclude domain="file" path="web_storage/Code Cache" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="sharedpref" path="afg_ai_prefs.xml" />
+        <include domain="file" path="web_storage" />
+        <exclude domain="sharedpref" path="afg_ai_prefs.xml" key="auth_token" />
+        <exclude domain="sharedpref" path="afg_ai_prefs.xml" key="refresh_token" />
+        <exclude domain="sharedpref" path="afg_ai_prefs.xml" key="biometric_secret" />
+        <exclude domain="file" path="web_storage/cache" />
+        <exclude domain="file" path="web_storage/Code Cache" />
+    </device-transfer>
+</data-extraction-rules>

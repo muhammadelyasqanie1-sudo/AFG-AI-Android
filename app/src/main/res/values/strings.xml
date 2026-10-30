@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AFG AI</string>
+    <string name="widget_name">AFG AI</string>
+    <string name="widget_logo_desc">AFG AI Logo</string>
+    <string name="widget_refresh_desc">Refresh</string>
+    <string name="widget_no_chats">No recent chats</string>
+    <string name="widget_model_auto">Model: Auto</string>
+    <string name="widget_new_chat">New Chat</string>
+    <string name="widget_voice_chat">Voice Chat</string>
+    <string name="widget_button_text">#0A0F1A</string>
+
+    <string name="shortcut_new_chat_short">New Chat</string>
+    <string name="shortcut_new_chat_long">Start a new conversation</string>
+    <string name="shortcut_voice_chat_short">Voice Chat</string>
+    <string name="shortcut_voice_chat_long">Start voice conversation</string>
+    <string name="shortcut_recent_short">Recent</string>
+    <string name="shortcut_recent_long">View recent conversations</string>
+    <string name="shortcut_settings_short">Settings</string>
+    <string name="shortcut_settings_long">Open settings</string>
+
+    <string-array name="widget_sizes">
+        <item>Small (2x1)</item>
+        <item>Medium (4x2)</item>
+        <item>Large (4x3)</item>
+    </string-array>
+
+    <string-array name="widget_themes">
+        <item>System Default</item>
+        <item>Cyberpunk</item>
+        <item>Minimal</item>
+        <item>Premium</item>
+    </string-array>
+
+    <string name="config_size">Widget Size</string>
+    <string name="config_theme">Widget Theme</string>
+    <string name="config_save">Save</string>
+    <string name="config_cancel">Cancel</string>
+</resources>

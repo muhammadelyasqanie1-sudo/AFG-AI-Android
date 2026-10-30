@@ -1,569 +1,529 @@
 <!doctype html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme="midnight" data-accent="cyan" data-size="md">
 <head>
-  <meta name="google-site-verification" content="gl4LRLY9K39T76ZmRBb6DCAK3Kv2Rfe3WqxlQJKHGUg" />
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#061329">
-<link rel="icon" type="image/svg+xml" href="./icon.svg">
-<meta name="description" content="AFGAI — هوش مصنوعی افغانستان؛ دستیار هوشمند به زبان فارسی و دری">
-<link rel="manifest" href="./manifest.webmanifest">
-<title>AFGAI | هوش مصنوعی افغانستان</title>
-<style>
-:root{color-scheme:dark;--bg:#0b1020;--panel:#121a2e;--panel2:#19233b;--text:#f3f6ff;--muted:#a8b2cc;--line:#2b3652;--accent:#7c9cff;--accent2:#4de0c1}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1c2b50 0,#0b1020 55%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100dvh}
-button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:960px;margin:auto;min-height:100dvh;display:flex;flex-direction:column;padding:14px}
-header{display:flex;align-items:center;gap:12px;padding:10px 2px 18px;border-bottom:1px solid var(--line)}
-.logo{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#6f8cff,#49d9c0);display:grid;place-items:center;color:#071323;font-weight:900;font-size:17px;box-shadow:0 8px 30px #4f77ff33}
-.brand{flex:1}.brand h1{margin:0;font-size:20px}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}.top-actions{display:flex;gap:8px}
-.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:9px 12px;border-radius:12px}.btn.primary{background:linear-gradient(135deg,#7894ff,#4ed9c0);color:#071323;border:0;font-weight:750}
-.layout{display:grid;grid-template-columns:220px 1fr;gap:14px;flex:1;padding-top:14px;min-height:0}
-aside,.chat-panel{background:#10182acc;border:1px solid var(--line);border-radius:20px;min-height:420px}
-aside{padding:14px}.section-label{color:var(--muted);font-size:12px;margin:4px 0 10px}.feature{padding:11px;border:1px solid var(--line);border-radius:13px;margin:8px 0;background:#ffffff04;font-size:13px}.feature strong{display:block;margin-bottom:3px}.feature span{color:var(--muted);font-size:12px}
-.chat-panel{display:flex;flex-direction:column;overflow:hidden}.welcome{padding:24px 22px 10px}.welcome h2{font-size:24px;margin:0 0 8px}.welcome p{color:var(--muted);margin:0;line-height:1.8}
-.quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.quick button{font-size:12px;border:1px solid var(--line);background:#ffffff06;color:var(--text);border-radius:999px;padding:8px 11px}
-.messages{padding:12px 20px;display:flex;flex-direction:column;gap:12px;flex:1;overflow:auto;min-height:150px}.msg{max-width:90%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8;padding:12px 14px;border-radius:16px}.msg.user{align-self:flex-start;background:#263a67;border:1px solid #3c5791}.msg.ai{align-self:flex-end;background:#17283a;border:1px solid #2c4c59}.msg.note{align-self:stretch;max-width:none;color:var(--muted);font-size:12px;background:#ffffff04;border:1px dashed var(--line)}
-.composer{padding:14px;border-top:1px solid var(--line)}.compose-row{display:flex;gap:9px;align-items:flex-end}.compose-row textarea{flex:1;resize:vertical;min-height:48px;max-height:180px;background:#0a1020;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px;outline:none}.compose-row textarea:focus,input:focus{border-color:var(--accent)}.smallprint{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7}
-.settings{display:none;padding:16px;border-top:1px solid var(--line);background:#0b1224}.settings.show{display:block}.settings label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}.settings input,.settings select{width:100%;background:#080e1c;color:var(--text);border:1px solid var(--line);padding:10px;border-radius:10px}.settings .warning{color:#ffd48b;font-size:12px;line-height:1.7;margin-top:8px}
-body.oled{background:#000!important}body.oled .chat-panel,body.oled aside,body.oled header,body.oled .settings{background:#050505!important;border-color:#252525!important}body.oled .feature-action,body.oled .feature,body.oled .compose-row textarea{background:#080808!important;border-color:#282828!important}
-footer{text-align:center;color:var(--muted);font-size:11px;padding:13px}
-@media(max-width:680px){.app{padding:9px}.layout{grid-template-columns:1fr}.layout aside{min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:9px}.section-label{grid-column:1/-1;margin:0}.feature{margin:0;padding:9px}.feature span{display:none}.chat-panel{min-height:55dvh}.welcome{padding:18px 16px 6px}.welcome h2{font-size:21px}.messages{padding:12px}.msg{max-width:96%}.top-actions .wide{display:none}}
-
-/* PRO++ visual system */
-:root{--bg:#030a19;--panel:#07152a;--panel2:#0c2140;--text:#f4f8ff;--muted:#a9bddc;--line:#1c3a61;--accent:#25d9ff;--accent2:#42f0c8;--violet:#8a5cff}
-body{background:radial-gradient(ellipse at 50% -12%,#164b80 0,transparent 42%),radial-gradient(ellipse at 100% 30%,#25145455,transparent 35%),linear-gradient(180deg,#061329,#020714 72%);background-attachment:fixed}
-.app{max-width:1120px;padding:18px 16px 24px}
-header{position:relative;border:1px solid #244d7b;border-radius:24px;padding:16px 18px;background:linear-gradient(110deg,#0a2343e8,#071226e8);box-shadow:0 18px 55px #0007;overflow:hidden}
-header:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 40%,#35d9ff0c 60%,transparent 80%)}
-.logo{width:68px;height:68px;flex:0 0 68px;border-radius:21px;display:block;object-fit:cover;background:#07162c;box-shadow:0 0 0 1px #8deaff70,0 0 28px #08caff42}
-.brand{flex:1;min-width:0}.brand h1{font-size:clamp(24px,4vw,32px);font-weight:850;letter-spacing:.7px;line-height:1.15}.brand p{font-size:13px;letter-spacing:.15px}
-header{gap:16px;min-height:104px}
-@media(max-width:680px){.logo{width:62px;height:62px;flex-basis:62px;border-radius:19px}.brand h1{font-size:27px}.brand p{font-size:11px;line-height:1.7}header{gap:12px;min-height:94px;padding:12px 13px}.top-actions{flex-shrink:0}.top-actions .btn{padding:8px 9px}#newChatBtn{font-size:11px;padding:8px 7px}}
-.brand h1{font-size:clamp(21px,3vw,30px);letter-spacing:-.5px}.brand p{font-size:13px}
-.btn{transition:transform .18s,border-color .18s,box-shadow .18s;border-radius:14px}.btn:hover{transform:translateY(-1px);border-color:#43dfff;box-shadow:0 6px 22px #00cfff16}.btn.primary{background:linear-gradient(120deg,#17dff4,#4d9bff 56%,#9463ff);color:#031022;box-shadow:0 8px 24px #147cff2c}
-.layout{grid-template-columns: minmax(245px, .82fr) minmax(0,1.8fr);gap:16px;padding-top:16px}
-aside,.chat-panel{border:1px solid #1c3b61;border-radius:24px;background:linear-gradient(160deg,#0b1930f5,#071020f5);box-shadow:0 16px 45px #0004}
-aside{padding:16px;align-self:start;position:relative;overflow:hidden}
-.section-label{font-size:13px;font-weight:800;color:#9bdcff;margin:2px 0 14px}
-.feature{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:100px;padding:14px;margin:9px 0;border-radius:18px;border-color:#24517b;background:linear-gradient(125deg,#0c2948,#0a142a);font-size:14px;box-shadow:inset 0 1px #ffffff08;overflow:hidden}
-.feature:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(#20dfff,#8b63ff)}
-.feature strong{font-size:15px;line-height:1.5}.feature span{display:block;font-size:12px;margin-top:4px;line-height:1.6}
-.chat-panel{min-height:680px}
-.welcome{position:relative;isolation:isolate;padding:28px 25px 18px;overflow:hidden}
-.welcome:before{content:"";position:absolute;z-index:-1;inset:0 0 auto;height:245px;background:radial-gradient(ellipse at 75% 5%,#1b73b755,transparent 55%),linear-gradient(180deg,#0a2343aa,transparent);clip-path:polygon(0 0,100% 0,100% 70%,82% 54%,72% 68%,60% 38%,48% 74%,35% 48%,22% 78%,0 56%)}
-.welcome h2{font-size:clamp(24px,4vw,34px);line-height:1.5;margin-bottom:8px}.welcome p{font-size:15px}
-.quick{gap:9px}.quick button{border-radius:14px;padding:10px 13px;background:#0b2340;border-color:#214a75;font-size:13px}
-.messages{padding:16px 22px;gap:14px}.msg{border-radius:18px;padding:14px 16px;font-size:15px;box-shadow:0 8px 24px #0002}.msg.user{background:linear-gradient(125deg,#173f70,#1c3260);border-color:#2b67a0}.msg.ai{background:linear-gradient(125deg,#0c2c3a,#12263a);border-color:#245465}
-.composer{background:#071020;padding:16px 18px}.compose-row{align-items:center;gap:10px}.compose-row textarea{min-height:54px;border-radius:18px;border-color:#234a75;background:#050c19;padding:14px;box-shadow:inset 0 1px 8px #0005}.compose-row textarea:focus{border-color:#24dfff;box-shadow:0 0 0 3px #18dfff18}.smallprint{font-size:12px}
-.settings{border-top-color:#21466c;background:#071225;padding:18px}.settings input,.settings select{border-radius:13px;border-color:#21466c}
-footer{padding:20px 8px;color:#7993b7}
-.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.feature-action{min-width:0;text-align:right;border:1px solid #214e78;border-radius:18px;padding:15px 13px;background:linear-gradient(140deg,#0d2c4d,#0a142a);color:var(--text);display:flex;align-items:center;gap:11px;cursor:pointer;min-height:100px}
-.feature-action .f-icon{flex:0 0 44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:23px;background:#12c7ff17;border:1px solid #22cfff66;color:#37e1ff}
-.feature-action:nth-child(2) .f-icon{color:#c58aff;background:#9d55ff18;border-color:#9d55ff66}
-.feature-action:nth-child(3) .f-icon{color:#39e9c7;background:#39e9c718;border-color:#39e9c766}
-.feature-action:nth-child(4) .f-icon{color:#ffb8e7;background:#f66bd518;border-color:#f66bd566}
-.feature-action strong{display:block;font-size:13px}.feature-action small{display:block;color:var(--muted);font-size:11px;line-height:1.5;margin-top:4px}
-.creative-banner{margin:4px 18px 18px;border:1px solid #2678a3;border-radius:20px;padding:18px;background:radial-gradient(ellipse at 95% 20%,#7d55ff45,transparent 36%),linear-gradient(110deg,#08364c,#0b1830 65%,#241748);display:flex;align-items:center;justify-content:space-between;gap:12px}
-.creative-banner h3{margin:0 0 5px;font-size:20px}.creative-banner p{margin:0;color:#b7cbe6;font-size:12px;line-height:1.7}
-@media(max-width:680px){.app{padding:10px 9px 18px}.layout{grid-template-columns:1fr;gap:12px}.layout aside{display:none}.chat-panel{min-height:65dvh}.welcome{padding:20px 17px 12px}.welcome h2{font-size:25px}.messages{padding:13px}.msg{max-width:96%}.feature-grid{gap:8px}.feature-action{padding:12px 10px;min-height:92px;gap:8px}.feature-action .f-icon{flex-basis:38px;height:38px;font-size:20px}.feature-action strong{font-size:12px}.feature-action small{font-size:10px}.creative-banner{margin:0 12px 12px;padding:14px}.creative-banner h3{font-size:17px}.top-actions{gap:5px}.top-actions .btn{padding:8px 10px}header{padding:13px;border-radius:20px}}
-
-
-.model-picker-row{display:grid;grid-template-columns:auto minmax(160px,1fr);align-items:center;gap:8px 12px;margin:0 0 12px;padding:11px 13px;border:1px solid #214a70;border-radius:16px;background:linear-gradient(110deg,#0b1e35,#081326)}.model-picker-row label{font-size:13px;font-weight:750;color:#c6eaff}.model-picker-row select{width:100%;min-width:0;background:#050d1b;color:#f4f8ff;border:1px solid #28577f;border-radius:12px;padding:10px 12px;outline:none}.model-picker-row select:focus{border-color:#25d9ff;box-shadow:0 0 0 3px #25d9ff18}.model-picker-row select:disabled{opacity:.75}.model-picker-row span{grid-column:1/-1;color:#91aacb;font-size:11px;line-height:1.6}.model-picker-row span.error{color:#ffd48b}@media(max-width:480px){.model-picker-row{grid-template-columns:1fr;gap:7px}.model-picker-row span{grid-column:auto}}
-
-/* Account & settings PRO dashboard */
-.settings.show{display:block;animation:settingsIn .24s ease-out}
-@keyframes settingsIn{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:none}}
-.settings>h3{font-size:22px;margin:4px 0 16px;letter-spacing:-.3px}
-.settings-extra{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.settings-extra>h3{grid-column:1/-1}
-.settings-card{border:1px solid #214c76;border-radius:19px;background:linear-gradient(145deg,#0b2039,#081326);padding:16px;margin:12px 0;box-shadow:inset 0 1px #ffffff08}
-.settings-card h4{font-size:15px;margin:0 0 6px}.settings-card p{font-size:12px;line-height:1.7;color:var(--muted);margin:0 0 12px}
-.account-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.auth-btn{display:flex;align-items:center;justify-content:center;gap:9px;border:1px solid #2a5278;background:#0b1b30;color:#eef7ff;padding:12px 9px;border-radius:13px;font-weight:700;font-size:13px;min-height:46px}
-.auth-btn:active{transform:scale(.98)}.auth-btn .provider-icon{font-size:17px;width:20px;text-align:center}
-.auth-form{display:grid;gap:9px}.auth-form input{width:100%;background:#050d1a;color:var(--text);border:1px solid #244a70;border-radius:12px;padding:12px;min-width:0}
-.auth-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.auth-status{font-size:12px;line-height:1.7;color:#73e8cb;min-height:20px;margin-top:9px;overflow-wrap:anywhere}
-.settings-group{border:1px solid #1d4167;border-radius:18px;padding:14px;background:#08162a;margin:10px 0}
-.settings-group>h4{margin:0 0 10px;font-size:14px}
-.settings-group label{margin-top:8px}
-.settings .btn{max-width:100%}
-.account-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:#7af0d5;background:#0c302f;border:1px solid #1a635b;padding:6px 9px;border-radius:999px;margin-bottom:10px}
-.account-badge:before{content:"";width:6px;height:6px;border-radius:50%;background:#42f0c8}
-@media(max-width:680px){.settings{padding:14px 12px}.settings-extra{grid-template-columns:1fr}.settings-card{padding:13px}.account-grid{gap:7px}.auth-btn{font-size:12px;padding:11px 6px}.auth-row{grid-template-columns:1fr}.settings-group{padding:12px}}
-
-
-/* First-launch authentication gate and navigation */
-.auth-gate{position:fixed;z-index:9999;inset:0;display:none;overflow:auto;background:radial-gradient(ellipse at 50% 0,#155087 0,transparent 48%),linear-gradient(180deg,#061329,#020714);padding:22px 16px;align-items:center;justify-content:center}
-.auth-gate.visible{display:flex}
-.auth-gate-card{width:min(100%,440px);border:1px solid #24517b;border-radius:26px;padding:24px;background:linear-gradient(155deg,#0c203b,#071020);box-shadow:0 28px 90px #0009}
-.auth-gate-logo{width:76px;height:76px;object-fit:cover;border-radius:23px;display:block;margin:0 auto 14px;box-shadow:0 0 28px #20cfff33}
-.auth-gate h2{text-align:center;font-size:25px;margin:6px 0}.auth-gate .lead{text-align:center;color:var(--muted);font-size:13px;line-height:1.8;margin:8px 0 20px}
-.auth-gate .gate-main-btn{width:100%;min-height:48px;margin:6px 0;border-radius:14px}
-.auth-gate .gate-provider{width:100%;margin:5px 0}
-.gate-back{display:flex;align-items:center;gap:8px;margin-bottom:16px;background:transparent;border:1px solid #24466b;color:var(--text);padding:9px 12px;border-radius:12px}
-.gate-panel[hidden]{display:none!important}.gate-status{min-height:22px;font-size:12px;line-height:1.7;color:#73e8cb;margin-top:10px;overflow-wrap:anywhere}
-.settings-heading-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.settings-back{border:1px solid #28547a;background:#0b2038;color:#eaf6ff;border-radius:12px;padding:8px 12px}
-@media(max-width:480px){.auth-gate{padding:12px}.auth-gate-card{padding:19px;border-radius:22px}.auth-gate h2{font-size:23px}}
-
-
-/* Full-screen settings dashboard: do not expose backend host in user-facing settings */
-.settings{display:none;position:fixed;z-index:1000;inset:0;overflow:auto;padding:18px 14px 30px;background:radial-gradient(ellipse at 50% 0,#124878 0,transparent 42%),linear-gradient(180deg,#061329,#020714);border:0}.settings.show{display:block;animation:settingsIn .22s ease-out}.settings-shell{max-width:1040px;margin:0 auto}.settings-topbar{display:flex;align-items:center;gap:14px;padding:8px 0 18px;border-bottom:1px solid #1c3a61}.settings-heading{flex:1;min-width:0}.settings-heading h2{margin:3px 0;font-size:clamp(23px,4vw,32px)}.settings-heading p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}.settings-eyebrow{font-size:10px;letter-spacing:2px;color:#50dff2;font-weight:800}.settings-mark{width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:#102c4a;border:1px solid #24517b;font-size:23px;color:#5de6ef}.settings-hero{display:flex;align-items:center;gap:14px;margin:18px 0;padding:18px;border:1px solid #23618a;border-radius:20px;background:linear-gradient(110deg,#0b3551,#101b3a 65%,#211842);box-shadow:0 12px 30px #0003}.settings-hero-icon{flex:0 0 48px;height:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,#24e1ec,#9274ff);color:#061329;font-size:26px;font-weight:900}.settings-hero strong{font-size:16px}.settings-hero p{font-size:12px;line-height:1.7;color:#b7cbe6;margin:5px 0 0}.settings-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(270px,.8fr);gap:15px;align-items:start}.settings-card{border:1px solid #214c76;border-radius:20px;background:linear-gradient(145deg,#0b2039,#081326);padding:17px;margin:0 0 14px;box-shadow:inset 0 1px #ffffff08}.settings-card h3{font-size:15px;margin:0 0 8px}.settings-card p{font-size:12px;line-height:1.75;color:var(--muted);margin:0 0 12px}.settings-card-heading{display:flex;gap:11px;align-items:center;margin-bottom:14px}.settings-card-heading h3{margin:0 0 3px}.settings-card-heading p{margin:0}.settings-card-icon{flex:0 0 42px;height:42px;border-radius:14px;display:grid;place-items:center;background:#102e4d;border:1px solid #245780;color:#59e3f2;font-size:21px}.settings-card label{display:block;font-size:12px;color:var(--muted);margin:11px 0 6px}.settings-card input,.settings-card select{width:100%;background:#050d1a;color:var(--text);border:1px solid #244a70;border-radius:12px;padding:12px;min-width:0}.settings-action{width:100%;display:flex;align-items:center;gap:10px;text-align:start;border:1px solid #1d4167;border-radius:14px;background:#08172b;color:var(--text);padding:12px;margin:8px 0}.settings-action>span:first-child{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border-radius:11px;background:#123353;color:#5de6ef;font-size:19px}.settings-action>span:nth-child(2){flex:1}.settings-action strong,.settings-action small{display:block}.settings-action strong{font-size:12px}.settings-action small{font-size:10px;line-height:1.6;color:var(--muted);margin-top:3px}.settings-action b{color:#7eacd6}.settings-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid #1c3a61;margin-top:2px}#settingsStatus{font-size:12px;line-height:1.7;color:#73e8cb;overflow-wrap:anywhere;flex:1;min-height:18px}.danger-btn{border-color:#773c54!important;color:#ffc3d1!important;background:#351626!important}.settings-footer{text-align:center;font-size:10px;color:#7893b8;margin:12px 0 0}.settings-card[hidden]{display:none!important}@media(max-width:700px){.settings{padding:10px 10px 22px}.settings-grid{grid-template-columns:1fr;gap:0}.settings-topbar{gap:9px}.settings-topbar .settings-back{font-size:11px;padding:9px}.settings-mark{width:39px;height:39px;flex:0 0 39px}.settings-hero{padding:14px;margin:13px 0}.settings-card{padding:14px;border-radius:17px}.settings-bottom{position:sticky;bottom:0;background:#061329f5;backdrop-filter:blur(14px);padding:12px 0 calc(12px + env(safe-area-inset-bottom));z-index:2}.settings-bottom .btn{white-space:nowrap}.settings-footer{padding-bottom:10px}}
- 
-/* Unified assistant workspace: chat, research, coding, study and creative modes */
-.mode-bar{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px;padding:8px;border:1px solid #1b4166;border-radius:16px;background:#061225}
-.mode-btn{border:1px solid transparent;border-radius:11px;background:transparent;color:#a9bddc;padding:9px 12px;font-size:12px}
-.mode-btn.active{color:#eefdff;background:linear-gradient(135deg,#123d60,#20214c);border-color:#2c7598;box-shadow:inset 0 1px #ffffff12}
-.mode-caption{display:none!important} .mode-bar{margin-top:9px;padding:5px;gap:5px;background:linear-gradient(120deg,#061225,#0b1930);border-color:#173b60}.mode-btn{padding:8px 10px;min-height:36px} .mode-btn.active{box-shadow:0 0 0 1px #2c7598,inset 0 1px #ffffff12}
-.result-card{border:1px solid #275178;background:#08172a;border-radius:17px;padding:12px;margin:8px 0;max-width:100%;overflow-wrap:anywhere}
-.result-card img{display:block;width:100%;height:auto;border-radius:12px;margin-top:8px}
-.result-card a{color:#69dff1;text-decoration:underline}
-.msg.ai{white-space:pre-wrap}
-#messages .source-list{display:grid;gap:7px;margin-top:10px}
-#messages .source-link{display:block;border:1px solid #24486d;border-radius:11px;padding:9px 11px;color:#82e7f5;text-decoration:none;font-size:12px;background:#071426}
-@media(max-width:680px){.mode-bar{gap:4px;padding:4px;margin-top:8px}.mode-btn{padding:8px 4px;flex:1;font-size:11px;white-space:nowrap}.mode-caption{display:none!important}}
-
-
-/* Conversation-first navigation inspired by modern AI workspaces */
-.sidebar-brand{display:flex;align-items:center;gap:10px;margin:2px 0 16px;padding:4px 2px}
-.sidebar-mini-logo{display:block;object-fit:cover;width:37px;height:37px;border-radius:12px;border:1px solid #2b5b8a;box-shadow:0 0 18px #245cff24}
-.sidebar-brand strong,.sidebar-brand small{display:block}.sidebar-brand strong{font-size:14px}.sidebar-brand small{font-size:10px;color:var(--muted);margin-top:3px}
-.sidebar-new{width:100%;text-align:start;border:1px solid #27618a;border-radius:13px;padding:12px;background:linear-gradient(120deg,#103b59,#15254b);color:#f4fbff;font-weight:750;margin-bottom:10px}
-.sidebar-search-wrap{display:flex;align-items:center;gap:7px;border:1px solid #1c3d5e;background:#061124;border-radius:12px;padding:0 10px;margin-bottom:18px;color:#72cfe4}
-.sidebar-search-wrap input{min-width:0;width:100%;border:0!important;outline:0;background:transparent;color:var(--text);padding:10px 0;font-size:12px}
-.sidebar-section-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#7898bc;margin:14px 5px 7px}
-.sidebar-nav{display:flex;align-items:center;gap:10px;width:100%;text-align:start;border:1px solid transparent;border-radius:11px;background:transparent;color:#c1d3ec;padding:10px 11px;margin:2px 0;font-size:12px}
-.sidebar-nav.active,.sidebar-nav:hover{background:#102b46;border-color:#214c70;color:#f2fcff}
-.recent-chats{display:grid;gap:4px;max-height:34vh;overflow:auto}
-.recent-chat{width:100%;text-align:start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:transparent;border:1px solid transparent;border-radius:10px;padding:9px 10px;color:#a9bddc;font-size:11px}
-.recent-chat:hover{background:#0c2138;border-color:#1d4167;color:#f4f8ff}
-.sidebar-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid #1b3653;padding-top:13px;margin-top:14px;color:#6f8fb5;font-size:9px}
-.sidebar-bottom button{border:1px solid #1e4266;background:#0a1a30;color:#d9edff;border-radius:10px;padding:9px 11px;font-size:11px}
-.sidebar-toggle{display:none}
-@media(max-width:680px){.sidebar-toggle{display:inline-flex!important}.layout aside#conversationSidebar{display:none}.layout aside#conversationSidebar.mobile-open{display:block;position:fixed;z-index:1100;top:9px;bottom:9px;right:9px;width:min(310px,86vw);min-height:0;overflow:auto;box-shadow:0 20px 80px #000b}.sidebar-bottom{position:sticky;bottom:0;background:#071225;padding-bottom:8px}.recent-chats{max-height:26vh}body.sidebar-open:after{content:"";position:fixed;inset:0;background:#0009;z-index:1090}}
-
-
-.image-dialog[hidden]{display:none!important}.image-dialog{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:18px;background:#000b;backdrop-filter:blur(10px)}
-.image-dialog-card{width:min(520px,100%);border:1px solid #28628a;border-radius:23px;padding:19px;background:linear-gradient(145deg,#0b2039,#050d1c);box-shadow:0 25px 90px #0009}
-.image-dialog-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}.image-dialog-head h3{font-size:17px;margin:0 0 4px}.image-dialog-head p{font-size:12px;color:var(--muted);margin:0}
-.image-dialog-card textarea{width:100%;resize:vertical;min-height:110px;border:1px solid #254d71;border-radius:14px;background:#040b17;color:var(--text);padding:12px;line-height:1.7}
-.image-dialog-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:12px}.image-dialog-actions button{min-width:105px}
-
-
-.welcome-brand-mark{display:flex;align-items:center;gap:13px;margin:0 0 18px;padding:12px 14px;border:1px solid #203f67;border-radius:18px;background:linear-gradient(115deg,#061326,#0b1530 72%,#100c2b);max-width:390px}
-.welcome-brand-mark img{display:block;width:64px;height:64px;object-fit:cover;border-radius:15px;flex:0 0 auto;box-shadow:0 0 25px #236bff25}
-.welcome-brand-mark strong{display:block;font-size:20px;letter-spacing:2px;background:linear-gradient(100deg,#f5fcff,#67bfff 52%,#b78aff);color:transparent;background-clip:text}
-.welcome-brand-mark span{display:block;margin-top:5px;color:#8ba7d2;font-size:9px;letter-spacing:1.2px}
-.logo{object-fit:cover;border:1px solid #2b5b8a;box-shadow:0 0 22px #2676ff30}
-@media(max-width:520px){.welcome-brand-mark{gap:10px;padding:9px 11px}.welcome-brand-mark img{width:54px;height:54px}.welcome-brand-mark strong{font-size:17px}.welcome-brand-mark span{font-size:8px;letter-spacing:.6px}}
-
-.service-health-result{font-size:12px;line-height:1.9;color:var(--muted);overflow-wrap:anywhere}.service-health-result .health-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #1d4167}.service-health-result .health-row:last-child{border-bottom:0}.service-health-result .health-value{font-weight:750;color:#8cebd5}.service-health-result .health-value.off{color:#ffd18b}.service-health-result .health-value.unknown{color:#a9bddc}\n
-/* AFGAI conversation interface refresh */
-:root{--bg:#212121;--panel:#212121;--panel2:#2f2f2f;--text:#ececec;--muted:#b4b4b4;--line:#3d3d3d;--accent:#10a37f;--accent2:#19c37d;--violet:#8b8b8b}
-html,body{background:#212121!important;color:#ececec}
-body{background:#212121!important;background-image:none!important}
-.app{max-width:100%;padding:0;min-height:100dvh}
-header{position:sticky;top:0;z-index:50;min-height:62px;padding:9px 18px;border:0;border-bottom:1px solid #383838;border-radius:0;background:#212121;box-shadow:none;gap:12px}
-header:after{display:none}
-.logo{width:36px;height:36px;flex-basis:36px;border-radius:11px;box-shadow:none}
-.brand h1{font-size:18px!important;letter-spacing:0;font-weight:700}
-.brand p{font-size:11px;color:#b4b4b4}
-.top-actions .btn{border-radius:10px;background:transparent;border-color:transparent;box-shadow:none;padding:8px 10px}
-.top-actions .btn:hover{background:#303030;transform:none}
-.top-actions .btn.primary{background:#10a37f;color:#fff}
-.layout{grid-template-columns:260px minmax(0,1fr);gap:0;padding:0;min-height:calc(100dvh - 104px)}
-aside{position:sticky;top:62px;height:calc(100dvh - 62px);overflow:auto;align-self:start;padding:16px 12px;border:0;border-right:1px solid #383838;border-radius:0;background:#171717;box-shadow:none}
-.sidebar-brand{padding:7px 8px 15px}
-.sidebar-mini-logo{border-radius:9px}
-.sidebar-new,.sidebar-nav,.sidebar-search-wrap{border-radius:11px}
-.sidebar-new{background:#242424;border:1px solid #454545}
-.sidebar-nav{padding:10px 12px;color:#d6d6d6}
-.sidebar-nav:hover,.sidebar-nav.active{background:#2c2c2c}
-.sidebar-section-title{color:#999}
-.recent-chat-item,.recent-chat{border-radius:9px}
-.chat-panel{position:relative;min-width:0;min-height:calc(100dvh - 104px);border:0;border-radius:0;background:#212121;box-shadow:none;overflow:visible}
-.welcome{width:min(100%,850px);margin:auto;padding:34px 28px 18px;background:transparent;clip-path:none}
-.welcome:before{display:none}
-.welcome-brand-mark{display:none}
-.welcome h2{font-size:clamp(25px,4vw,34px);font-weight:650;line-height:1.35;margin:16px 0 10px;text-align:center}
-.welcome>p{text-align:center;color:#b4b4b4;font-size:15px}
-.quick{justify-content:center;margin:22px auto 10px;max-width:800px}
-.quick button{background:transparent;border:1px solid #484848;border-radius:999px;color:#ddd;padding:9px 13px}
-.quick button:hover{background:#303030}
-.feature-grid{max-width:760px;margin:16px auto 0;gap:9px}
-.feature-action{min-height:72px;padding:11px 13px;background:#262626;border-color:#444;border-radius:15px;box-shadow:none}
-.feature-action:before{display:none}
-.feature-action:hover{background:#303030;border-color:#666}
-.feature-action .f-icon{flex-basis:34px;height:34px;border-radius:10px;background:#333;border:0;color:#ddd;font-size:18px}
-.feature-action strong{font-size:13px}
-.feature-action small{color:#aaa}
-.mode-bar{justify-content:center;flex-wrap:wrap}
-.mode-btn{border-radius:999px;background:transparent;border-color:#444;color:#ccc}
-.mode-btn.active{background:#333;border-color:#666;color:#fff}
-.mode-caption{text-align:center;color:#999}
-.messages{width:min(100%,820px);margin:0 auto;padding:16px 24px 30px;gap:22px;overflow:visible;flex:none;min-height:0}
-.msg{max-width:100%;box-shadow:none;font-size:15px;line-height:1.85;border-radius:18px}
-.msg.user{align-self:flex-start;background:#2f2f2f;border:0;border-radius:18px;padding:10px 16px;max-width:85%}
-.msg.ai{align-self:stretch;background:transparent;border:0;border-radius:0;padding:3px 2px;box-shadow:none}
-.msg.note{background:#292929;border:1px solid #444;color:#c6c6c6}
-.composer{position:sticky;bottom:0;z-index:20;width:min(100%,860px);margin:0 auto;padding:10px 18px 12px;border:0;background:linear-gradient(180deg,transparent,#212121 14%);backdrop-filter:none}
-.compose-row{gap:8px;padding:7px 8px 7px 12px;border:1px solid #4a4a4a;border-radius:25px;background:#2f2f2f;align-items:flex-end;box-shadow:0 5px 22px #0002}
-.compose-row:focus-within{border-color:#666;box-shadow:0 0 0 1px #666}
-.compose-row textarea{min-height:38px;max-height:220px;padding:9px 5px;border:0!important;outline:0;background:transparent!important;box-shadow:none!important;resize:none;line-height:1.65}
-.compose-row textarea:focus{border:0!important;box-shadow:none!important}
-.compose-row .btn{flex-shrink:0;border:0;border-radius:50%;width:38px;height:38px;padding:0;display:grid;place-items:center}
-.compose-row #attachBtn{background:transparent;color:#ddd;font-size:22px}
-.compose-row #sendBtn{background:#ececec;color:#171717;font-size:0}
-
-.smallprint{text-align:center;color:#999;font-size:11px;margin-top:8px}
-footer{background:#212121;color:#888;padding:8px;border:0}
-.settings{background:#212121;border-color:#383838}
-.settings-card,.settings-group,.settings-hero{background:#262626;border-color:#444;box-shadow:none;border-radius:15px}
-.settings input,.settings select,.auth-form input{background:#303030;border-color:#4a4a4a}
-.creative-banner{border-color:#444;background:#292929;border-radius:16px}
-.image-dialog{background:#0009}
-.image-dialog-card{background:#262626;border-color:#444}
-.result-card{border-color:#444;background:#292929}
-@media(max-width:760px){
- .layout{grid-template-columns:minmax(0,1fr)}
- aside{position:fixed;z-index:100;top:0;left:0;bottom:0;width:min(82vw,290px);height:100dvh;transform:translateX(-105%);transition:transform .22s ease;border-right:1px solid #444;box-shadow:10px 0 40px #0005}
- body.sidebar-open aside{transform:translateX(0)}
- .chat-panel{min-height:calc(100dvh - 62px)}
- .welcome{padding:25px 15px 12px}
- .welcome h2{font-size:25px;margin-top:10px}
- .welcome>p{font-size:14px}
- .feature-grid{grid-template-columns:1fr 1fr}
- .feature-action{min-height:78px}
- .messages{padding:14px 14px 24px;gap:18px}
- .msg.user{max-width:92%}
- .composer{padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
- header{padding:9px 10px}
- .top-actions .wide{display:none}
-}
-@media(min-width:761px){.sidebar-toggle{display:none!important}}
-
-
-/* Attachment tray and polished composer */
-.compose-row{gap:8px;align-items:flex-end}.compose-row textarea{min-height:52px;border-radius:22px;padding:14px 16px}.composer{background:linear-gradient(180deg,transparent,#06122555)}
-#attachBtn{width:52px;height:52px;flex:0 0 52px;border-radius:50%;font-size:27px;display:grid;place-items:center;padding:0;background:#102744;border:1px solid #2a5277;box-shadow:0 5px 18px #0003;transition:transform .16s,background .16s}
-#attachBtn:active{transform:scale(.94);background:#1b3b60}#sendBtn{min-width:54px;height:52px;border-radius:50%;font-size:0;padding:0;display:grid;place-items:center;box-shadow:0 6px 20px #24d9ff22}#sendBtn:before{content:'➤';font-size:23px}html[dir=rtl] #sendBtn:before{transform:rotate(180deg)}#sendBtn:disabled{opacity:.55}
-.attach-menu{position:absolute;bottom:calc(100% + 10px);inset-inline-start:0;display:grid;grid-template-columns:1fr;gap:5px;min-width:205px;padding:8px;border:1px solid #2a5277;border-radius:17px;background:#0a1930;box-shadow:0 16px 44px #0008;z-index:30}.attach-menu[hidden]{display:none}.attach-option{display:flex;align-items:center;gap:12px;text-align:start;width:100%;border:0;border-radius:11px;background:transparent;color:var(--text);padding:11px 12px}.attach-option:active,.attach-option:hover{background:#17365a}.attach-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:#173454;font-size:18px}.composer{position:relative}.attachment-preview{display:flex;align-items:center;gap:10px;padding:8px 12px;margin-bottom:9px;border:1px solid var(--line);border-radius:14px;background:#0b1a30}.attachment-preview img{width:54px;height:54px;object-fit:cover;border-radius:10px}.attachment-preview .attachment-name{flex:1;overflow-wrap:anywhere;font-size:12px;color:var(--muted)}.attachment-preview button{border:0;background:#263e5c;color:white;border-radius:50%;width:30px;height:30px}
-@media(max-width:420px){.compose-row{gap:6px}#attachBtn{width:48px;height:48px;flex-basis:48px}#sendBtn{height:48px;min-width:48px}.compose-row textarea{min-height:48px;padding:12px}}
-
-/* AFGAI Neo redesign: unified modern dark glass interface */
-:root{color-scheme:dark;--bg:#080d1b;--panel:#101a2e;--panel2:#172642;--text:#f4f7ff;--muted:#a5b3ce;--line:#263858;--accent:#72a7ff;--accent2:#5eead4}
-body{background:radial-gradient(ellipse at 15% -10%,#244c83 0,transparent 38%),radial-gradient(ellipse at 95% 20%,#482c78 0,transparent 30%),linear-gradient(180deg,#0b1324,#070b15 80%);color:var(--text)}
-.app{max-width:1240px;padding:16px;gap:12px}
-header{background:linear-gradient(135deg,#111f36ee,#0c1426ee);border:1px solid #344967;border-radius:24px;backdrop-filter:blur(18px);box-shadow:0 18px 50px #0005}
-.brand h1{font-weight:850;letter-spacing:-.7px;background:linear-gradient(100deg,#f5fbff,#8bdcff 65%,#a5a0ff);color:transparent;background-clip:text}
-.logo{border-radius:20px}
-.layout{gap:14px}
-aside,.chat-panel{background:linear-gradient(155deg,#111d32f2,#0b1324f7);border:1px solid #293e5d;border-radius:24px;box-shadow:0 18px 50px #0003}
-aside{padding:14px}
-.sidebar-nav,.sidebar-new,.settings-action{border-radius:14px;transition:background .18s,border-color .18s,transform .18s}
-.sidebar-nav.active,.sidebar-nav:hover,.sidebar-new:hover{background:#1b3150;border-color:#41658f}
-.chat-panel{min-height:calc(100dvh - 120px);overflow:hidden}
-.welcome{padding:34px 26px 18px}
-.welcome h2{font-weight:800;letter-spacing:-.6px;background:linear-gradient(90deg,#f8fbff,#a5d9ff 70%,#c4b5fd);color:transparent;background-clip:text}
-.welcome>p{color:#b3c1d8;line-height:1.9}
-.quick button{background:#111f34;border-color:#2c4262;color:#dce9ff;border-radius:14px}
-.quick button:hover{background:#1b3150;border-color:#5a8dc2}
-.feature-action{background:linear-gradient(145deg,#14243d,#101a2d);border-color:#2a4264;border-radius:18px;min-height:90px;transition:transform .18s,border-color .18s,background .18s}
-.feature-action:hover{transform:translateY(-2px);background:#172943;border-color:#4e80b8}
-.feature-action .f-icon{border:1px solid #31577d;background:#17314e;color:#8be6ff;border-radius:13px}
-.mode-btn{border-radius:12px;border-color:#2c4262;color:#b7c5dd}
-.mode-btn.active{background:linear-gradient(110deg,#1e4e72,#383365);border-color:#6387bd;color:white}
-.mode-caption{color:#93a8c8}
-.messages{gap:18px}
-.msg.user{background:linear-gradient(135deg,#1b3c64,#28345f);border:1px solid #365b88;border-radius:20px 20px 5px 20px}
-.msg.ai{background:linear-gradient(145deg,#101f31,#101a2b);border:1px solid #243d54;border-radius:20px;padding:15px 17px}
-.msg.note{background:#17243a;border-color:#344762;color:#bac9df;border-radius:16px}
-.composer{background:linear-gradient(180deg,transparent,#0a1222 22%);padding:12px 18px calc(14px + env(safe-area-inset-bottom))}
-.compose-row{background:#111d30;border:1px solid #334966;border-radius:25px;box-shadow:0 12px 35px #0004}
-.compose-row:focus-within{border-color:#6b9ff2;box-shadow:0 0 0 3px #659bff18}
-.compose-row textarea{color:#f5f8ff}
-#attachBtn{background:#1a2c46;border-color:#385579;color:#e4efff}
-#sendBtn{background:linear-gradient(130deg,#8be7ff,#8ba8ff 65%,#b4a1ff);color:#07111f}
-.attach-menu{background:#101c30;border-color:#354e70;border-radius:18px;box-shadow:0 20px 55px #0008}
-.attach-option:hover{background:#1b3150}
-.attachment-preview{background:#111f33;border-color:#344a69}
-.settings{background:#0b1425;border-color:#293e5d}
-.settings-shell{color:var(--text)}
-.settings-topbar,.settings-hero,.settings-card{background:linear-gradient(145deg,#13233b,#0e192c);border-color:#2b4364;border-radius:20px}
-.settings-card{box-shadow:0 10px 30px #0002}
-.settings-card h3,.settings-card h4{color:#f2f6ff}
-.settings-card p,.settings label{color:#aabbd4}
-.settings input,.settings select,.auth-form input{background:#091222;border-color:#304967;color:#f4f7ff;border-radius:13px}
-.settings-action{background:#101f34;border:1px solid #2b4262;color:#edf5ff}
-.settings-action:hover{background:#1a3150}
-.settings-back{background:#142640;border-color:#2d486b;border-radius:12px}
-.settings-mark,.settings-hero-icon{background:linear-gradient(135deg,#2a7b9f,#6553a5);border-radius:16px}
-.settings-bottom{background:#0c1628;border-color:#2b4262}
-.btn{border-color:#334a6b;background:#172641}
-.btn.primary{background:linear-gradient(120deg,#77e2f6,#8ca7ff 65%,#b8a1ff);color:#07111f}
-footer{background:transparent;color:#8195b5}
-body.oled{background:#000!important}
-body.oled .chat-panel,body.oled aside,body.oled header,body.oled .settings{background:#050505!important;border-color:#252525!important}
-@media(max-width:760px){.app{padding:9px}.chat-panel{border-radius:20px}.welcome{padding:23px 15px 12px}.messages{padding:12px}.msg.ai{padding:13px}.composer{background:linear-gradient(180deg,transparent,#0a1222 12%)}header{border-radius:20px}}
-
-
-/* AFGAI usability polish: cleaner conversation area and a clear, touch-friendly send action */
-.welcome{padding-bottom:8px}
-.quick{margin-top:12px}
-.mode-bar{display:flex;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;max-width:100%}
-.mode-bar::-webkit-scrollbar{display:none}
-.mode-btn{flex:0 0 auto;white-space:nowrap}
-.compose-row{gap:10px;align-items:stretch}
-.compose-row textarea{min-height:56px;padding:15px 16px;font-size:16px;line-height:1.5}
-#sendBtn{min-width:94px;width:auto;height:44px;flex:0 0 auto;border-radius:24px;padding:0 15px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:800;white-space:nowrap;box-shadow:0 5px 16px #24d9ff28;border:1px solid #75f2ff55;background:linear-gradient(135deg,#25d9ff,#42f0c8);color:#031425}
-#sendBtn:before{content:'➤';font-size:17px;transform:none!important}
-#sendBtn:disabled{opacity:.55;filter:saturate(.7)}
-#attachBtn{min-width:42px;width:42px;height:42px;flex:0 0 42px;border-radius:50%;font-size:34px;line-height:1;display:grid;place-items:center;padding:0;color:#f4f8ff;background:linear-gradient(145deg,#159cf5,#075cf5);border:1px solid #438cff;box-shadow:0 4px 14px #0003}
-#attachBtn::before{content:none!important}
-#attachBtn:focus-visible{outline:3px solid #7bdfff;outline-offset:2px}
-@media(max-width:680px){
- .welcome{padding:17px 14px 7px}
- .quick{gap:6px;margin-top:10px}
- .quick button{padding:8px 10px;font-size:11px}
- .mode-bar{margin-top:9px}
- .mode-btn{padding:9px 11px;font-size:12px}
- .compose-row{gap:7px}
- .compose-row textarea{min-width:0;min-height:54px;padding:13px 11px;font-size:16px}
- #sendBtn{min-width:78px;width:auto;height:42px;padding:0 11px;border-radius:22px;font-size:12px}
- #sendBtn:before{font-size:15px}
- #attachBtn{min-width:36px;width:36px;height:36px;flex-basis:36px;border-radius:50%;font-size:27px}
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#020711">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="AFG AI — a premium, multilingual AI assistant for learning, building and solving problems. Fast, private and intelligent.">
+  <meta name="google-site-verification" content="gl4LRLY9K39T76ZmRBb6DCAK3Kv2Rfe3WqxlQJKHGUg">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https:; font-src 'self' data:; media-src 'self' blob:; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'">
+  <title>AFG AI — Advanced AI Platform</title>
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="apple-touch-icon" href="./afg-ai-logo.jpg">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="preconnect" href="https://afg-ai.onrender.com" crossorigin>
+  <link rel="stylesheet" href="./styles/tokens.css">
+  <link rel="stylesheet" href="./styles/base.css">
+  <link rel="stylesheet" href="./styles/chat.css">
 </head>
 <body>
-<div class="app">
-<header>
- <img class="logo" src="./afg-ai-logo.jpg?v=1" alt="AFGAI Neon Chrome logo" width="68" height="68">
- <div class="brand"><h1>AFGAI</h1><p id="subtitle">هوش مصنوعی افغانستان · همراه هوشمند تو</p></div>
- <div class="top-actions"><button class="btn sidebar-toggle" id="sidebarToggle" type="button" aria-label="گفت‌وگوهای اخیر">☰</button><button class="btn wide" id="newChatBtn" type="button">گفت‌وگوی جدید</button><button class="btn wide" id="langBtn">English</button><button class="btn" id="settingsBtn" aria-label="تنظیمات">⚙</button><button class="btn primary" id="installBtn" hidden>نصب</button></div>
-</header>
-<div class="layout">
-<aside id="conversationSidebar" aria-label="گفت‌وگوها">
- <div class="sidebar-brand"><img class="sidebar-mini-logo" src="./afg-ai-logo.jpg?v=1" alt="AFGAI logo"><span><strong>AFGAI</strong><small id="sidebarTagline">فضای هوشمند تو</small></span></div>
- <button class="sidebar-new" id="sidebarNewChat" type="button">＋ <span id="sidebarNewText">گفت‌وگوی جدید</span></button>
- <label class="sidebar-search-wrap"><span>⌕</span><input id="chatSearch" type="search" placeholder="جست‌وجو در گفتگوها…" aria-label="جست‌وجوی گفت‌وگوها"></label>
- <div class="sidebar-section-title" id="sidebarToolsTitle">فضاها</div>
- <button class="sidebar-nav active" type="button" data-mode="chat">✦ <span id="sideChatText">گفت‌وگو</span></button>
- <button class="sidebar-nav" type="button" data-mode="research">⌕ <span id="sideResearchText">پژوهش زنده</span></button>
- <button class="sidebar-nav" type="button" data-mode="coding">⌘ <span id="sideCodingText">برنامه‌نویسی</span></button>
- <button class="sidebar-nav" type="button" data-mode="study">▤ <span id="sideStudyText">آموزش</span></button>
- <button class="sidebar-nav" type="button" data-mode="creative">✧ <span id="sideCreativeText">خلاقیت</span></button>
- <div class="sidebar-section-title" id="sidebarRecentTitle">گفت‌وگوهای اخیر</div><div id="recentChats" class="recent-chats"></div>
- <div class="sidebar-bottom"><button type="button" id="sidebarSettings">⚙ <span id="sidebarSettingsText">تنظیمات</span></button><span>AFGAI · PRO++</span></div>
-</aside>
-<main class="chat-panel">
- <section class="welcome"><div class="welcome-brand-mark"><img src="./afg-ai-logo.jpg?v=1" alt="AFGAI Neon Chrome emblem"><div><strong>AFGAI</strong><span>PRO++ · INTELLIGENCE, REIMAGINED</span></div></div><h2 id="welcomeTitle">سلام! به افغان AI خوش آمدی.</h2><p id="welcomeText">چه چیزی را می‌خواهی یاد بگیری، بسازی یا حل کنی؟ پرسشت را بنویس تا شروع کنیم.</p>
- <div class="quick"><button data-prompt="یک برنامهٔ یادگیری زبان انگلیسی برایم بساز.">📚 یادگیری</button><button data-prompt="این ایده را به یک پروژهٔ عملی تبدیل کن.">💡 ایده‌پردازی</button><button data-prompt="یک قطعه کد را توضیح بده و بهترش کن.">⌘ برنامه‌نویسی</button></div>
- <!-- Removed redundant large feature panel; tools remain available in the main navigation and attachment menu. -->
- <div class="mode-bar" role="group" aria-label="AI mode">
-  <button type="button" class="mode-btn active" data-mode="chat" id="modeChat">✦ گفتگو</button>
-  <button type="button" class="mode-btn" data-mode="research" id="modeResearch">⌕ پژوهش زنده</button>
-  <button type="button" class="mode-btn" data-mode="coding" id="modeCoding">⌘ برنامه‌نویسی</button>
-  <button type="button" class="mode-btn" data-mode="study" id="modeStudy">▤ آموزش</button>
-  <button type="button" class="mode-btn" data-mode="creative" id="modeCreative">✧ خلاقیت</button>
- </div>
- <p class="mode-caption" id="modeCaption">حالت گفتگو برای پاسخ‌های عمومی؛ برای منابع زنده، پژوهش را انتخاب کن.</p>
- </section>
- <section class="messages" id="messages" aria-live="polite"><div class="msg note" id="setupNote">برای پاسخ‌های واقعی، نشانی سرور AFGAI را در تنظیمات وارد کن. این فایل به‌تنهایی مدل هوش مصنوعی یا سرور را در خود ندارد.</div></section>
- <form class="composer" id="chatForm"><input type="file" id="fileInput" accept=".txt,.md,.csv,.json,.log" hidden><input type="file" id="photoInput" accept="image/*" hidden><input type="file" id="cameraInput" accept="image/*" capture="environment" hidden><div class="model-picker-row"><label for="modelSelect" id="modelSelectLabel">🤖 مدل هوش مصنوعی</label><select id="modelSelect" aria-label="انتخاب مدل هوش مصنوعی" disabled><option value="">در حال دریافت مدل‌ها…</option></select><span id="modelStatus" role="status">فهرست مدل‌ها از سرور دریافت می‌شود.</span></div><div class="attachment-preview" id="attachmentPreview" hidden><img id="attachmentThumb" alt=""><span class="attachment-name" id="attachmentName"></span><button type="button" id="removeAttachment" aria-label="حذف پیوست">×</button></div><div class="compose-row"><textarea id="prompt" placeholder="پیامت را بنویس…" rows="1" required></textarea><button class="btn" type="button" id="attachBtn" aria-label="پیوست عکس یا فایل" aria-expanded="false">＋</button><div class="attach-menu" id="attachMenu" hidden><button type="button" class="attach-option" id="choosePhoto"><span class="attach-icon">🖼️</span><span id="choosePhotoText">انتخاب عکس</span></button><button type="button" class="attach-option" id="takePhoto"><span class="attach-icon">📷</span><span id="takePhotoText">بازکردن دوربین</span></button><button type="button" class="attach-option" id="chooseFile"><span class="attach-icon">📎</span><span id="chooseFileText">انتخاب فایل</span></button></div><button class="btn primary" type="submit" id="sendBtn" aria-label="ارسال پیام">ارسال</button></div><div class="smallprint" id="finePrint">پاسخ‌های هوش مصنوعی ممکن است اشتباه باشند. اطلاعات مهم را بررسی کن.</div></form>
- <section class="image-dialog" id="imageDialog" hidden role="dialog" aria-modal="true" aria-labelledby="imageDialogTitle">
-  <form id="imageForm" class="image-dialog-card">
-   <div class="image-dialog-head"><span class="settings-card-icon">✧</span><div><h3 id="imageDialogTitle">ساخت تصویر با هوش مصنوعی</h3><p id="imageDialogText">تصویر را با جزئیات توصیف کن.</p></div></div>
-   <textarea id="imagePrompt" rows="4" maxlength="4000" placeholder="مثلاً: منظرهٔ کوهستان‌های افغانستان در طلوع آفتاب، سبک سینمایی…"></textarea>
-   <div class="image-dialog-actions"><button type="button" class="btn" id="imageCancel">انصراف</button><button type="submit" class="btn primary" id="imageCreate">ساخت تصویر ✧</button></div>
-   <p class="smallprint" id="imageDialogNote">تولید تصویر به سرویس تصویری فعال در سرور نیاز دارد.</p>
-  </form>
- </section>
- <section class="settings" id="settings" aria-label="تنظیمات برنامه">
-<div class="settings-shell">
- <div class="settings-topbar"><button class="settings-back" id="settingsBackBtn" type="button">← <span id="settingsBackText">بازگشت</span></button><div class="settings-heading"><span class="settings-eyebrow">AFGAI · PRO</span><h2 id="settingsTitle">تنظیمات برنامه</h2><p id="settingsIntro">همه‌چیز را مطابق سلیقه‌ات تنظیم کن.</p></div><div class="settings-mark">⚙</div></div>
- <div class="settings-hero"><div class="settings-hero-icon">✦</div><div><strong id="settingsHeroTitle">تجربهٔ هوشمند، مخصوص تو</strong><p id="settingsHeroText">حساب، زبان، ظاهر و اطلاعاتت را از یک جا مدیریت کن.</p></div></div>
- <div class="settings-grid">
-  <div>
-   <section class="settings-card" id="accountCard" hidden></section>
-   <section class="settings-card"><div class="settings-card-heading"><span class="settings-card-icon">文</span><div><h3 id="languageSettingsTitle">زبان و پاسخ‌ها</h3><p id="languageSettingsText">زبان رابط و زبان پاسخ هوش مصنوعی را انتخاب کن.</p></div></div><label for="uiLanguage" id="uiLanguageLabel">زبان رابط برنامه</label><select id="uiLanguage"><option value="auto">مطابق زبان گوشی / Auto</option><option value="fa">فارسی / دری</option><option value="en">English</option></select><label for="language" id="languageLabel">زبان پاسخ</label><select id="language"><option value="auto">خودکار / Auto</option><option value="fa">فارسی / دری</option><option value="en">English</option></select></section>
-   <section class="settings-card"><div class="settings-card-heading"><span class="settings-card-icon">◐</span><div><h3 id="appearanceTitle">ظاهر برنامه</h3><p id="appearanceText">تمی را انتخاب کن که برایت راحت‌تر است.</p></div></div><label for="appearance" id="appearanceLabel">تم برنامه</label><select id="appearance"><option value="dark">شبانهٔ آبی / Midnight</option><option value="black">مشکی خالص / OLED</option></select></section>
+  <a class="skip-link" href="#prompt" data-i18n="skipToComposer">Skip to message composer</a>
+
+  <div class="ambient" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
   </div>
-  <div>
-   <section class="settings-card"><h3 id="quickSettingsTitle">دسترسی سریع</h3><button class="settings-action" id="savedChatsAction" type="button"><span>▤</span><span><strong id="savedChatsActionTitle">گفت‌وگوهای ذخیره‌شده</strong><small id="savedChatsActionText">بازکردن گفتگوهای قبلی</small></span><b>←</b></button><button class="settings-action" id="newChatAction" type="button"><span>＋</span><span><strong id="newChatActionTitle">گفت‌وگوی جدید</strong><small id="newChatActionText">شروع گفت‌وگوی تازه</small></span><b>←</b></button><button class="settings-action" id="helpAction" type="button"><span>؟</span><span><strong id="helpActionTitle">راهنما و پشتیبانی</strong><small id="helpActionText">راهنمای استفاده از AFGAI</small></span><b>←</b></button><button class="settings-action" id="aboutAction" type="button"><span>ⓘ</span><span><strong id="aboutActionTitle">دربارهٔ برنامه</strong><small id="aboutActionText">اطلاعات نسخه و حریم خصوصی</small></span><b>←</b></button></section>
-   <section class="settings-card" id="serviceHealthCard"><div class="settings-card-heading"><span class="settings-card-icon">⌁</span><div><h3 id="serviceHealthTitle">وضعیت سرویس‌ها</h3><p id="serviceHealthIntro">وضعیت اتصال و آماده‌بودن قابلیت‌ها را بررسی کن.</p></div></div><div id="serviceHealthResult" class="service-health-result" role="status" aria-live="polite">برای بررسی، دکمه را بزن.</div><button class="btn primary" id="checkServiceHealthBtn" type="button" style="width:100%;margin-top:12px">بررسی اتصال</button></section>\n    <section class="settings-card" id="savedChatsCard"><div class="settings-card-heading"><span class="settings-card-icon">▤</span><div><h3 id="historyTitle">گفت‌وگوهای ذخیره‌شده</h3><p id="historyDescription">گفت‌وگوهای قبلی روی همین دستگاه نگهداری می‌شوند.</p></div></div><div id="savedChats" style="display:grid;gap:8px;margin-top:10px"></div><button class="btn danger-btn" id="clearHistoryBtn" type="button" style="margin-top:14px;width:100%">پاک‌کردن تاریخچهٔ این دستگاه</button><button class="btn" id="exportDataBtn" type="button" style="margin-top:8px;width:100%">دریافت نسخهٔ پشتیبان</button></section>
-   <section class="settings-card" id="aboutCard" hidden><h3 id="aboutCardTitle">دربارهٔ AFGAI</h3><p id="aboutCardText">AFGAI یک همراه هوشمند برای یادگیری، نوشتن و حل مسئله است.</p><p id="aboutVersion">نسخهٔ برنامه: 1.1.0</p><p id="aboutPrivacy">کلیدهای محرمانه فقط باید روی سرور نگهداری شوند.</p></section>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Sidebar">
+      <div class="sidebar-head">
+        <a class="brand" href="#" id="brandHome">
+          <img class="brand-logo" src="./afg-ai-logo.jpg" alt="AFG AI" width="42" height="42">
+          <span class="brand-copy">
+            <strong>AFG <em>AI</em></strong>
+            <small data-i18n="brandTagline">Advanced intelligence platform</small>
+          </span>
+        </a>
+        <button class="icon-btn ghost only-mobile" id="closeSidebar" type="button" aria-label="Close sidebar">✕</button>
+      </div>
+
+      <button class="new-chat-btn" id="newChatBtn" type="button">
+        <span class="plus" aria-hidden="true">＋</span>
+        <span data-i18n="newChat">New conversation</span>
+        <kbd>⌘⇧O</kbd>
+      </button>
+
+      <label class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input id="chatSearch" type="search" autocomplete="off" data-i18n-placeholder="searchChats" placeholder="Search conversations…">
+      </label>
+
+      <div class="side-scroll">
+        <div class="side-label" data-i18n="workspaces">Workspaces</div>
+        <nav aria-label="Workspaces">
+          <button class="side-link is-active" type="button" data-mode="chat"><span class="glyph" aria-hidden="true">✦</span><span data-i18n="modeChat">Chat</span></button>
+          <button class="side-link" type="button" data-mode="research"><span class="glyph" aria-hidden="true">⌕</span><span data-i18n="modeResearch">Live research</span></button>
+          <button class="side-link" type="button" data-mode="coding"><span class="glyph" aria-hidden="true">⌘</span><span data-i18n="modeCoding">Coding</span></button>
+          <button class="side-link" type="button" data-mode="study"><span class="glyph" aria-hidden="true">▤</span><span data-i18n="modeStudy">Study</span></button>
+          <button class="side-link" type="button" data-mode="creative"><span class="glyph" aria-hidden="true">✧</span><span data-i18n="modeCreative">Create</span></button>
+        </nav>
+
+        <div class="side-label">
+          <span data-i18n="recentChats">Recent chats</span>
+          <span class="badge" id="conversationCount">0</span>
+        </div>
+        <div class="recent-list" id="recentChats"></div>
+      </div>
+
+      <div class="sidebar-foot">
+        <button class="side-link" id="accountBtn" type="button">
+          <span class="account-dot" id="sidebarAccountDot" aria-hidden="true">G</span>
+          <span id="sidebarAccountLabel" data-i18n="account">Account</span>
+          <span class="badge" id="accountBadge">Guest</span>
+        </button>
+        <button class="side-link" id="settingsBtn" type="button">
+          <span class="glyph" aria-hidden="true">⚙</span>
+          <span data-i18n="settings">Settings</span>
+        </button>
+        <div class="sidebar-version">
+          <span>AFG AI · v2.0</span>
+          <span aria-hidden="true">·</span>
+          <span class="status-dot" id="sidebarStatusDot"></span>
+          <span id="sidebarStatusText" data-i18n="statusConnecting">Connecting</span>
+        </div>
+      </div>
+    </aside>
+
+    <div class="scrim" id="scrim" hidden></div>
+
+    <main class="workspace">
+      <header class="topbar">
+        <button class="icon-btn only-mobile" id="openSidebar" type="button" aria-label="Open sidebar">☰</button>
+        <div class="topbar-title">
+          <span class="eyebrow">AFG AI · PRO++</span>
+          <h1 id="chatTitle" data-i18n="newChat">New conversation</h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="status-pill" id="connectionPill" role="status" aria-live="polite">
+            <span class="status-dot connecting" id="statusDot"></span>
+            <span id="statusText" data-i18n="statusConnecting">Connecting</span>
+          </div>
+          <button class="icon-btn" id="paletteBtn" type="button" aria-label="Command palette" title="⌘K">⌘</button>
+          <button class="icon-btn" id="themeBtn" type="button" aria-label="Cycle theme" title="Theme">◐</button>
+          <button class="account-chip" id="accountChip" type="button">
+            <span class="account-avatar" id="accountAvatar" aria-hidden="true">G</span>
+            <span class="account-name" id="accountName" data-i18n="guest">Guest</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="conversation" id="conversation" aria-label="Conversation">
+        <div class="welcome" id="welcome">
+          <div class="welcome-mark">
+            <div class="welcome-orb"><img src="./afg-ai-logo.jpg" alt="" width="54" height="54"></div>
+            <div class="welcome-mark-copy">
+              <span class="eyebrow" data-i18n="welcomeEyebrow">Intelligence, reimagined</span>
+              <strong>AFG AI</strong>
+              <small data-i18n="brandTagline">Advanced intelligence platform</small>
+            </div>
+          </div>
+          <h2>
+            <span data-i18n="welcomeTitleA">Hello.</span>
+            <span class="grad" data-i18n="welcomeTitleGrad">What will we build today?</span>
+          </h2>
+          <p class="welcome-lead" data-i18n="welcomeLead">Ask anything, create something original, or solve a hard problem. AFG AI routes every request to the best available model automatically.</p>
+
+          <div class="prompt-grid">
+            <button class="prompt-card" type="button" data-prompt-key="learn">
+              <span class="prompt-icon" aria-hidden="true">📚</span>
+              <span class="prompt-copy"><strong data-i18n="promptLearnTitle">Learn something new</strong><small data-i18n="promptLearnText">Build a study plan in minutes</small></span>
+            </button>
+            <button class="prompt-card" type="button" data-prompt-key="build">
+              <span class="prompt-icon" aria-hidden="true">💡</span>
+              <span class="prompt-copy"><strong data-i18n="promptBuildTitle">Turn an idea into a plan</strong><small data-i18n="promptBuildText">From concept to concrete steps</small></span>
+            </button>
+            <button class="prompt-card" type="button" data-prompt-key="code">
+              <span class="prompt-icon" aria-hidden="true">⌘</span>
+              <span class="prompt-copy"><strong data-i18n="promptCodeTitle">Debug and improve code</strong><small data-i18n="promptCodeText">Explain, review, and ship safely</small></span>
+            </button>
+            <button class="prompt-card" type="button" data-prompt-key="create">
+              <span class="prompt-icon" aria-hidden="true">✧</span>
+              <span class="prompt-copy"><strong data-i18n="promptCreateTitle">Create something original</strong><small data-i18n="promptCreateText">Writing, visuals, and fresh ideas</small></span>
+            </button>
+          </div>
+
+          <div class="mode-bar" id="modeBar" role="group" aria-label="AI mode">
+            <button class="mode-chip is-active" type="button" data-mode="chat"><span aria-hidden="true">✦</span><span data-i18n="modeChat">Chat</span></button>
+            <button class="mode-chip" type="button" data-mode="research"><span aria-hidden="true">⌕</span><span data-i18n="modeResearch">Live research</span></button>
+            <button class="mode-chip" type="button" data-mode="coding"><span aria-hidden="true">⌘</span><span data-i18n="modeCoding">Coding</span></button>
+            <button class="mode-chip" type="button" data-mode="study"><span aria-hidden="true">▤</span><span data-i18n="modeStudy">Study</span></button>
+            <button class="mode-chip" type="button" data-mode="creative"><span aria-hidden="true">✧</span><span data-i18n="modeCreative">Create</span></button>
+          </div>
+          <p class="mode-caption" id="modeCaption" data-i18n="modeCaptionChat">General questions, writing, and advice.</p>
+        </div>
+
+        <div class="messages" id="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+        <button class="scroll-bottom" id="scrollBottom" type="button" aria-label="Scroll to latest" hidden>↓</button>
+      </section>
+
+      <div class="composer-wrap">
+        <div class="route-strip">
+          <div class="route-info">
+            <span class="route-icon" aria-hidden="true">✦</span>
+            <div class="route-copy">
+              <strong id="routeTitle" data-i18n="autoRouteTitle">Auto · Intelligent routing</strong>
+              <small id="routeDetail" data-i18n="autoRouteDetail">The best model is chosen for every request.</small>
+            </div>
+          </div>
+          <div class="model-control">
+            <label class="sr-only" for="modelSelect" data-i18n="modelLabel">AI model</label>
+            <select id="modelSelect" disabled>
+              <option value="auto" data-i18n="loadingModels">Loading models…</option>
+            </select>
+            <button class="icon-btn small" id="refreshModels" type="button" aria-label="Refresh models" title="Refresh models">↻</button>
+          </div>
+        </div>
+
+        <form class="composer" id="chatForm" autocomplete="off" novalidate>
+          <div class="attach-menu" id="attachMenu" hidden>
+            <button class="attach-option" type="button" id="choosePhoto"><span class="attach-icon" aria-hidden="true">🖼️</span><span data-i18n="attachPhoto">Choose photo</span></button>
+            <button class="attach-option" type="button" id="takePhoto"><span class="attach-icon" aria-hidden="true">📷</span><span data-i18n="attachCamera">Open camera</span></button>
+            <button class="attach-option" type="button" id="chooseFile"><span class="attach-icon" aria-hidden="true">📎</span><span data-i18n="attachFile">Choose text file</span></button>
+          </div>
+
+          <div class="attachment-preview" id="attachmentPreview" hidden>
+            <img id="attachmentThumb" alt="">
+            <div class="attachment-meta">
+              <strong id="attachmentName"></strong>
+              <small id="attachmentSize"></small>
+            </div>
+            <button class="icon-btn small" id="removeAttachment" type="button" aria-label="Remove attachment">✕</button>
+          </div>
+
+          <label class="sr-only" for="prompt" data-i18n="messageLabel">Message</label>
+          <textarea id="prompt" rows="1" maxlength="24000" data-i18n-placeholder="messagePlaceholder" placeholder="Message AFG AI…"></textarea>
+
+          <div class="composer-toolbar">
+            <div class="composer-tools">
+              <button class="attach-btn" id="attachBtn" type="button" aria-label="Attach" aria-expanded="false" title="Attach">＋</button>
+              <button class="chip-btn" id="imageBtn" type="button"><span class="glyph" aria-hidden="true">✧</span><span data-i18n="createImage">Create image</span></button>
+            </div>
+            <div class="composer-actions">
+              <span class="char-count" id="charCount" aria-hidden="true"></span>
+              <button class="stop-btn" id="stopBtn" type="button" aria-label="Stop generating" hidden>■</button>
+              <button class="send-btn" id="sendBtn" type="submit">
+                <span data-i18n="send">Send</span>
+                <span class="send-icon" aria-hidden="true">➤</span>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <p class="disclaimer" data-i18n="disclaimer">AI can make mistakes. Verify important information and never share secrets.</p>
+      </div>
+    </main>
   </div>
- </div>
- <div class="settings-bottom"><div id="settingsStatus" role="status" aria-live="polite"></div><button class="btn primary" id="saveSettings" type="button">ذخیره تنظیمات</button></div><p class="settings-footer" id="settingsFooter">AFGAI · ساخته‌شده برای تجربه‌ای ساده و هوشمند</p>
-</div><input id="serverUrl" type="hidden" value="https://afg-ai.onrender.com"><div id="keyWarning" hidden></div>
-</section>
-</main>
-</div>
-<footer>AFGAI · همراه هوشمند افغانستان · Afghanistan AI</footer>
-</div>
 
-<script>
-const $=id=>document.getElementById(id);let isEnglish=false,installPrompt=null,activeMode='chat';
-function makeUuid(){return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==='x'?r:(r&3|8)).toString(16)})}
-function savedUuid(key){let value=localStorage.getItem(key);if(!value){value=makeUuid();localStorage.setItem(key,value)}return value}
-const afgAiUserId=savedUuid('afg_ai_user_id');
-let afgAiSessionId=savedUuid('afg_ai_session_id');
-const chatStorageKey='afg_ai_chat_history_v3';
-const archivedChatsKey='afg_ai_archived_chats_v1';
-try{localStorage.removeItem('afg_ai_chat_history_v1');localStorage.removeItem('afg_ai_chat_history_v2')}catch{}
-let archivedChats=[];try{const a=JSON.parse(localStorage.getItem(archivedChatsKey)||'[]');archivedChats=Array.isArray(a)?a:[]}catch{archivedChats=[]}
-let chatHistory=[];
-const obsoleteNotices=[/نشانی سرور تنظیم نشده/i,/نشانی سرور تنظیم نشده است/i,/تنظیم نشده است\. از ⚙ تنظیمات/i,/Could not reach the server/i,/Server URL is missing/i,/Make sure the backend accepts/i,/بررسی کن که سرور درخواست را بپذیرد/i,/Settings saved on this device/i,/تنظیمات در همین دستگاه ذخیره شد/i,/در حال دریافت پاسخ/i,/Getting a response/i,/جست.?وجوی وب به کلید سرویس/i,/Web search needs a configured/i,/ساخت تصویر هنوز به سرویس تصویری وصل نشده/i,/Image generation is not connected yet/i,/نشانی سرور تنظیم نشده است/i];
-try{
- const stored=JSON.parse(localStorage.getItem(chatStorageKey)||'[]');
- chatHistory=Array.isArray(stored)?stored.filter(m=>m&&['user','ai'].includes(m.kind)&&typeof m.text==='string'&&!obsoleteNotices.some(rx=>rx.test(m.text))):[];
- localStorage.setItem(chatStorageKey,JSON.stringify(chatHistory.slice(-80)));
-}catch{chatHistory=[]}
-function persistHistory(){try{localStorage.setItem(chatStorageKey,JSON.stringify(chatHistory.slice(-80)));if(chatHistory.length){const snapshot={id:afgAiSessionId,title:makeChatTitle(chatHistory),messages:chatHistory.slice(-80),savedAt:Date.now()};const existing=archivedChats.findIndex(c=>c.id===afgAiSessionId);if(existing>=0)archivedChats[existing]=snapshot;else archivedChats.push(snapshot);archivedChats=archivedChats.slice(-50);persistArchivedChats();if(typeof renderArchivedChats==='function')renderArchivedChats()}}catch{}}
-function persistArchivedChats(){try{localStorage.setItem(archivedChatsKey,JSON.stringify(archivedChats.slice(-50)))}catch{}}
-function openSavedConversation(chat){if(chatHistory.length){archivedChats.push({id:makeUuid(),title:makeChatTitle(chatHistory),messages:chatHistory.slice(),savedAt:Date.now()});archivedChats=archivedChats.slice(-50);persistArchivedChats()}chatHistory=Array.isArray(chat.messages)?chat.messages.slice(-80):[];persistHistory();afgAiSessionId=chat.id||makeUuid();localStorage.setItem('afg_ai_session_id',afgAiSessionId);$('messages').innerHTML='';if(chatHistory.length)chatHistory.forEach(m=>addMsg(m.text,m.kind,false));else $('messages').appendChild($('setupNote'));$('settingsStatus').textContent=isEnglish?'Conversation opened.':'گفت‌وگوی ذخیره‌شده باز شد.';renderArchivedChats();$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open');window.scrollTo({top:0,behavior:'smooth'})}
-function renderChatList(root,items,emptyText){if(!root)return;root.innerHTML='';if(!items.length){const empty=document.createElement('div');empty.className='smallprint';empty.textContent=emptyText;root.appendChild(empty);return}items.slice().reverse().forEach((chat,index)=>{const b=document.createElement('button');b.type='button';b.className=root.id==='recentChats'?'recent-chat':'btn';b.style.textAlign='start';b.style.width='100%';b.textContent=chat.title||((isEnglish?'Conversation ':'گفت‌وگو ')+(items.length-index));b.onclick=()=>openSavedConversation(chat);root.appendChild(b)})}
-function renderArchivedChats(){renderChatList($('savedChats'),archivedChats,isEnglish?'Your saved conversations will appear here.':'گفت‌وگوهای قبلی‌ات پس از شروع گفت‌وگوی جدید اینجا ذخیره می‌شوند.');const q=($('chatSearch')&&$('chatSearch').value||'').trim().toLowerCase();renderChatList($('recentChats'),archivedChats.filter(c=>!q||(c.title||'').toLowerCase().includes(q)),isEnglish?'No recent conversations yet.':'گفت‌وگوی ذخیره‌شده‌ای نیست.')}
-function makeChatTitle(messages){const first=(messages||[]).find(m=>m.kind==='user'&&m.text);if(!first)return isEnglish?'Saved conversation':'گفت‌وگوی ذخیره‌شده';return first.text.replace(/\s+/g,' ').slice(0,44)+(first.text.length>44?'…':'')}
-function archiveCurrentChat(){if(!chatHistory.length)return;const snapshot={id:afgAiSessionId,title:makeChatTitle(chatHistory),messages:chatHistory.slice(-80),savedAt:Date.now()};const existing=archivedChats.findIndex(c=>c.id===afgAiSessionId);if(existing>=0)archivedChats[existing]=snapshot;else archivedChats.push(snapshot);archivedChats=archivedChats.slice(-50);persistArchivedChats();renderArchivedChats()}
-function restoreHistory(){if(chatHistory.length){$('messages').innerHTML='';chatHistory.slice(-80).forEach(m=>addMsg(m.text,m.kind,false))}else{$('setupNote').textContent=tr('setup')}renderArchivedChats()}
-const strings={fa:{subtitle:"هوش مصنوعی افغانستان · همراه هوشمند تو",tools:"قابلیت‌ها",welcome:"سلام، خوش آمدی!",welcomeText:"چه چیزی را می‌خواهی یاد بگیری، بسازی یا حل کنی؟ پرسشت را بنویس تا شروع کنیم.",placeholder:"پیامت را بنویس…",send:"ارسال ➤",fine:"پاسخ‌های هوش مصنوعی ممکن است اشتباه باشند. اطلاعات مهم را بررسی کن.",setup:"سرور AFGAI آماده است. پرسشت را بنویس تا شروع کنیم.",settings:"تنظیمات برنامه",server:"",language:"زبان پاسخ",save:"ذخیره تنظیمات",warning:"",newChat:"گفت‌وگوی جدید",install:"نصب",thinking:"در حال دریافت پاسخ…",notSet:"",error:"ارتباط با سرویس برقرار نشد. کمی بعد دوباره تلاش کن.",empty:"لطفاً پیام بنویس."},en:{subtitle:"Afghanistan AI · Your intelligent companion",tools:"Features",welcome:"Hello, welcome!",welcomeText:"What would you like to learn, create, or solve? Write your question to begin.",placeholder:"Type your message…",send:"Send ➤",fine:"AI responses can be inaccurate. Verify important information.",setup:"The AFGAI server is ready. Write your question to get started.",settings:"App settings",server:"",language:"Response language",save:"Save preferences",warning:"",newChat:"New chat",install:"Install",thinking:"Getting a response…",notSet:"",error:"Could not reach the service. Please try again shortly.",empty:"Please enter a message."}};
-function tr(k){return strings[isEnglish?'en':'fa'][k]||k}
-function applyLang(){document.documentElement.lang=isEnglish?'en':'fa';document.documentElement.dir=isEnglish?'ltr':'rtl';$('subtitle').textContent=tr('subtitle');$('newChatBtn').textContent=tr('newChat');$('sidebarToolsTitle').textContent=isEnglish?'Workspaces':'فضاها';$('welcomeTitle').textContent=tr('welcome');$('welcomeText').textContent=tr('welcomeText');$('prompt').placeholder=tr('placeholder');$('sendBtn').setAttribute('aria-label',tr('send'));$('choosePhotoText').textContent=isEnglish?'Choose photo':'انتخاب عکس';$('takePhotoText').textContent=isEnglish?'Open camera':'بازکردن دوربین';$('chooseFileText').textContent=isEnglish?'Choose file':'انتخاب فایل';$('finePrint').textContent=tr('fine');$('setupNote').textContent=tr('setup');$('settingsTitle').textContent=isEnglish?'App settings':'تنظیمات برنامه';$('settingsIntro').textContent=isEnglish?'Make AFGAI work the way you like.':'همه‌چیز را مطابق سلیقه‌ات تنظیم کن.';$('settingsBackText').textContent=isEnglish?'Back':'بازگشت';$('settingsHeroTitle').textContent=isEnglish?'Your AI experience, your way':'تجربهٔ هوشمند، مخصوص تو';$('settingsHeroText').textContent=isEnglish?'Manage account, language, appearance and data in one place.':'حساب، زبان، ظاهر و اطلاعاتت را از یک جا مدیریت کن.';$('languageSettingsTitle').textContent=isEnglish?'Language and responses':'زبان و پاسخ‌ها';$('languageSettingsText').textContent=isEnglish?'Choose app and AI response languages.':'زبان رابط و زبان پاسخ هوش مصنوعی را انتخاب کن.';$('languageLabel').textContent=isEnglish?'AI response language':'زبان پاسخ هوش مصنوعی';$('uiLanguageLabel').textContent=isEnglish?'App language':'زبان رابط برنامه';$('appearanceTitle').textContent=isEnglish?'Appearance':'ظاهر برنامه';$('appearanceText').textContent=isEnglish?'Choose a comfortable theme.':'تمی را انتخاب کن که برایت راحت‌تر است.';$('appearanceLabel').textContent=isEnglish?'Theme':'تم برنامه';$('quickSettingsTitle').textContent=isEnglish?'Quick access':'دسترسی سریع';$('savedChatsActionTitle').textContent=isEnglish?'Saved conversations':'گفت‌وگوهای ذخیره‌شده';$('savedChatsActionText').textContent=isEnglish?'Open previous chats':'بازکردن گفتگوهای قبلی';$('newChatActionTitle').textContent=isEnglish?'New conversation':'گفت‌وگوی جدید';$('newChatActionText').textContent=isEnglish?'Start a fresh conversation':'شروع گفت‌وگوی تازه';$('helpActionTitle').textContent=isEnglish?'Help and support':'راهنما و پشتیبانی';$('helpActionText').textContent=isEnglish?'Tips for using AFGAI':'راهنمای استفاده از AFGAI';$('aboutActionTitle').textContent=isEnglish?'About the app':'دربارهٔ برنامه';$('aboutActionText').textContent=isEnglish?'Version and privacy information':'اطلاعات نسخه و حریم خصوصی';$('historyTitle').textContent=isEnglish?'Saved conversations':'گفت‌وگوهای ذخیره‌شده';$('historyDescription').textContent=isEnglish?'Previous chats are stored on this device.':'گفت‌وگوهای قبلی روی همین دستگاه نگهداری می‌شوند.';$('clearHistoryBtn').textContent=isEnglish?'Clear history on this device':'پاک‌کردن تاریخچهٔ این دستگاه';$('exportDataBtn').textContent=isEnglish?'Export backup':'دریافت نسخهٔ پشتیبان';$('aboutCardTitle').textContent=isEnglish?'About AFGAI':'دربارهٔ AFGAI';$('aboutCardText').textContent=isEnglish?'AFGAI is an AI companion for learning, writing and problem solving. Verify important answers.':'AFGAI یک همراه هوشمند برای یادگیری، نوشتن و حل مسئله است. پاسخ‌ها را برای تصمیم‌های مهم بررسی کن.';$('aboutVersion').textContent=isEnglish?'App edition: Pro':'نسخهٔ برنامه: Pro';$('aboutPrivacy').textContent=isEnglish?'Secret API keys must remain on the server.':'کلیدهای محرمانه فقط باید روی سرور نگهداری شوند.';$('saveSettings').textContent=isEnglish?'Save preferences':'ذخیره تنظیمات';$('settingsFooter').textContent=isEnglish?'AFGAI · Made for a simple, smart experience':'AFGAI · ساخته‌شده برای تجربه‌ای ساده و هوشمند';$('installBtn').textContent=tr('install');$('langBtn').textContent=isEnglish?'دری / فارسی':'English';$('sidebarTagline').textContent=isEnglish?'Your AI workspace':'فضای هوشمند تو';$('sidebarNewText').textContent=isEnglish?'New chat':'گفت‌وگوی جدید';$('chatSearch').placeholder=isEnglish?'Search conversations…':'جست‌وجو در گفتگوها…';$('sidebarRecentTitle').textContent=isEnglish?'Recent chats':'گفت‌وگوهای اخیر';$('sideChatText').textContent=isEnglish?'Chat':'گفت‌وگو';$('sideResearchText').textContent=isEnglish?'Research':'پژوهش زنده';$('sideCodingText').textContent=isEnglish?'Coding':'برنامه‌نویسی';$('sideStudyText').textContent=isEnglish?'Study':'آموزش';$('sideCreativeText').textContent=isEnglish?'Create':'خلاقیت';$('sidebarSettingsText').textContent=isEnglish?'Settings':'تنظیمات';$('modeChat').textContent=isEnglish?'✦ Chat':'✦ گفتگو';$('modeResearch').textContent=isEnglish?'⌕ Research':'⌕ پژوهش زنده';$('modeCoding').textContent=isEnglish?'⌘ Coding':'⌘ برنامه‌نویسی';$('modeStudy').textContent=isEnglish?'▤ Study':'▤ آموزش';$('modeCreative').textContent=isEnglish?'✧ Create':'✧ خلاقیت';renderArchivedChats();setMode(activeMode)}
-function addMsg(text,kind,save=true){let el=document.createElement('div');el.className='msg '+kind;el.textContent=text;$('messages').appendChild(el);el.scrollIntoView({block:'end',behavior:'smooth'});if(save&&['user','ai'].includes(kind)){chatHistory.push({text,kind});persistHistory()}return el}
-$('newChatBtn').onclick=()=>{archiveCurrentChat();chatHistory=[];persistHistory();$('messages').innerHTML='';$('messages').appendChild($('setupNote'));$('setupNote').textContent=tr('setup');afgAiSessionId=makeUuid();localStorage.setItem('afg_ai_session_id',afgAiSessionId);$('prompt').value='';renderArchivedChats();$('prompt').focus()};
-$('langBtn').onclick=()=>{isEnglish=!isEnglish;localStorage.setItem('afg_ai_ui_language',isEnglish?'en':'fa');$('uiLanguage').value=isEnglish?'en':'fa';applyLang()};
-function closeSettings(){$('settings').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'})}
-$('settingsBackBtn').onclick=closeSettings;$('sidebarToggle').onclick=()=>{const side=$('conversationSidebar');side.classList.toggle('mobile-open');document.body.classList.toggle('sidebar-open',side.classList.contains('mobile-open'))};
-// Close the conversation/history drawer when the user taps outside it.
-function closeConversationSidebar(){const side=$('conversationSidebar');side.classList.remove('mobile-open');document.body.classList.remove('sidebar-open')}
-document.addEventListener('click',event=>{
-  const side=$('conversationSidebar');
-  if(!side.classList.contains('mobile-open'))return;
-  if(side.contains(event.target)||$('sidebarToggle').contains(event.target))return;
-  closeConversationSidebar();
-});
-document.addEventListener('keydown',event=>{if(event.key==='Escape')closeConversationSidebar()});
-$('sidebarNewChat').onclick=()=>{$('newChatBtn').click();$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open')};$('sidebarSettings').onclick=()=>{$('settingsBtn').click();$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open')};$('chatSearch').addEventListener('input',renderArchivedChats);
-$('settingsBtn').onclick=()=>{const panel=$('settings');const opening=!panel.classList.contains('show');panel.classList.toggle('show',opening);if(opening)panel.scrollTop=0};
-$('uiLanguage').value=localStorage.getItem('afg_ai_ui_language')||'auto';
-$('uiLanguage').onchange=()=>{const value=$('uiLanguage').value;localStorage.setItem('afg_ai_ui_language',value);isEnglish=value==='auto'?deviceLang==='en':value==='en';applyLang()};
-$('language').value=localStorage.getItem('afg_ai_language')||'auto';
-$('appearance').value=localStorage.getItem('afg_ai_appearance')||'dark';
-function applyAppearance(){document.body.classList.toggle('oled',$('appearance').value==='black')}
-$('appearance').onchange=()=>{localStorage.setItem('afg_ai_appearance',$('appearance').value);applyAppearance()};
-$('saveSettings').onclick=()=>{localStorage.setItem('afg_ai_language',$('language').value);localStorage.setItem('afg_ai_ui_language',$('uiLanguage').value);localStorage.setItem('afg_ai_appearance',$('appearance').value);applyAppearance();$('settingsStatus').textContent=isEnglish?'Preferences saved on this device.':'تنظیمات با موفقیت در همین دستگاه ذخیره شد.';setTimeout(()=>$('settingsStatus').textContent='',3000)};
-$('savedChatsAction').onclick=()=>$('savedChatsCard').scrollIntoView({behavior:'smooth',block:'start'});$('checkServiceHealthBtn').onclick=async()=>{const button=$('checkServiceHealthBtn'),result=$('serviceHealthResult');button.disabled=true;button.textContent=isEnglish?'Checking…':'در حال بررسی…';result.textContent=isEnglish?'Contacting the AFGAI server…':'در حال بررسی اتصال به سرور AFGAI…';try{const response=await fetch(defaultServer+'/api/health',{cache:'no-store'});const data=await response.json();if(!response.ok||!data.ok)throw new Error('health');const row=(label,ok)=>'<div class="health-row"><span>'+label+'</span><span class="health-value '+(ok?'':'off')+'">'+(ok?(isEnglish?'Configured':'تنظیم است'):(isEnglish?'Not configured':'تنظیم نشده'))+'</span></div>';result.innerHTML='<div class="health-row"><span>'+(isEnglish?'Server connection':'اتصال سرور')+'</span><span class="health-value">'+(isEnglish?'Online':'فعال')+'</span></div>'+row(isEnglish?'AI provider key':'کلید سرویس هوش مصنوعی',!!data.aiConfigured)+row(isEnglish?'Live web search':'جست‌وجوی زندهٔ وب',!!data.webSearchConfigured)+row(isEnglish?'Image generation':'تولید تصویر',!!data.imageConfigured)+'<p class="smallprint">'+(isEnglish?'Configured means a key is present; it does not guarantee provider quota or key validity.':'«تنظیم است» یعنی کلید در سرور موجود است؛ اعتبار کلید یا سهمیهٔ سرویس را تضمین نمی‌کند.')+'</p>';}catch(error){result.textContent=isEnglish?'Could not reach the health endpoint. Check your connection and try again.':'به سرویس بررسی وضعیت وصل نشدیم. اتصال اینترنت را بررسی و دوباره تلاش کن.'}finally{button.disabled=false;button.textContent=isEnglish?'Check connection':'بررسی اتصال'}};
-$('newChatAction').onclick=()=>{closeSettings();$('newChatBtn').click()};
-$('helpAction').onclick=()=>$('settingsStatus').textContent=isEnglish?'For help, check the app settings. Never share secret API keys.':'برای راهنمایی، تنظیمات برنامه را بررسی کن. کلیدهای محرمانه را با کسی شریک نساز.';
-$('aboutAction').onclick=()=>{const card=$('aboutCard');card.hidden=!card.hidden;if(!card.hidden)card.scrollIntoView({behavior:'smooth',block:'center'})};
-$('clearHistoryBtn').onclick=()=>{if(!confirm(isEnglish?'Clear all chat history saved on this device?':'تمام تاریخچهٔ گفت‌وگوهای ذخیره‌شده در این دستگاه پاک شود؟'))return;chatHistory=[];archivedChats=[];persistHistory();persistArchivedChats();$('messages').innerHTML='';$('messages').appendChild($('setupNote'));$('setupNote').textContent=tr('setup');afgAiSessionId=makeUuid();localStorage.setItem('afg_ai_session_id',afgAiSessionId);$('settingsStatus').textContent=isEnglish?'All chat history on this device was cleared.':'تمام تاریخچهٔ چت این دستگاه پاک شد.';renderArchivedChats()};
-$('exportDataBtn').onclick=()=>{const payload={exported_at:new Date().toISOString(),chat_history:chatHistory,saved_conversations:archivedChats,preferences:{language:localStorage.getItem('afg_ai_language')||'auto',ui_language:localStorage.getItem('afg_ai_ui_language')||'auto',appearance:localStorage.getItem('afg_ai_appearance')||'dark'}};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='afg-ai-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('settingsStatus').textContent=isEnglish?'Backup export requested.':'درخواست دریافت نسخهٔ پشتیبان انجام شد.'};
+  <!-- Authentication -->
+  <div class="modal" id="authModal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <div class="modal-head">
+        <span class="modal-head-icon" aria-hidden="true">◈</span>
+        <div class="modal-head-copy">
+          <h2 id="authTitle" data-i18n="authTitle">Your AFG AI account</h2>
+          <p id="authLead" data-i18n="authLead">Sync conversations across devices and keep your history private to you.</p>
+        </div>
+        <button class="modal-close" type="button" data-close="authModal" aria-label="Close">✕</button>
+      </div>
 
-/* Account sign-in is intentionally not part of the current public experience. */
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab is-active" id="signInTab" type="button" role="tab" aria-selected="true" data-i18n="signInTab">Sign in</button>
+        <button class="auth-tab" id="registerTab" type="button" role="tab" aria-selected="false" data-i18n="createTab">Create account</button>
+      </div>
 
+      <form class="auth-form" id="authForm" novalidate>
+        <div class="field" id="nameField" hidden>
+          <label for="authName" data-i18n="nameLabel">Name</label>
+          <input id="authName" name="name" type="text" autocomplete="name" maxlength="60" data-i18n-placeholder="namePlaceholder" placeholder="Your name">
+        </div>
+        <div class="field">
+          <label for="authEmail" data-i18n="emailLabel">Email</label>
+          <input id="authEmail" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label for="authPassword" data-i18n="passwordLabel">Password</label>
+          <input id="authPassword" name="password" type="password" autocomplete="current-password" minlength="8" required placeholder="••••••••">
+          <span class="field-hint" data-i18n="passwordHint">At least 8 characters. Stored as a salted scrypt hash on the server.</span>
+        </div>
+        <p class="form-status" id="authStatus" role="status" aria-live="polite"></p>
+        <button class="btn btn-primary btn-block" id="authSubmit" type="submit" data-i18n="authSubmitSignIn">Sign in securely</button>
+      </form>
 
-const defaultServer='https://afg-ai.onrender.com';
-let availableModels=[], selectedModelId=localStorage.getItem('afg_ai_selected_model')||'';
-function modelGroupLabel(group){return ({claude:'Claude · Basic / Pro',codex:'GPT / Codex · Codex Pro',uncensored:'GLM / DeepSeek · Uncensored'})[group]||group}
-async function loadAvailableModels(){
- const select=$('modelSelect'),status=$('modelStatus');if(!select||!status)return;
- select.disabled=true;status.classList.remove('error');
- status.textContent=isEnglish?'Checking configured AI model providers…':'در حال بررسی گروه‌های مدل تنظیم‌شده…';
- try{
-  const response=await fetch(defaultServer+'/api/models',{cache:'no-store'});const data=await response.json();
-  if(!response.ok)throw new Error(data.detail||'Could not load models');
-  availableModels=Array.isArray(data.models)?data.models:[];
-  select.replaceChildren();
-  if(!availableModels.length){
-   const option=document.createElement('option');option.value='';
-   option.textContent=isEnglish?'No models available yet — configure an API key':'هنوز مدلی در دسترس نیست — کلید API را تنظیم کنید';
-   select.appendChild(option);
-   const groups=[
-    {id:'claude',label:'Claude · Basic / Pro'},
-    {id:'codex',label:'ChatGPT / GPT · Codex / Codex Pro'},
-    {id:'uncensored',label:'GLM / DeepSeek · Uncensored'}
-   ];
-   groups.forEach(group=>{const item=document.createElement('option');item.value='';item.disabled=true;item.textContent='🔒 '+group.label+(isEnglish?' — API key needed':' — نیاز به کلید API');select.appendChild(item)});
-   select.disabled=true;
-   status.textContent=data.detail||(isEnglish?'Add LLMSRELAY_CLAUDE_API_KEY in Render → Environment. Then refresh this chat.':'کلید LLMSRELAY_CLAUDE_API_KEY را در Render ← Environment اضافه کن؛ سپس چت را تازه‌سازی کن.');
-   status.classList.add('error');return;
-  }
-  const groups=[...new Set(availableModels.map(model=>model.group))];
-  groups.forEach(group=>{
-   const optgroup=document.createElement('optgroup');optgroup.label=modelGroupLabel(group);
-   availableModels.filter(model=>model.group===group).forEach(model=>{
-    const option=document.createElement('option');option.value=model.id;
-    option.textContent=model.displayName&&model.displayName!==model.id?model.displayName+' · '+model.id:model.id;
-    optgroup.appendChild(option);
-   });
-   select.appendChild(optgroup);
-  });
-  const savedExists=availableModels.some(model=>model.id===selectedModelId);
-  if(!savedExists)selectedModelId=availableModels[0].id;
-  select.value=selectedModelId;select.disabled=false;localStorage.setItem('afg_ai_selected_model',selectedModelId);
-  status.textContent=isEnglish?availableModels.length+' models available. Choose one for your next message.':availableModels.length+' مدل موجود است؛ مدل دلخواهت را برای پیام بعدی انتخاب کن.';
- }catch(error){
-  select.disabled=true;select.replaceChildren();
-  const option=document.createElement('option');option.value='';option.textContent=isEnglish?'Model list unavailable':'فهرست مدل‌ها در دسترس نیست';select.appendChild(option);
-  status.classList.add('error');status.textContent=(error.message||'')+' — '+(isEnglish?'Check Render deployment and API keys.':'استقرار Render و کلیدهای API را بررسی کن.');
- }
-}
-$('modelSelect').addEventListener('change',()=>{
- selectedModelId=$('modelSelect').value;
- if(selectedModelId)localStorage.setItem('afg_ai_selected_model',selectedModelId);
- const chosen=availableModels.find(model=>model.id===selectedModelId);
- $('modelStatus').textContent=chosen?(isEnglish?'Selected: ':'انتخاب‌شده: ')+chosen.displayName:'';
-});
-window.addEventListener('DOMContentLoaded',()=>{wakeBackendOnOpen(true).then(()=>loadAvailableModels())});
-window.addEventListener('pageshow',()=>{wakeBackendOnOpen().then(()=>loadAvailableModels())});
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wakeBackendOnOpen()});const deviceLang=(navigator.language||'fa').toLowerCase().startsWith('en')?'en':'fa';$('language').value=localStorage.getItem('afg_ai_language')||'auto';if(!localStorage.getItem('afg_ai_language'))localStorage.setItem('afg_ai_language','auto');const savedUiLanguage=localStorage.getItem('afg_ai_ui_language')||'auto';isEnglish=savedUiLanguage==='auto'?deviceLang==='en':savedUiLanguage==='en';$('uiLanguage').value=savedUiLanguage;$('appearance').value=localStorage.getItem('afg_ai_appearance')||'dark';applyAppearance();applyLang();restoreHistory();
-document.querySelectorAll('[data-prompt]').forEach(b=>b.onclick=()=>{$('prompt').value=b.dataset.prompt;$('prompt').focus()});
-let pendingImageData='',pendingImageFile=null;
-function closeAttachMenu(){$('attachMenu').hidden=true;$('attachBtn').setAttribute('aria-expanded','false')}
-$('attachBtn').onclick=()=>{const open=$('attachMenu').hidden;$('attachMenu').hidden=!open;$('attachBtn').setAttribute('aria-expanded',String(open))};
-$('choosePhoto').onclick=()=>{closeAttachMenu();$('photoInput').click()};
-$('takePhoto').onclick=()=>{closeAttachMenu();try{if(window.AFGCamera)window.AFGCamera.setCameraMode(true)}catch(_){}$('cameraInput').click()};
-$('chooseFile').onclick=()=>{closeAttachMenu();$('fileInput').click()};
-document.addEventListener('click',e=>{if(!$('attachMenu').contains(e.target)&&!$('attachBtn').contains(e.target))closeAttachMenu()});
-$('removeAttachment').onclick=()=>{pendingImageData='';pendingImageFile=null;$('attachmentPreview').hidden=true;$('attachmentThumb').removeAttribute('src');$('photoInput').value='';$('cameraInput').value=''};
-async function loadImageAttachment(file){if(!file)return;if(file.size>5*1024*1024){showToolNotice(isEnglish?'Image limit is 5 MB.':'حداکثر اندازهٔ عکس ۵ مگابایت است.');return}if(!file.type.startsWith('image/'))return;try{pendingImageData=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||''));reader.onerror=reject;reader.readAsDataURL(file)});pendingImageFile=file;$('attachmentThumb').src=pendingImageData;$('attachmentThumb').hidden=false;$('attachmentName').textContent=file.name|| (isEnglish?'Camera photo':'عکس دوربین');$('attachmentPreview').hidden=false;if(!$('prompt').value.trim())$('prompt').value=isEnglish?'Please analyze this image.':'لطفاً این عکس را تحلیل کن.';$('prompt').focus()}catch{showToolNotice(isEnglish?'Could not load this image.':'خواندن عکس ممکن نشد.')}} 
-$('photoInput').addEventListener('change',e=>{loadImageAttachment(e.target.files&&e.target.files[0]);e.target.value=''});
-$('cameraInput').addEventListener('change',e=>{loadImageAttachment(e.target.files&&e.target.files[0]);e.target.value=''});
-$('chatForm').onsubmit=async e=>{
- e.preventDefault();
- const text=$('prompt').value.trim(),imageToSend=pendingImageData;
- const outgoingText=text||(imageToSend?(isEnglish?'Please analyze this image.':'لطفاً این عکس را تحلیل کن.'):'');
- if(!outgoingText){addMsg(tr('empty'),'note');return}
- addMsg(outgoingText+(imageToSend?' 📷':''),'user');
- $('prompt').value='';pendingImageData='';pendingImageFile=null;$('attachmentPreview').hidden=true;
- const wait=addMsg(isEnglish?'Working on your request…':'در حال آماده‌سازی پاسخ…','ai',false);
- $('sendBtn').disabled=true;
- try{
-  const res=await fetch(defaultServer+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:selectedModelId||undefined,messages:chatHistory.filter(m=>['user','ai'].includes(m.kind)).slice(-20).map(m=>({role:m.kind==='ai'?'assistant':'user',content:m.text})),image:imageToSend||undefined,language:$('language').value||'auto',mode:activeMode,web_search:activeMode==='research',user_id:afgAiUserId,session_id:afgAiSessionId})});
-  const data=await res.json();if(!res.ok)throw new Error(data.detail||tr('error'));
-  wait.textContent=data.reply||data.response||JSON.stringify(data);chatHistory.push({text:wait.textContent,kind:'ai'});persistHistory();
-  if(Array.isArray(data.sources)&&data.sources.length){const list=document.createElement('div');list.className='source-list';data.sources.forEach(src=>{const a=document.createElement('a');a.className='source-link';a.href=src.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='↗ '+src.title;list.appendChild(a)});wait.appendChild(list)}
- }catch(err){wait.className='msg note';wait.textContent=err.message||tr('error')}
- finally{$('sendBtn').disabled=false}
-};
+      <div class="auth-divider" data-i18n="orContinue">or</div>
+      <button class="btn btn-block" id="continueGuest" type="button" data-i18n="continueGuest">Continue as guest</button>
+      <p class="field-hint mt-sm" data-i18n="guestNote">Guest mode keeps conversations on this device. You can create an account at any time.</p>
+    </div>
+  </div>
 
-function setMode(mode){activeMode=mode;document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));const captions={fa:{chat:'حالت گفتگو برای پرسش‌های عمومی، نوشتن و مشاوره.',research:'پژوهش زنده به سرویس جست‌وجو نیاز دارد؛ پاسخ همراه با پیوند منابع نمایش داده می‌شود.',coding:'برای کدنویسی، اشکال‌زدایی، توضیح و بازبینی امنیتی.',study:'آموزش گام‌به‌گام، مثال و توضیح متناسب با سطح تو.',creative:'ایده‌پردازی، داستان، متن تبلیغاتی و راه‌حل‌های خلاقانه.'},en:{chat:'General questions, writing and advice.',research:'Live research requires a configured search provider and returns source links.',coding:'Coding, debugging, explanations and security-minded reviews.',study:'Step-by-step teaching, examples and explanations.',creative:'Brainstorming, stories, copywriting and original ideas.'}};$('modeCaption').textContent=captions[isEnglish?'en':'fa'][mode];$('prompt').placeholder=mode==='coding'?(isEnglish?'Describe the code or bug…':'کد یا مشکل برنامه‌نویسی را بنویس…'):mode==='research'?(isEnglish?'What should I research on the web?':'چه موضوعی را در وب بررسی کنم؟'):mode==='creative'?(isEnglish?'What would you like to create?':'چه چیزی می‌خواهی خلق کنی؟'):tr('placeholder')}
-document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{setMode(b.dataset.mode);document.querySelectorAll('.sidebar-nav').forEach(x=>x.classList.toggle('active',x.dataset.mode===b.dataset.mode));$('conversationSidebar').classList.remove('mobile-open');document.body.classList.remove('sidebar-open')}));
-const legacyChatFeature=$('chatFeature');if(legacyChatFeature)legacyChatFeature.onclick=()=>{setMode('chat');$('prompt').focus();$('prompt').scrollIntoView({behavior:'smooth',block:'center'})};
-const legacyFileFeature=$('fileFeature');if(legacyFileFeature)legacyFileFeature.onclick=()=>$('fileInput').click();
-function showToolNotice(message){let notice=$('toolNotice');if(!notice){notice=document.createElement('div');notice.id='toolNotice';notice.className='msg note';notice.setAttribute('role','status');$('messages').appendChild(notice)}notice.textContent=message;notice.scrollIntoView({behavior:'smooth',block:'nearest'})}
-const legacyWebFeature=$('webFeature');if(legacyWebFeature)legacyWebFeature.onclick=()=>{setMode('research');showToolNotice(isEnglish?'Live research mode selected. Send a question to search the web and receive source links.':'حالت پژوهش زنده انتخاب شد. پرسشت را بفرست تا وب جست‌وجو شود و پیوند منابع نمایش داده شود.')};
-function openImageDialog(){$('imageDialog').hidden=false;$('imageDialogTitle').textContent=isEnglish?'Create an AI image':'ساخت تصویر با هوش مصنوعی';$('imageDialogText').textContent=isEnglish?'Describe the image in as much detail as you like.':'تصویر را با جزئیات دلخواه توصیف کن.';$('imagePrompt').placeholder=isEnglish?'Example: cinematic sunrise over the mountains of Afghanistan…':'مثلاً: منظرهٔ کوهستان‌های افغانستان در طلوع آفتاب، سبک سینمایی…';$('imageDialogNote').textContent=isEnglish?'Image generation requires an image provider configured on the server.':'تولید تصویر به سرویس تصویری فعال در سرور نیاز دارد.';$('imageCreate').textContent=isEnglish?'Generate image ✧':'ساخت تصویر ✧';$('imageCancel').textContent=isEnglish?'Cancel':'انصراف';$('imagePrompt').focus()}
-const legacyImageFeature=$('imageFeature');if(legacyImageFeature)legacyImageFeature.onclick=openImageDialog;$('imageCancel').onclick=()=>{$('imageDialog').hidden=true};
-$('imageForm').onsubmit=async e=>{e.preventDefault();const prompt=$('imagePrompt').value.trim();if(!prompt)return;const card=document.createElement('div');card.className='result-card';card.textContent=isEnglish?'Generating image…':'در حال تولید تصویر…';$('messages').appendChild(card);card.scrollIntoView({behavior:'smooth',block:'end'});$('imageCreate').disabled=true;try{const response=await fetch(defaultServer+'/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});const data=await response.json();if(!response.ok)throw new Error(data.detail||'Image generation failed');card.textContent='';const label=document.createElement('div');label.textContent=isEnglish?'Generated image':'تصویر تولیدشده';card.appendChild(label);const img=document.createElement('img');img.alt=prompt;img.src=data.imageUrl;card.appendChild(img);const link=document.createElement('a');link.href=data.imageUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent=isEnglish?'Open image':'بازکردن تصویر';card.appendChild(link);$('imageDialog').hidden=true;$('imagePrompt').value=''}catch(error){card.textContent=error.message||(isEnglish?'Image generation failed.':'تولید تصویر ناموفق بود.')}finally{$('imageCreate').disabled=false}};
-$('fileInput').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;const allowed=['txt','md','csv','json','log'];const ext=file.name.split('.').pop().toLowerCase();if(!allowed.includes(ext)){addMsg(isEnglish?'For now, choose TXT, MD, CSV, JSON or LOG.':'فعلاً فایل TXT، MD، CSV، JSON یا LOG انتخاب کن.','note');e.target.value='';return}if(file.size>1024*1024){addMsg(isEnglish?'File limit is 1 MB for this basic analyzer.':'حداکثر اندازهٔ فایل در این تحلیل‌گر اولیه ۱ مگابایت است.','note');e.target.value='';return}try{const content=await file.text();$('prompt').value=(isEnglish?'Analyze this file named ':'این فایل را تحلیل کن: ')+file.name+'\n\n'+content.slice(0,18000);addMsg(isEnglish?'File loaded into the prompt. Press Send to analyze it with AFGAI.':'فایل خوانده شد. برای تحلیل محتوای آن با AFGAI دکمهٔ ارسال را بزن.','note');$('prompt').focus()}catch{addMsg(isEnglish?'Could not read this file.':'خواندن این فایل ممکن نشد.','note')}finally{e.target.value=''}});
+  <!-- Settings -->
+  <div class="modal" id="settingsModal" hidden>
+    <div class="modal-card settings-modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="settings-shell">
+        <div class="settings-topbar">
+          <span class="modal-head-icon" aria-hidden="true">⚙</span>
+          <div class="settings-heading">
+            <span class="eyebrow">AFG AI · CONTROL CENTER</span>
+            <h2 id="settingsTitle" data-i18n="settingsTitle">Settings</h2>
+            <p data-i18n="settingsIntro">Shape AFG AI around the way you work.</p>
+          </div>
+          <button class="modal-close" type="button" data-close="settingsModal" aria-label="Close">✕</button>
+        </div>
 
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').hidden=false});$('installBtn').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installBtn').hidden=true}else{addMsg(isEnglish?'Use your browser menu and choose “Install app” or “Add to Home screen”.':'از منوی مرورگر گزینهٔ «نصب برنامه» یا «افزودن به صفحهٔ اصلی» را انتخاب کن.','note')}};
-if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+        <div class="settings-body">
+          <div class="settings-hero">
+            <span class="settings-hero-icon" aria-hidden="true">✦</span>
+            <div>
+              <strong data-i18n="settingsHeroTitle">Your intelligence, your rules</strong>
+              <p data-i18n="settingsHeroText">Account, language, appearance, models, and data — all in one place.</p>
+            </div>
+          </div>
 
-/* Account sign-in UI is disabled for this version. */
+          <div class="settings-grid">
+            <div class="settings-column">
+              <section class="settings-card" id="accountCard">
+                <div class="settings-card-head">
+                  <span class="settings-card-icon" aria-hidden="true">◈</span>
+                  <div>
+                    <h3 data-i18n="accountTitle">Account</h3>
+                    <p data-i18n="accountText">Private sync for signed-in users.</p>
+                  </div>
+                </div>
+                <div id="accountContent"></div>
+              </section>
 
-</script>
-</body></html>
+              <section class="settings-card">
+                <div class="settings-card-head">
+                  <span class="settings-card-icon" aria-hidden="true">文</span>
+                  <div>
+                    <h3 data-i18n="languageTitle">Language & responses</h3>
+                    <p data-i18n="languageText">Interface and answer language.</p>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="uiLanguage" data-i18n="uiLanguageLabel">Interface language</label>
+                  <select id="uiLanguage">
+                    <option value="auto" data-i18n="autoDetect">Automatic</option>
+                    <option value="fa" data-i18n="langFa">فارسی / دری</option>
+                    <option value="en" data-i18n="langEn">English</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="responseLanguage" data-i18n="responseLanguageLabel">Answer language</label>
+                  <select id="responseLanguage">
+                    <option value="auto" data-i18n="autoDetect">Automatic</option>
+                    <option value="fa" data-i18n="langFa">فارسی / دری</option>
+                    <option value="en" data-i18n="langEn">English</option>
+                  </select>
+                </div>
+              </section>
+
+              <section class="settings-card">
+                <div class="settings-card-head">
+                  <span class="settings-card-icon" aria-hidden="true">◐</span>
+                  <div>
+                    <h3 data-i18n="appearanceTitle">Appearance</h3>
+                    <p data-i18n="appearanceText">Theme, accent, and reading comfort.</p>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="themeSelect" data-i18n="themeLabel">Theme</label>
+                  <select id="themeSelect">
+                    <option value="midnight" data-i18n="themeMidnight">Midnight glass</option>
+                    <option value="oled" data-i18n="themeOled">OLED black</option>
+                    <option value="aurora" data-i18n="themeAurora">Aurora violet</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <span class="field-label" data-i18n="accentLabel">Accent</span>
+                  <div class="swatches" role="group" aria-label="Accent">
+                    <button class="swatch swatch-cyan is-active" type="button" data-accent="cyan" aria-label="Cyan" aria-pressed="true"></button>
+                    <button class="swatch swatch-violet" type="button" data-accent="violet" aria-label="Violet" aria-pressed="false"></button>
+                    <button class="swatch swatch-emerald" type="button" data-accent="emerald" aria-label="Emerald" aria-pressed="false"></button>
+                    <button class="swatch swatch-amber" type="button" data-accent="amber" aria-label="Amber" aria-pressed="false"></button>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="fontSize" data-i18n="fontSizeLabel">Text size</label>
+                  <select id="fontSize">
+                    <option value="sm" data-i18n="sizeSm">Compact</option>
+                    <option value="md" data-i18n="sizeMd">Balanced</option>
+                    <option value="lg" data-i18n="sizeLg">Large</option>
+                  </select>
+                </div>
+                <div class="switch-row">
+                  <div class="switch-copy">
+                    <strong data-i18n="reduceMotion">Reduce motion</strong>
+                    <small data-i18n="reduceMotionText">Disable ambient and transition animations.</small>
+                  </div>
+                  <button class="switch" id="reduceMotion" type="button" role="switch" aria-checked="false"></button>
+                </div>
+                <div class="switch-row">
+                  <div class="switch-copy">
+                    <strong data-i18n="sendOnEnter">Enter to send</strong>
+                    <small data-i18n="sendOnEnterText">Use Shift + Enter for a new line.</small>
+                  </div>
+                  <button class="switch" id="sendOnEnter" type="button" role="switch" aria-checked="true"></button>
+                </div>
+                <div class="switch-row">
+                  <div class="switch-copy">
+                    <strong data-i18n="streaming">Stream responses</strong>
+                    <small data-i18n="streamingText">Show text as it is generated.</small>
+                  </div>
+                  <button class="switch" id="streaming" type="button" role="switch" aria-checked="true"></button>
+                </div>
+              </section>
+            </div>
+
+            <div class="settings-column">
+              <section class="settings-card">
+                <div class="settings-card-head">
+                  <span class="settings-card-icon" aria-hidden="true">⌁</span>
+                  <div>
+                    <h3 data-i18n="serviceTitle">Service status</h3>
+                    <p data-i18n="serviceText">Live readiness of connected capabilities.</p>
+                  </div>
+                </div>
+                <div class="health-list" id="healthList">
+                  <div class="health-row"><span data-i18n="healthServer">Server</span><span class="health-value" id="healthServer">—</span></div>
+                  <div class="health-row"><span data-i18n="healthAI">AI providers</span><span class="health-value" id="healthAI">—</span></div>
+                  <div class="health-row"><span data-i18n="healthSearch">Live search</span><span class="health-value" id="healthSearch">—</span></div>
+                  <div class="health-row"><span data-i18n="healthImage">Image generation</span><span class="health-value" id="healthImage">—</span></div>
+                  <div class="health-row"><span data-i18n="healthModels">Models available</span><span class="health-value" id="healthModels">—</span></div>
+                </div>
+                <button class="btn btn-sm btn-block mt-md" id="checkHealth" type="button" data-i18n="checkConnection">Check connection</button>
+              </section>
+
+              <section class="settings-card">
+                <div class="settings-card-head">
+                  <span class="settings-card-icon" aria-hidden="true">▤</span>
+                  <div>
+                    <h3 data-i18n="dataTitle">Your data</h3>
+                    <p data-i18n="dataText">Export or delete what is stored on this device.</p>
+                  </div>
+                </div>
+                <p class="field-hint" id="dataSummary"></p>
+                <button class="btn btn-sm btn-block" id="exportData" type="button" data-i18n="exportData">Export backup</button>
+                <button class="btn btn-sm btn-block btn-danger" id="clearHistory" type="button" data-i18n="clearHistory">Clear local history</button>
+              </section>
+
+              <section class="settings-card">
+                <div class="settings-card-head">
+                  <span class="settings-card-icon" aria-hidden="true">⌘</span>
+                  <div>
+                    <h3 data-i18n="advancedTitle">Advanced</h3>
+                    <p data-i18n="advancedText">Use a self-hosted or alternate AFG AI server.</p>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="serverUrl" data-i18n="serverUrlLabel">API server URL</label>
+                  <input id="serverUrl" type="url" inputmode="url" spellcheck="false" placeholder="https://afg-ai.onrender.com">
+                  <span class="field-hint" data-i18n="serverUrlHint">HTTPS only. Leave the default unless you run your own server.</span>
+                </div>
+                <button class="btn btn-sm btn-block" id="testServer" type="button" data-i18n="testConnection">Test connection</button>
+              </section>
+
+              <section class="settings-card">
+                <div class="settings-card-head">
+                  <span class="settings-card-icon" aria-hidden="true">ⓘ</span>
+                  <div>
+                    <h3 data-i18n="aboutTitle">About AFG AI</h3>
+                    <p data-i18n="aboutText">A premium AI platform built for Afghanistan and beyond.</p>
+                  </div>
+                </div>
+                <div class="health-list">
+                  <div class="health-row"><span data-i18n="versionLabel">Version</span><span class="health-value">2.0.0</span></div>
+                  <div class="health-row"><span data-i18n="privacyLabel">Privacy</span><span class="health-value ok" data-i18n="privacyValue">Keys stay on the server</span></div>
+                </div>
+                <p class="field-hint mt-sm" data-i18n="privacyText">AFG AI never stores provider API keys on your device. Important answers should always be verified.</p>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-footer">
+          <p class="form-status" id="settingsStatus" role="status" aria-live="polite"></p>
+          <button class="btn btn-primary" id="saveSettings" type="button" data-i18n="save">Save preferences</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image generation -->
+  <div class="modal" id="imageModal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="imageTitle">
+      <div class="modal-head">
+        <span class="modal-head-icon" aria-hidden="true">✧</span>
+        <div class="modal-head-copy">
+          <h2 id="imageTitle" data-i18n="imageTitle">Create an image</h2>
+          <p data-i18n="imageLead">Describe the scene, style, lighting, and mood.</p>
+        </div>
+        <button class="modal-close" type="button" data-close="imageModal" aria-label="Close">✕</button>
+      </div>
+      <form class="image-form" id="imageForm">
+        <div class="field">
+          <label for="imagePrompt" data-i18n="imagePromptLabel">Prompt</label>
+          <textarea id="imagePrompt" maxlength="4000" required data-i18n-placeholder="imagePlaceholder" placeholder="A cinematic sunrise over the mountains of Afghanistan, volumetric light, ultra detailed…"></textarea>
+        </div>
+        <div class="field">
+          <label for="imageSize" data-i18n="imageSizeLabel">Size</label>
+          <select id="imageSize">
+            <option value="1024x1024">1024 × 1024 · Square</option>
+            <option value="1024x1536">1024 × 1536 · Portrait</option>
+            <option value="1536x1024">1536 × 1024 · Landscape</option>
+          </select>
+        </div>
+        <p class="form-status" id="imageStatus" role="status" aria-live="polite"></p>
+        <p class="field-hint" data-i18n="imageNote">Image generation requires IMAGE_API_KEY on the server.</p>
+        <div class="modal-actions">
+          <button class="btn" type="button" data-close="imageModal" data-i18n="cancel">Cancel</button>
+          <button class="btn btn-primary" id="imageGenerate" type="submit" data-i18n="generate">Generate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Command palette -->
+  <div class="palette" id="palette" hidden>
+    <div class="palette-card" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="palette-search">
+        <span class="glyph" aria-hidden="true">⌘</span>
+        <input id="paletteInput" type="search" autocomplete="off" data-i18n-placeholder="palettePlaceholder" placeholder="Type a command…">
+        <button class="icon-btn small" type="button" data-close="palette" aria-label="Close">✕</button>
+      </div>
+      <div class="palette-list" id="paletteList" role="listbox"></div>
+      <div class="palette-foot" data-i18n="paletteHint">↑ ↓ to navigate · Enter to run · Esc to close</div>
+    </div>
+  </div>
+
+  <!-- First launch -->
+  <div class="onboarding" id="onboarding" hidden>
+    <div class="onboarding-card">
+      <img class="onboarding-logo" src="./afg-ai-logo.jpg" alt="AFG AI" width="82" height="82">
+      <span class="eyebrow">AFG AI · PRO++</span>
+      <h2 data-i18n="onboardingTitle">Intelligence that works for you.</h2>
+      <p data-i18n="onboardingLead">A fast, multilingual AI workspace with intelligent model routing, live research, coding tools, and a beautiful dark interface.</p>
+      <div class="onboarding-features">
+        <div class="onboarding-feature"><span class="glyph" aria-hidden="true">✦</span><span data-i18n="onboardingF1">Auto-routes each request to the strongest available model.</span></div>
+        <div class="onboarding-feature"><span class="glyph" aria-hidden="true">◈</span><span data-i18n="onboardingF2">Secure accounts or private guest mode — your choice.</span></div>
+        <div class="onboarding-feature"><span class="glyph" aria-hidden="true">⌕</span><span data-i18n="onboardingF3">Live research with sources and multimodal image understanding.</span></div>
+        <div class="onboarding-feature"><span class="glyph" aria-hidden="true">◐</span><span data-i18n="onboardingF4">Three themes, four accents, Persian-first and fully bilingual.</span></div>
+      </div>
+      <div class="onboarding-actions">
+        <button class="btn btn-primary" id="onboardingSignIn" type="button" data-i18n="onboardingSignIn">Sign in or create account</button>
+        <button class="btn" id="onboardingGuest" type="button" data-i18n="onboardingGuest">Continue as guest</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toasts" role="status" aria-live="polite"></div>
+
+  <input type="file" id="fileInput" accept=".txt,.md,.csv,.json,.log,.js,.py,.html,.css,.xml,.yaml,.yml" hidden>
+  <input type="file" id="photoInput" accept="image/png,image/jpeg,image/webp" hidden>
+  <input type="file" id="cameraInput" accept="image/*" capture="environment" hidden>
+
+  <noscript><p class="noscript-note">AFG AI requires JavaScript to run. Please enable it and reload.</p></noscript>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

@@ -4,3 +4,10 @@ app/build/
 local.properties
 *.jks
 *.keystore
+
+# Node.js
+node_modules/
+.data/
+*.log
+npm-debug.log*
+.DS_Store

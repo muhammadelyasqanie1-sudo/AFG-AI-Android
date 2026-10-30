@@ -1,12 +1,25 @@
 {
-  "name": "afg-ai-mini-app",
-  "version": "1.0.0",
+  "name": "afg-ai-platform",
+  "version": "2.0.0",
   "private": true,
-  "description": "Web server for the AFG AI Mini App",
+  "type": "module",
+  "description": "AFG AI — advanced AI assistant platform (Android-first PWA + API server)",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test test/*.test.js",
+    "check": "node scripts/check.mjs"
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "keywords": [
+    "ai",
+    "assistant",
+    "android",
+    "pwa",
+    "llm"
+  ],
+  "license": "UNLICENSED"
 }
