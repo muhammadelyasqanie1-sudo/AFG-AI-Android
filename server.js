@@ -2,6 +2,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const apiKeysManager = require("./api-keys-manager");
 
 const root = path.join(__dirname, "app", "src", "main", "assets");
 const port = Number(process.env.PORT || 3000);
@@ -123,7 +124,7 @@ function rateLimited(req, limit = 20, windowMs = 60_000) {
 }
 
 async function searchWeb(query) {
-  const apiKey = process.env.TAVILY_API_KEY;
+  const apiKey = apiKeysManager.getKey('tavily') || process.env.TAVILY_API_KEY;
   if (!apiKey) {
     const error = new Error("Live web search is not configured yet. The administrator must add TAVILY_API_KEY on the server.");
     error.status = 503; throw error;
@@ -155,7 +156,7 @@ const RELAY_GROUPS = [
   { key: "LLMSRELAY_UNCENSORED_API_KEY", group: "uncensored", label: "GLM / DeepSeek · Uncensored", api: "chat" }
 ];
 async function relayModelsForGroup(config) {
-  const apiKey = process.env[config.key];
+  const apiKey = apiKeysManager.getKey(config.group);
   if (!apiKey) return [];
   const response = await fetch(RELAY_BASE + "/v1/models", {
     headers: { "x-api-key": apiKey, "Authorization": "Bearer " + apiKey },
@@ -180,7 +181,7 @@ async function getRelayCatalog() {
 }
 async function handleRelayModels(req, res) {
   if (req.method !== "GET") { res.setHeader("Allow", "GET"); return sendJson(res, 405, { detail: "Use GET for this endpoint." }); }
-  const hasAnyKey = RELAY_GROUPS.some(group => Boolean(process.env[group.key]));
+  const hasAnyKey = RELAY_GROUPS.some(group => apiKeysManager.hasKey(group.group));
   if (!hasAnyKey) return sendJson(res, 200, { configured: false, models: [], groups: [], detail: "LLMsRelay API keys have not been configured on the server." });
   try {
     const models = await getRelayCatalog();
@@ -198,7 +199,7 @@ async function handleRelayChat(req, res, body) {
   const selected = catalog.find(model => model.id === requestedModel);
   if (!selected) return sendJson(res, 400, { detail: "Choose a model from the current model list, then try again." });
   const groupConfig = RELAY_GROUPS.find(group => group.group === selected.group);
-  const apiKey = groupConfig && process.env[groupConfig.key];
+  const apiKey = groupConfig && apiKeysManager.getKey(groupConfig.group);
   if (!apiKey) return sendJson(res, 503, { detail: "The API key for this model group is not configured on the server." });
   const inputMessages = Array.isArray(body.messages) ? body.messages : [];
   const messages = inputMessages.filter(m => m && ["user", "assistant"].includes(m.role) && typeof m.content === "string")
@@ -271,9 +272,9 @@ async function handleChat(req, res) {
     return sendJson(res, 405, { detail: "Use POST for this endpoint." });
   }
   if (rateLimited(req, 20)) return sendJson(res, 429, { detail: "Too many requests from this connection. Please wait a minute and try again." });
-  const relayConfigured = RELAY_GROUPS.some(group => Boolean(process.env[group.key]));
-  const provider = String(process.env.AI_PROVIDER || (process.env.ANTHROPIC_API_KEY ? "anthropic" : "openai")).toLowerCase();
-  const apiKey = provider === "anthropic" ? process.env.ANTHROPIC_API_KEY : (process.env.AI_API_KEY || process.env.OPENAI_API_KEY);
+  const relayConfigured = RELAY_GROUPS.some(group => apiKeysManager.hasKey(group.group));
+  const provider = String(process.env.AI_PROVIDER || (apiKeysManager.hasKey('anthropic') ? "anthropic" : "openai")).toLowerCase();
+  const apiKey = provider === "anthropic" ? apiKeysManager.getKey('anthropic') : (apiKeysManager.getKey('openai') || process.env.AI_API_KEY || process.env.OPENAI_API_KEY);
   if (!relayConfigured) {
     if (!["anthropic", "openai"].includes(provider)) return sendJson(res, 500, { detail: "Unsupported AI_PROVIDER. Use anthropic or openai." });
     if (!apiKey) return sendJson(res, 503, { detail: "No AI provider key is configured. Add an LLMsRelay group key or configure the existing AI provider on Render." });
@@ -394,7 +395,7 @@ async function handleImage(req, res) {
   catch (error) { return sendJson(res, error.status || 400, { detail: error.message || "Could not read request." }); }
   const prompt = typeof body.prompt === "string" ? body.prompt.trim().slice(0, 4000) : "";
   if (!prompt) return sendJson(res, 400, { detail: "Write a description of the image you want." });
-  const apiKey = process.env.IMAGE_API_KEY;
+  const apiKey = apiKeysManager.getKey('image') || process.env.IMAGE_API_KEY;
   if (!apiKey) return sendJson(res, 503, { detail: "Image generation is not configured yet. The administrator must add IMAGE_API_KEY and configure an image provider on the server." });
   const baseUrl = (process.env.IMAGE_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
   const model = process.env.IMAGE_MODEL || "gpt-image-1";
@@ -442,15 +443,67 @@ http.createServer(async (req, res) => {
     return sendJson(res, 200, {
       ok: true,
       service: "AFG AI",
-      aiConfigured: Boolean(process.env.AI_API_KEY || process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY || RELAY_GROUPS.some(group => process.env[group.key])),
-      llmsRelayConfigured: RELAY_GROUPS.some(group => Boolean(process.env[group.key])),
-      webSearchConfigured: Boolean(process.env.TAVILY_API_KEY),
-      imageConfigured: Boolean(process.env.IMAGE_API_KEY)
+      aiConfigured: RELAY_GROUPS.some(group => apiKeysManager.hasKey(group.group)) || apiKeysManager.hasKey('openai') || apiKeysManager.hasKey('anthropic'),
+      llmsRelayConfigured: RELAY_GROUPS.some(group => apiKeysManager.hasKey(group.group)),
+      webSearchConfigured: apiKeysManager.hasKey('tavily'),
+      imageConfigured: apiKeysManager.hasKey('image')
     });
   }
 
   if (pathname === "/api/models") {
     return handleRelayModels(req, res);
+  }
+
+  // API Keys Management Endpoints
+  if (pathname === "/api/keys/status") {
+    if (req.method !== "GET") {
+      res.setHeader("Allow", "GET");
+      return sendJson(res, 405, { detail: "Use GET for this endpoint." });
+    }
+    const status = apiKeysManager.getAllKeysStatus();
+    return sendJson(res, 200, { status, configuredCount: Object.values(status).filter(s => s.configured).length });
+  }
+
+  if (pathname === "/api/keys/set") {
+    if (req.method !== "POST") {
+      res.setHeader("Allow", "POST");
+      return sendJson(res, 405, { detail: "Use POST for this endpoint." });
+    }
+    try {
+      const body = await readJson(req);
+      const { group, key, adminPassword } = body;
+      if (!group || !key || !adminPassword) {
+        return sendJson(res, 400, { detail: "Missing required fields: group, key, adminPassword" });
+      }
+      const result = apiKeysManager.setKey(group, key, adminPassword);
+      return sendJson(res, 200, result);
+    } catch (error) {
+      if (error.message.includes('Unauthorized')) {
+        return sendJson(res, 401, { detail: error.message });
+      }
+      return sendJson(res, 400, { detail: error.message });
+    }
+  }
+
+  if (pathname === "/api/keys/remove") {
+    if (req.method !== "POST") {
+      res.setHeader("Allow", "POST");
+      return sendJson(res, 405, { detail: "Use POST for this endpoint." });
+    }
+    try {
+      const body = await readJson(req);
+      const { group, adminPassword } = body;
+      if (!group || !adminPassword) {
+        return sendJson(res, 400, { detail: "Missing required fields: group, adminPassword" });
+      }
+      const result = apiKeysManager.removeKey(group, adminPassword);
+      return sendJson(res, 200, result);
+    } catch (error) {
+      if (error.message.includes('Unauthorized')) {
+        return sendJson(res, 401, { detail: error.message });
+      }
+      return sendJson(res, 400, { detail: error.message });
+    }
   }
 
   if (pathname === "/api/chat") {

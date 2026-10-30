@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#061329">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
+<title>تنظیمات API | AFGAI</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#121a2e;--panel2:#19233b;--text:#f3f6ff;--muted:#a8b2cc;--line:#2b3652;--accent:#7c9cff;--accent2:#4de0c1;--success:#4de0c1;--warning:#ffb74d;--error:#ff5252}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1c2b50 0,#0b1020 55%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100dvh;padding:20px}
+.container{max-width:800px;margin:auto;background:var(--panel);border-radius:16px;padding:24px;box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+h1{margin:0 0 8px;font-size:24px;color:var(--accent2)}
+.subtitle{color:var(--muted);font-size:14px;margin:0 0 24px}
+.section{margin:24px 0;padding:20px;background:var(--panel2);border-radius:12px;border:1px solid var(--line)}
+.section h2{margin:0 0 16px;font-size:18px;color:var(--accent)}
+.key-item{padding:16px;background:var(--bg);border-radius:8px;margin:12px 0;border:1px solid var(--line)}
+.key-header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.key-name{font-weight:600;color:var(--text);flex:1}
+.status{padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600}
+.status.configured{background:rgba(77,224,193,0.2);color:var(--success)}
+.status.not-configured{background:rgba(168,178,204,0.2);color:var(--muted)}
+.key-info{font-size:13px;color:var(--muted);margin:4px 0}
+.masked-key{font-family:monospace;color:var(--accent2)}
+.form-group{margin:16px 0}
+label{display:block;margin-bottom:6px;font-size:14px;color:var(--text);font-weight:500}
+input,select{width:100%;padding:12px;background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--text);font-size:14px}
+input:focus,select:focus{outline:none;border-color:var(--accent)}
+.btn{padding:12px 20px;border-radius:8px;border:none;font-weight:600;cursor:pointer;font-size:14px;transition:all 0.2s}
+.btn.primary{background:linear-gradient(135deg,#7894ff,#4ed9c0);color:#071323}
+.btn.danger{background:var(--error);color:white}
+.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.btn-group{display:flex;gap:12px;margin-top:16px}
+.alert{padding:12px 16px;border-radius:8px;margin:16px 0;font-size:14px}
+.alert.success{background:rgba(77,224,193,0.2);color:var(--success);border:1px solid var(--success)}
+.alert.error{background:rgba(255,82,82,0.2);color:var(--error);border:1px solid var(--error)}
+.alert.warning{background:rgba(255,183,77,0.2);color:var(--warning);border:1px solid var(--warning)}
+.back-link{display:inline-block;margin-bottom:20px;color:var(--accent);text-decoration:none;font-size:14px}
+.back-link:hover{text-decoration:underline}
+.helper-text{font-size:12px;color:var(--muted);margin-top:6px}
+.add-key-form{display:none;padding:20px;background:var(--bg);border-radius:8px;margin-top:16px;border:1px solid var(--line)}
+.add-key-form.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{padding:16px;background:var(--panel2);border-radius:12px;border:1px solid var(--line);text-align:center}
+.stat-value{font-size:32px;font-weight:700;color:var(--accent2);margin-bottom:4px}
+.stat-label{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="./index.html" class="back-link">← بازگشت به چت</a>
+<h1>🔑 مدیریت API Keys</h1>
+<p class="subtitle">کلیدهای API خود را برای دسترسی به مدل‌های مختلف هوش مصنوعی مدیریت کنید</p>
+
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-value" id="configuredCount">0</div>
+    <div class="stat-label">کلید فعال</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" id="totalCount">7</div>
+    <div class="stat-label">کل سرویس‌ها</div>
+  </div>
+</div>
+
+<div id="alert" style="display:none"></div>
+
+<div class="section">
+  <h2>📋 وضعیت API Keys</h2>
+  <div id="keysList">در حال بارگذاری...</div>
+</div>
+
+<div class="section">
+  <h2>➕ اضافه کردن / ویرایش کلید</h2>
+  <button class="btn secondary" onclick="toggleAddForm()">نمایش فرم</button>
+  
+  <div id="addKeyForm" class="add-key-form">
+    <div class="form-group">
+      <label>سرویس:</label>
+      <select id="serviceSelect">
+        <option value="claude">Claude (LLMsRelay)</option>
+        <option value="codex">GPT/Codex (LLMsRelay)</option>
+        <option value="uncensored">GLM/DeepSeek (LLMsRelay)</option>
+        <option value="openai">OpenAI (Direct)</option>
+        <option value="anthropic">Anthropic (Direct)</option>
+        <option value="tavily">Tavily (جستجوی وب)</option>
+        <option value="image">Image Generation</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>API Key:</label>
+      <input type="password" id="apiKeyInput" placeholder="کلید API خود را وارد کنید">
+      <p class="helper-text">این کلید به صورت رمزنگاری شده ذخیره می‌شود</p>
+    </div>
+    
+    <div class="form-group">
+      <label>رمز عبور مدیر:</label>
+      <input type="password" id="adminPassword" placeholder="رمز عبور مدیریت">
+      <p class="helper-text">برای امنیت، نیاز به تأیید رمز عبور مدیر است</p>
+    </div>
+    
+    <div class="btn-group">
+      <button class="btn primary" onclick="addKey()">ذخیره کلید</button>
+      <button class="btn secondary" onclick="toggleAddForm()">لغو</button>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>ℹ️ راهنما</h2>
+  <div style="font-size:14px;line-height:1.8;color:var(--muted)">
+    <p><strong>روش استفاده:</strong></p>
+    <ol style="margin:8px 0;padding-right:20px">
+      <li>برای امنیت بیشتر، API keys را در GitHub Secrets یا متغیرهای محیطی تنظیم کنید</li>
+      <li>می‌توانید از این پنل برای مدیریت موقت استفاده کنید</li>
+      <li>کلیدهای محیطی (GitHub) اولویت بالاتری دارند</li>
+      <li>رمز عبور مدیر را در متغیر <code>ADMIN_PASSWORD</code> تنظیم کنید</li>
+    </ol>
+    
+    <p><strong>سرویس‌های پشتیبانی شده:</strong></p>
+    <ul style="margin:8px 0;padding-right:20px">
+      <li><strong>Claude/GPT/GLM:</strong> از طریق LLMsRelay.com</li>
+      <li><strong>OpenAI/Anthropic:</strong> اتصال مستقیم</li>
+      <li><strong>Tavily:</strong> جستجوی وب هوشمند</li>
+      <li><strong>Image:</strong> تولید تصویر با AI</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<script>
+let keysStatus = {};
+
+async function loadKeysStatus() {
+  try {
+    const response = await fetch('/api/keys/status');
+    const data = await response.json();
+    keysStatus = data.status;
+    document.getElementById('configuredCount').textContent = data.configuredCount;
+    renderKeysList();
+  } catch (error) {
+    showAlert('خطا در بارگذاری وضعیت کلیدها: ' + error.message, 'error');
+  }
+}
+
+function renderKeysList() {
+  const container = document.getElementById('keysList');
+  const services = {
+    claude: 'Claude (LLMsRelay)',
+    codex: 'GPT/Codex (LLMsRelay)',
+    uncensored: 'GLM/DeepSeek (LLMsRelay)',
+    openai: 'OpenAI Direct',
+    anthropic: 'Anthropic Direct',
+    tavily: 'Tavily Web Search',
+    image: 'Image Generation'
+  };
+  
+  let html = '';
+  for (const [group, info] of Object.entries(keysStatus)) {
+    const serviceName = services[group] || group;
+    const statusClass = info.configured ? 'configured' : 'not-configured';
+    const statusText = info.configured ? 'فعال' : 'غیرفعال';
+    
+    html += `
+      <div class="key-item">
+        <div class="key-header">
+          <span class="key-name">${serviceName}</span>
+          <span class="status ${statusClass}">${statusText}</span>
+        </div>
+        ${info.configured ? `
+          <div class="key-info">
+            <span class="masked-key">${info.masked}</span> 
+            <span style="color:var(--muted)">• منبع: ${info.source === 'environment' ? 'GitHub/Environment' : 'پنل'}</span>
+          </div>
+          ${info.source !== 'environment' ? `
+            <button class="btn danger" style="margin-top:8px;padding:8px 16px;font-size:12px" onclick="removeKey('${group}')">حذف</button>
+          ` : '<p class="helper-text">این کلید از متغیرهای محیطی آمده و فقط از آنجا قابل حذف است</p>'}
+        ` : '<p class="key-info">هنوز کلیدی تنظیم نشده</p>'}
+      </div>
+    `;
+  }
+  
+  container.innerHTML = html;
+}
+
+function toggleAddForm() {
+  const form = document.getElementById('addKeyForm');
+  form.classList.toggle('active');
+}
+
+async function addKey() {
+  const service = document.getElementById('serviceSelect').value;
+  const key = document.getElementById('apiKeyInput').value.trim();
+  const password = document.getElementById('adminPassword').value.trim();
+  
+  if (!key || !password) {
+    showAlert('لطفاً تمام فیلدها را پر کنید', 'error');
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/keys/set', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ group: service, key, adminPassword: password })
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      showAlert('کلید با موفقیت ذخیره شد!', 'success');
+      document.getElementById('apiKeyInput').value = '';
+      document.getElementById('adminPassword').value = '';
+      toggleAddForm();
+      loadKeysStatus();
+    } else {
+      showAlert('خطا: ' + (data.detail || 'عملیات ناموفق بود'), 'error');
+    }
+  } catch (error) {
+    showAlert('خطا در ارتباط با سرور: ' + error.message, 'error');
+  }
+}
+
+async function removeKey(group) {
+  if (!confirm('آیا از حذف این کلید مطمئن هستید؟')) return;
+  
+  const password = prompt('رمز عبور مدیر را وارد کنید:');
+  if (!password) return;
+  
+  try {
+    const response = await fetch('/api/keys/remove', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ group, adminPassword: password })
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      showAlert('کلید با موفقیت حذف شد', 'success');
+      loadKeysStatus();
+    } else {
+      showAlert('خطا: ' + (data.detail || 'عملیات ناموفق بود'), 'error');
+    }
+  } catch (error) {
+    showAlert('خطا در ارتباط با سرور: ' + error.message, 'error');
+  }
+}
+
+function showAlert(message, type) {
+  const alert = document.getElementById('alert');
+  alert.className = 'alert ' + type;
+  alert.textContent = message;
+  alert.style.display = 'block';
+  setTimeout(() => alert.style.display = 'none', 5000);
+}
+
+// Load on page load
+loadKeysStatus();
+</script>
+</body>
+</html>
