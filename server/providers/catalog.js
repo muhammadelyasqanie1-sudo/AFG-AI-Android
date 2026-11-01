@@ -90,6 +90,23 @@ export function createProviderDescriptors(config) {
     staticModels: [],
   }));
 
+  // Cloudflare Workers AI (OpenAI-compatible chat completions)
+  if (p.cloudflareAccountId && p.cloudflareApiToken) {
+    descriptors.push({
+      id: "cloudflare-workers-ai",
+      label: "Cloudflare Workers AI",
+      api: "openai",
+      baseUrl: `https://api.cloudflare.com/client/v4/accounts/${p.cloudflareAccountId}/ai/v1`,
+      key: p.cloudflareApiToken,
+      group: "cloudflare",
+      tier: "standard",
+      priority: 35,
+      kind: "native",
+      dynamic: "cloudflare",
+      staticModels: p.cloudflareModels || [],
+    });
+  }
+
   // Native Anthropic
   if (p.anthropicKey) {
     descriptors.push({
@@ -315,6 +332,20 @@ async function discover(descriptor, fetchImpl) {
       .map((item) => (item && typeof item.id === "string" ? item.id : ""))
       .filter(Boolean)
       .slice(0, 150);
+  }
+  if (descriptor.dynamic === "cloudflare") {
+    const url = "https://api.cloudflare.com/client/v4/accounts/" +
+      encodeURIComponent(config.providers.cloudflareAccountId) +
+      "/ai/models/search?task=text-generation&hide_experimental=true&per_page=100";
+    const response = await fetchJson(fetchImpl, url, {
+      headers: { Authorization: "Bearer " + descriptor.key },
+    });
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    const data = await response.json().catch(() => ({}));
+    if (data.success === false) throw new Error("Cloudflare model discovery was rejected");
+    return (Array.isArray(data.result) ? data.result : [])
+      .map((item) => item && (item.name || item.id))
+      .filter((id) => typeof id === "string" && id.startsWith("@cf/"));
   }
   if (descriptor.dynamic === "gemini") {
     const response = await fetchJson(fetchImpl, descriptor.baseUrl + "/models", {
