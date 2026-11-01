@@ -322,9 +322,11 @@ async function discover(descriptor, fetchImpl) {
     if (!response.ok) throw new Error("HTTP " + response.status);
     const data = await response.json().catch(() => ({}));
     if (data.success === false) throw new Error("Cloudflare model discovery was rejected");
-    return (Array.isArray(data.result) ? data.result : [])
+    const discovered = (Array.isArray(data.result) ? data.result : [])
       .map((item) => item && (item.name || item.id))
       .filter((id) => typeof id === "string" && id.startsWith("@cf/"));
+    const allowlist = descriptor.staticModels || [];
+    return allowlist.length ? discovered.filter((id) => allowlist.includes(id)) : discovered;
   }
   if (descriptor.dynamic === "gemini") {
     const response = await fetchJson(fetchImpl, descriptor.baseUrl + "/models", {
