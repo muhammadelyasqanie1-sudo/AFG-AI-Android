@@ -120,8 +120,8 @@ export function createProviderDescriptors(config) {
       tier: "pro",
       priority: 40,
       kind: "native",
-      dynamic: null,
-      staticModels: p.anthropicModels,
+      dynamic: "anthropic",
+      staticModels: [],
     });
   }
 
@@ -245,43 +245,7 @@ export function createProviderDescriptors(config) {
     });
   }
 
-  // AWS Bedrock
-  if (p.bedrockAccessKey && p.bedrockSecretKey && p.bedrockRegion) {
-    descriptors.push({
-      id: "bedrock",
-      label: "AWS Bedrock",
-      api: "bedrock",
-      baseUrl: `https://bedrock-runtime.${p.bedrockRegion}.amazonaws.com`,
-      key: p.bedrockAccessKey,
-      secret: p.bedrockSecretKey,
-      region: p.bedrockRegion,
-      group: "bedrock",
-      tier: "pro",
-      priority: 80,
-      kind: "native",
-      dynamic: "bedrock",
-      staticModels: p.bedrockModels || ["anthropic.claude-3-sonnet-20240229-v1:0", "anthropic.claude-3-haiku-20240307-v1:0", "meta.llama3-70b-instruct-v1:0"],
-    });
-  }
-
-  // Google Vertex AI
-  if (p.vertexProjectId && p.vertexLocation && p.vertexCredentials) {
-    descriptors.push({
-      id: "vertex",
-      label: "Google Vertex AI",
-      api: "vertex",
-      baseUrl: `https://${p.vertexLocation}-aiplatform.googleapis.com/v1`,
-      key: p.vertexCredentials,
-      projectId: p.vertexProjectId,
-      location: p.vertexLocation,
-      group: "vertex",
-      tier: "pro",
-      priority: 85,
-      kind: "native",
-      dynamic: "vertex",
-      staticModels: p.vertexModels || ["gemini-1.5-pro-001", "gemini-1.5-flash-001"],
-    });
-  }
+  // Bedrock and Vertex are intentionally omitted until native request adapters exist.
 
   // Ollama (local)
   if (p.ollamaBaseUrl) {
@@ -333,6 +297,20 @@ async function discover(descriptor, fetchImpl) {
       .map((item) => (item && typeof item.id === "string" ? item.id : ""))
       .filter(Boolean)
       .slice(0, 150);
+  }
+  if (descriptor.dynamic === "anthropic") {
+    const response = await fetchJson(fetchImpl, descriptor.baseUrl + "/models?limit=1000", {
+      headers: {
+        "x-api-key": descriptor.key,
+        "anthropic-version": "2023-06-01",
+      },
+    });
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    const data = await response.json().catch(() => ({}));
+    return (Array.isArray(data.data) ? data.data : [])
+      .filter((item) => item && item.lifecycle !== "retired")
+      .map((item) => item && item.id)
+      .filter((id) => typeof id === "string" && id.length > 0);
   }
   if (descriptor.dynamic === "cloudflare") {
     const url = "https://api.cloudflare.com/client/v4/accounts/" +
@@ -436,9 +414,9 @@ export function createCatalog(config, { fetchImpl = fetch } = {}) {
           ids = await discover(descriptor, fetchImpl);
         } catch (error) {
           descriptor.error = error.message;
-          ids = descriptor.dynamic === "cloudflare" ? [] : descriptor.staticModels;
+          ids = descriptor.dynamic ? [] : descriptor.staticModels;
         }
-        if (!ids.length && descriptor.dynamic !== "cloudflare") ids = descriptor.staticModels;
+        if (!ids.length && !descriptor.dynamic) ids = descriptor.staticModels;
         return { descriptor, ids: [...new Set(ids)] };
       })
     );
