@@ -1,7 +1,7 @@
 /* AFG AI · application bootstrap and global shell behaviour */
 
 import { $, bus, getPrefs, updatePrefs } from "./core.js";
-import { initI18n, t } from "./i18n.js";
+import { initI18n, setUiLanguage, t } from "./i18n.js";
 import { api, setBaseUrl } from "./api.js";
 import { initUi, setConnection, toast } from "./ui.js";
 import { initModels, loadModels } from "./models.js";
@@ -55,13 +55,23 @@ function finishOnboarding() {
 }
 
 function initOnboarding() {
+  const gate = $("#languageGate");
   const overlay = $("#onboarding");
-  if (!overlay) return;
-  if (getPrefs().onboarded) {
-    overlay.hidden = true;
-    return;
-  }
-  overlay.hidden = false;
+  if (!overlay || !gate) return;
+
+  const hasChosenLanguage = ["fa", "en"].includes(getPrefs().uiLanguage);
+  gate.hidden = hasChosenLanguage;
+  overlay.hidden = hasChosenLanguage ? Boolean(getPrefs().onboarded) : true;
+
+  const chooseLanguage = (language) => {
+    setUiLanguage(language);
+    gate.hidden = true;
+    overlay.hidden = Boolean(getPrefs().onboarded);
+  };
+
+  $("#languageDari")?.addEventListener("click", () => chooseLanguage("fa"));
+  $("#languageEnglish")?.addEventListener("click", () => chooseLanguage("en"));
+
   $("#onboardingSignIn")?.addEventListener("click", () => {
     finishOnboarding();
     openAuth("signin");
