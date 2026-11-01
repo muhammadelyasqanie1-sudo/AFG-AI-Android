@@ -116,6 +116,9 @@ export function loadConfig(env = process.env, overrides = {}) {
       openaiKey: env.AI_API_KEY || env.OPENAI_API_KEY || "",
       openaiBaseUrl: (env.AI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, ""),
       openaiModels: splitList(env.AI_MODELS || env.AI_MODEL || "gpt-4.1-mini"),
+      cloudflareAccountId: env.CLOUDFLARE_ACCOUNT_ID || "",
+      cloudflareApiToken: env.CLOUDFLARE_API_TOKEN || "",
+      cloudflareModels: splitList(env.CLOUDFLARE_AI_MODELS || ""),
       openrouterKey: env.OPENROUTER_API_KEY || "",
       openrouterBaseUrl: "https://openrouter.ai/api/v1",
       // Google Gemini
