@@ -100,7 +100,7 @@ const fa = {
   uiLanguageLabel: "زبان رابط",
   responseLanguageLabel: "زبان پاسخ",
   autoDetect: "خودکار",
-  langFa: "فارسی / دری",
+  langFa: "دری",
   langEn: "English",
   appearanceTitle: "ظاهر",
   appearanceText: "تم، رنگ تأکید و راحتی خواندن.",
@@ -462,7 +462,7 @@ const en = {
   onboardingF1: "Auto-routes each request to the strongest available model.",
   onboardingF2: "Secure accounts or private guest mode — your choice.",
   onboardingF3: "Live research with sources and multimodal image understanding.",
-  onboardingF4: "Three themes, four accents, Persian-first and fully bilingual.",
+  onboardingF4: "Three themes, four accents, Dari-first, with a separate English interface.",
   onboardingSignIn: "Sign in or create account",
   onboardingGuest: "Continue as guest",
 
@@ -639,7 +639,7 @@ export function applyStaticTranslations(root = document) {
 
 export function applyLanguage(pref = getPrefs().uiLanguage) {
   currentLanguage = resolveLanguage(pref);
-  document.documentElement.lang = currentLanguage;
+  document.documentElement.lang = currentLanguage === "fa" ? "fa-AF" : "en";
   document.documentElement.dir = currentLanguage === "fa" ? "rtl" : "ltr";
   applyStaticTranslations(document);
   const langButton = document.getElementById("langBtn");
