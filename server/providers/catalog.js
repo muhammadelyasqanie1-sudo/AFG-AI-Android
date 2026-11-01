@@ -458,7 +458,7 @@ export function createCatalog(config, { fetchImpl = fetch } = {}) {
 
   async function get({ force = false } = {}) {
     const fresh = Date.now() - cache.at < config.providers.catalogTtlMs;
-    if (!force && fresh && cache.models.length) return cache;
+    if (!force && fresh) return cache;
     if (!pending) {
       pending = refresh()
         .catch((error) => {
