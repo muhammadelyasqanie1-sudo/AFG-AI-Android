@@ -5,7 +5,7 @@ import { api } from "./api.js";
 import { groupLabel, modelTierLabel, t } from "./i18n.js";
 import { toast } from "./ui.js";
 
-const GROUP_ORDER = ["claude", "codex", "uncensored", "multi", "local"];
+const GROUP_ORDER = ["claude", "codex", "uncensored", "cloudflare", "multi", "local"];
 
 const state = {
   models: [],
