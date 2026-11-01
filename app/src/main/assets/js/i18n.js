@@ -284,6 +284,7 @@ const fa = {
   modelGroupClaude: "Claude",
   modelGroupCodex: "GPT / Codex",
   modelGroupUncensored: "GLM / DeepSeek",
+  modelGroupCloudflare: "Cloudflare Workers AI",
   modelGroupMulti: "چندمدلی",
   modelGroupLocal: "محلی",
   poweredBy: "قدرت‌گرفته از موتور AFG AI",
@@ -580,6 +581,7 @@ const en = {
   modelGroupClaude: "Claude",
   modelGroupCodex: "GPT / Codex",
   modelGroupUncensored: "GLM / DeepSeek",
+  modelGroupCloudflare: "Cloudflare Workers AI",
   modelGroupMulti: "Multi-model",
   modelGroupLocal: "Local",
   poweredBy: "Powered by the AFG AI engine",
@@ -709,6 +711,7 @@ export function groupLabel(group) {
       claude: "modelGroupClaude",
       codex: "modelGroupCodex",
       uncensored: "modelGroupUncensored",
+      cloudflare: "modelGroupCloudflare",
       multi: "modelGroupMulti",
       local: "modelGroupLocal"
     }[group] || "modelGroupMulti"
