@@ -97,6 +97,7 @@ export function createProviderDescriptors(config) {
       label: "Cloudflare Workers AI",
       api: "openai",
       baseUrl: `https://api.cloudflare.com/client/v4/accounts/${p.cloudflareAccountId}/ai/v1`,
+      accountId: p.cloudflareAccountId,
       key: p.cloudflareApiToken,
       group: "cloudflare",
       tier: "standard",
@@ -335,7 +336,7 @@ async function discover(descriptor, fetchImpl) {
   }
   if (descriptor.dynamic === "cloudflare") {
     const url = "https://api.cloudflare.com/client/v4/accounts/" +
-      encodeURIComponent(config.providers.cloudflareAccountId) +
+      encodeURIComponent(descriptor.accountId) +
       "/ai/models/search?task=text-generation&hide_experimental=true&per_page=100";
     const response = await fetchJson(fetchImpl, url, {
       headers: { Authorization: "Bearer " + descriptor.key },
@@ -435,9 +436,9 @@ export function createCatalog(config, { fetchImpl = fetch } = {}) {
           ids = await discover(descriptor, fetchImpl);
         } catch (error) {
           descriptor.error = error.message;
-          ids = descriptor.staticModels;
+          ids = descriptor.dynamic === "cloudflare" ? [] : descriptor.staticModels;
         }
-        if (!ids.length) ids = descriptor.staticModels;
+        if (!ids.length && descriptor.dynamic !== "cloudflare") ids = descriptor.staticModels;
         return { descriptor, ids: [...new Set(ids)] };
       })
     );
