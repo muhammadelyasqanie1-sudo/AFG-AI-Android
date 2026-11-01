@@ -1,4 +1,4 @@
-/* AFG AI · bilingual copy (Persian/Dari first, English second) */
+/* AFG AI · separate Dari and English interface dictionaries */
 
 import { bus, getPrefs, setPref } from "./core.js";
 
@@ -643,7 +643,7 @@ export function applyLanguage(pref = getPrefs().uiLanguage) {
   document.documentElement.dir = currentLanguage === "fa" ? "rtl" : "ltr";
   applyStaticTranslations(document);
   const langButton = document.getElementById("langBtn");
-  if (langButton) langButton.textContent = isEnglish() ? "دری / فارسی" : "English";
+  if (langButton) langButton.textContent = isEnglish() ? "دری" : "English";
   bus.emit("language", currentLanguage);
   return currentLanguage;
 }
